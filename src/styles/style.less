@@ -1,0 +1,54 @@
+body {
+    margin: 0px;
+    [data-reactid=".0"] {
+        display: flex;
+        flex-direction: row;
+        .sideBar {
+            height: 100%;
+            width: 250px;
+            min-width: 250px;
+            max-width: 250px;
+            margin-right: 25px;
+            background-color: #1B3F8B;
+            color: white;
+            @font-face {
+                font-family: monterey;
+                src: url('../fonts/ChicagoFLF.ttf');
+            }
+            font-family: monterey;
+        }
+        .databaseList,
+        .collectionList,
+        .actionArea, 
+        .resultArea {
+            padding: 8px;
+            height: 50%;
+            overflow: scroll;
+        }
+        .database,
+        .collection {
+            background-color: #1B3F8B;
+            padding: 1px 5px;
+            &:hover {
+                background-color: rgba(139, 175, 223, 0.5);
+            }
+            &.clicked {
+                background-color: rgba(139, 175, 223, 1);
+            }
+        }
+        .column {
+            display: flex; 
+            flex-direction: column;
+        }
+        .actionArea {
+            form {
+                display: flex; 
+                align-items: center;
+                padding-top: 25px;
+                select {
+                    margin-right: 15px;
+                }
+            }  
+        }
+    }
+}

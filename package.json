@@ -1,0 +1,36 @@
+{
+  "name": "super-mongo",
+  "version": "1.0.0",
+  "description": "Management console for localhost MongoDB database.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mattvella07/SuperMongo.git"
+  },
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Matt Vella",
+  "license": "MIT",
+  "dependencies": {
+    "babel-core": "^6.7.2",
+    "express": "^4.13.4",
+    "mongodb": "^2.1.10",
+    "react": "^15.1.0",
+    "react-dom": "^15.1.0"
+  },
+  "devDependencies": {
+    "babel-preset-es2015": "^6.9.0",
+    "del": "^2.2.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-clean-css": "^2.0.8",
+    "gulp-jshint": "^2.0.0",
+    "gulp-less": "^3.0.5",
+    "gulp-react": "^3.1.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglifyjs": "^0.6.2",
+    "jshint": "^2.9.1"
+  }
+}
