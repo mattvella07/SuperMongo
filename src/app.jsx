@@ -188,19 +188,21 @@ var ActionArea = React.createClass({
                     <select name="operations"> 
                         <option value="find">Find</option>
                     </select>
-                    {/* Where:&nbsp; <input type="text" ref={(ref) => this.whereClause = ref} /> &nbsp; */}
-                    Query:&nbsp; <input type="text" placeholder="Key" ref={(ref) => this.queryKey = ref} /> 
-                    <select name="comparison" ref={(ref) => this.queryComparison = ref} > 
-                        <option value=":">Equals</option>
-                        <option value="$lt">Less than</option>
-                        <option value="$lte">Less than or equal to</option>
-                        <option value="$gt">Greater than</option>
-                        <option value="$gte">Greater than or equal to</option>
-                        <option value="$ne">Not equal</option>
-                    </select>
-                    <input type="text" placeholder="Value" ref={(ref) => this.queryVal = ref} /> 
-                    
-                    <input type="submit" value="Run" />
+                    <div>
+                        <div>
+                            Query:&nbsp; <input type="text" placeholder="Key" ref={(ref) => this.queryKey = ref} /> 
+                            <select name="comparison" ref={(ref) => this.queryComparison = ref} > 
+                                <option value=":">Equals</option>
+                                <option value="$lt">Less than</option>
+                                <option value="$lte">Less than or equal to</option>
+                                <option value="$gt">Greater than</option>
+                                <option value="$gte">Greater than or equal to</option>
+                                <option value="$ne">Not equal</option>
+                            </select>
+                            <input type="text" placeholder="Value" ref={(ref) => this.queryVal = ref} /> 
+                        </div>
+                        <input type="submit" value="Run" />
+                    </div>
                 </form>
             </div>
         );
