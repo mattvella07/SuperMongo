@@ -90,6 +90,35 @@ app.get('/api/find/:DBName/:ColName/:Query', function(req, res) {
     });
 });
 
+app.get('/api/find/:DBName/:ColName/:Query/:Projection', function(req, res) {
+    MongoClient.connect(dbUrl + req.params.DBName, function(err, db) {
+        if(err) {
+            res.send(err);
+        } else {
+            var collection = db.collection(req.params.ColName),
+                query = {},
+                projection = {};
+            
+            try {
+                query = JSON.parse(req.params.Query);
+                projection = JSON.parse(req.params.Projection);
+                
+                collection.find(query, projection).toArray(function(err, items) {
+                    if(err) {
+                        res.send(err);
+                    } else {
+                        res.json(items);
+                    }
+                    
+                    db.close();
+                });
+                
+            } catch (error) {
+                res.send(error);
+            }
+        }
+    });
+});
 
 app.listen(port, function() {
    console.log('Listening on port ' + port); 

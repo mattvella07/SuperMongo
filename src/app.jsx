@@ -23,8 +23,9 @@ var PageContainer = React.createClass({
             showResultArea: false
         });  
     },
-    handleRun: function(query) {
+    handleRun: function(query, projection) {
         this.query = query;
+        this.projection = projection;
         this.setState({
             showResultArea: true 
         });
@@ -38,7 +39,7 @@ var PageContainer = React.createClass({
                 </div>
                 <div className="column">
                     { this.state.showActionArea ? <ActionArea db={this.state.selectedDB} col={this.state.selectedCol} onRun={this.handleRun} /> : null }
-                    { this.state.showResultArea ? <ResultArea db={this.state.selectedDB} col={this.state.selectedCol} query={this.query} /> : null }
+                    { this.state.showResultArea ? <ResultArea db={this.state.selectedDB} col={this.state.selectedCol} query={this.query} projection={this.projection} /> : null }
                 </div>
             </div>
         );
@@ -170,7 +171,9 @@ var ActionArea = React.createClass({
     onSubmit: function(e) {
         e.preventDefault();
         
-        let queryStr = '';
+        let queryStr = '',
+            projectionStr = '';
+        
         if(this.queryKey.value) {
             if(this.queryComparison.value === ':') {
                 queryStr += '{"' + this.queryKey.value + '"' + this.queryComparison.value + ' ' + this.queryVal.value + '}';
@@ -179,7 +182,11 @@ var ActionArea = React.createClass({
             }
         }
         
-        this.props.onRun(queryStr);
+        if(this.projectionField.value) {
+            projectionStr += '{"' + this.projectionField.value + '": ' + this.projectionValue.value + '}';
+        }
+        
+        this.props.onRun(queryStr, projectionStr);
     },
     render: function() {
         return (
@@ -200,6 +207,13 @@ var ActionArea = React.createClass({
                                 <option value="$ne">Not equal</option>
                             </select>
                             <input type="text" placeholder="Value" ref={(ref) => this.queryVal = ref} /> 
+                        </div>
+                        <div>
+                            Projection:&nbsp; <select name="hideOrShow" ref={(ref) => this.projectionValue = ref} >
+                                <option value="1">Show</option>
+                                <option value="0">Hide</option>
+                            </select>
+                            <input type="text" placeholder="Field" ref={(ref) => this.projectionField = ref} />
                         </div>
                         <input type="submit" value="Run" />
                     </div>
@@ -222,6 +236,14 @@ var ResultArea = React.createClass({
         
         if(currProps.query) {
             getStr += '/' + currProps.query;
+        }
+        
+        if(currProps.projection) {
+            if(!currProps.query) {
+                getStr += '/{}';
+            }
+            
+            getStr += '/' + currProps.projection;
         }
         
         $.get(getStr, function(result) {
