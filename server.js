@@ -44,7 +44,7 @@ app.get('/api/collections/:DBName', function(req, res) {
     });
 });
 
-app.get('/api/find/:DBName/:ColName', function(req, res) {
+/* app.get('/api/find/:DBName/:ColName', function(req, res) {
     MongoClient.connect(dbUrl + req.params.DBName, function(err, db) {
         if(err) { 
             res.send(err);
@@ -61,9 +61,9 @@ app.get('/api/find/:DBName/:ColName', function(req, res) {
             });
         } 
     });
-});
+}); */
 
-app.get('/api/find/:DBName/:ColName/:Query', function(req, res) {
+/* app.get('/api/find/:DBName/:ColName/:Query', function(req, res) {
     MongoClient.connect(dbUrl + req.params.DBName, function(err, db) {
         if(err) { 
             res.send(err);
@@ -88,7 +88,7 @@ app.get('/api/find/:DBName/:ColName/:Query', function(req, res) {
             }
         } 
     });
-});
+}); */
 
 app.get('/api/find/:DBName/:ColName/:Query/:Projection', function(req, res) {
     MongoClient.connect(dbUrl + req.params.DBName, function(err, db) {

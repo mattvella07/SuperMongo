@@ -23,9 +23,10 @@ var PageContainer = React.createClass({
             showResultArea: false
         });  
     },
-    handleRun: function(query, projection) {
+    handleRun: function(query, projection, sort) {
         this.query = query;
         this.projection = projection;
+        this.sort = sort;
         this.setState({
             showResultArea: true 
         });
@@ -172,7 +173,8 @@ var ActionArea = React.createClass({
         e.preventDefault();
         
         let queryStr = '',
-            projectionStr = '';
+            projectionStr = '',
+            sortStr = '';
         
         if(this.queryKey.value) {
             if(this.queryComparison.value === ':') {
@@ -186,7 +188,11 @@ var ActionArea = React.createClass({
             projectionStr += '{"' + this.projectionField.value + '": ' + this.projectionValue.value + '}';
         }
         
-        this.props.onRun(queryStr, projectionStr);
+        if(this.sortField.value) {
+            sortStr += '{"' + this.sortField.value + '": ' + this.sortDirection.value + '}';
+        }
+        
+        this.props.onRun(queryStr, projectionStr, sortStr);
     },
     render: function() {
         return (
@@ -215,6 +221,13 @@ var ActionArea = React.createClass({
                             </select>
                             <input type="text" placeholder="Field" ref={(ref) => this.projectionField = ref} />
                         </div>
+                        <div>
+                            Sort:&nbsp; <input type="text" placeholder="Field" ref={(ref) => this.sortField = ref} />
+                            <select name="ascOrDesc" ref={(ref) => this.sortDirection = ref} >
+                                <option value="1">Ascending</option>
+                                <option value="-1">Descending</option>
+                            </select>
+                        </div>
                         <input type="submit" value="Run" />
                     </div>
                 </form>
@@ -236,14 +249,14 @@ var ResultArea = React.createClass({
         
         if(currProps.query) {
             getStr += '/' + currProps.query;
+        } else {
+            getStr += '/{}';
         }
         
         if(currProps.projection) {
-            if(!currProps.query) {
-                getStr += '/{}';
-            }
-            
             getStr += '/' + currProps.projection;
+        } else {
+            getStr += '/{}';
         }
         
         $.get(getStr, function(result) {
