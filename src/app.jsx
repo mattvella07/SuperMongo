@@ -23,10 +23,10 @@ var PageContainer = React.createClass({
             showResultArea: false
         });  
     },
-    handleRun: function(query, projection, sort) {
+    handleRun: function(query, projection, options) {
         this.query = query;
         this.projection = projection;
-        this.sort = sort;
+        this.options = options;
         this.setState({
             showResultArea: true 
         });
@@ -40,7 +40,7 @@ var PageContainer = React.createClass({
                 </div>
                 <div className="column">
                     { this.state.showActionArea ? <ActionArea db={this.state.selectedDB} col={this.state.selectedCol} onRun={this.handleRun} /> : null }
-                    { this.state.showResultArea ? <ResultArea db={this.state.selectedDB} col={this.state.selectedCol} query={this.query} projection={this.projection} /> : null }
+                    { this.state.showResultArea ? <ResultArea db={this.state.selectedDB} col={this.state.selectedCol} query={this.query} projection={this.projection} options={this.options} /> : null }
                 </div>
             </div>
         );
@@ -174,7 +174,7 @@ var ActionArea = React.createClass({
         
         let queryStr = '',
             projectionStr = '',
-            sortStr = '';
+            optionsStr = '';
         
         if(this.queryKey.value) {
             if(this.queryComparison.value === ':') {
@@ -189,10 +189,10 @@ var ActionArea = React.createClass({
         }
         
         if(this.sortField.value) {
-            sortStr += '{"' + this.sortField.value + '": ' + this.sortDirection.value + '}';
+            optionsStr += '{"sort": [["' + this.sortField.value + '", "' + this.sortDirection.value + '"]]}';
         }
-        
-        this.props.onRun(queryStr, projectionStr, sortStr);
+
+        this.props.onRun(queryStr, projectionStr, optionsStr);
     },
     render: function() {
         return (
@@ -212,7 +212,7 @@ var ActionArea = React.createClass({
                                 <option value="$gte">Greater than or equal to</option>
                                 <option value="$ne">Not equal</option>
                             </select>
-                            <input type="text" placeholder="Value" ref={(ref) => this.queryVal = ref} /> 
+                            <input type="text" placeholder="Value" ref={(ref) => this.queryVal = ref} />&nbsp;
                         </div>
                         <div>
                             Projection:&nbsp; <select name="hideOrShow" ref={(ref) => this.projectionValue = ref} >
@@ -224,8 +224,8 @@ var ActionArea = React.createClass({
                         <div>
                             Sort:&nbsp; <input type="text" placeholder="Field" ref={(ref) => this.sortField = ref} />
                             <select name="ascOrDesc" ref={(ref) => this.sortDirection = ref} >
-                                <option value="1">Ascending</option>
-                                <option value="-1">Descending</option>
+                                <option value="asc">Ascending</option>
+                                <option value="desc">Descending</option>
                             </select>
                         </div>
                         <input type="submit" value="Run" />
@@ -255,6 +255,12 @@ var ResultArea = React.createClass({
         
         if(currProps.projection) {
             getStr += '/' + currProps.projection;
+        } else {
+            getStr += '/{}';
+        }
+
+        if(currProps.options) {
+            getStr += '/' + currProps.options;
         } else {
             getStr += '/{}';
         }

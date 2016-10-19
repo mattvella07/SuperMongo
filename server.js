@@ -44,66 +44,22 @@ app.get('/api/collections/:DBName', function(req, res) {
     });
 });
 
-/* app.get('/api/find/:DBName/:ColName', function(req, res) {
-    MongoClient.connect(dbUrl + req.params.DBName, function(err, db) {
-        if(err) { 
-            res.send(err);
-        } else {
-            var collection = db.collection(req.params.ColName);
-            collection.find({}).toArray(function(err, items) {
-                if(err) {
-                    res.send(err);
-                } else {
-                    res.json(items);    
-                }
-                
-                db.close();
-            });
-        } 
-    });
-}); */
-
-/* app.get('/api/find/:DBName/:ColName/:Query', function(req, res) {
-    MongoClient.connect(dbUrl + req.params.DBName, function(err, db) {
-        if(err) { 
-            res.send(err);
-        } else {
-            var collection = db.collection(req.params.ColName),
-                query = {};
-            
-            try {
-                query = JSON.parse(req.params.Query);
-                
-                collection.find(query).toArray(function(err, items) {
-                    if(err) {
-                        res.send(err);
-                    } else {
-                        res.json(items);    
-                    }
-                    
-                    db.close();
-                });
-            } catch(error) {
-                res.send(error);
-            }
-        } 
-    });
-}); */
-
-app.get('/api/find/:DBName/:ColName/:Query/:Projection', function(req, res) {
+app.get('/api/find/:DBName/:ColName/:Query/:Projection/:Options', function(req, res) {
     MongoClient.connect(dbUrl + req.params.DBName, function(err, db) {
         if(err) {
             res.send(err);
         } else {
             var collection = db.collection(req.params.ColName),
                 query = {},
-                projection = {};
+                projection = {},
+                options = {};
             
             try {
                 query = JSON.parse(req.params.Query);
                 projection = JSON.parse(req.params.Projection);
-                
-                collection.find(query, projection).toArray(function(err, items) {
+                options = JSON.parse(req.params.Options);
+
+                collection.find(query, projection, options).toArray(function(err, items) {
                     if(err) {
                         res.send(err);
                     } else {
