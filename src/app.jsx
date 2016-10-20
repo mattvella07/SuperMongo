@@ -172,15 +172,26 @@ var ActionArea = React.createClass({
     onSubmit: function(e) {
         e.preventDefault();
         
-        let queryStr = '',
+        let queryValStr = this.queryVal.value,
+            queryStr = '',
             projectionStr = '',
             optionsStr = '';
         
         if(this.queryKey.value) {
+            //If the query value is a string, make sure it satrts and end with double quotes
+            if(isNaN(queryValStr) && queryValStr[0] !== '"' && queryValStr[queryValStr.length - 1] !== '"') {
+                //If single quotes were used replace them with double quotes, else just add double quotes 
+                if(queryValStr[0] === "'" && queryValStr[queryValStr.length - 1] === "'") {
+                    queryValStr = queryValStr.replace("'" , '"');
+                    queryValStr = queryValStr.replace("'" , '"');
+                } else {
+                    queryValStr = '"' + queryValStr + '"';
+                }
+            }
             if(this.queryComparison.value === ':') {
-                queryStr += '{"' + this.queryKey.value + '"' + this.queryComparison.value + ' ' + this.queryVal.value + '}';
+                queryStr += '{"' + this.queryKey.value + '"' + this.queryComparison.value + ' ' + queryValStr + '}';
             } else {
-                queryStr += '{"' + this.queryKey.value + '": {"' + this.queryComparison.value + '": ' + this.queryVal.value + '} }';
+                queryStr += '{"' + this.queryKey.value + '": {"' + this.queryComparison.value + '": ' + queryValStr + '} }';
             }
         }
         
