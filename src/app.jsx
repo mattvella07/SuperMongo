@@ -175,7 +175,7 @@ var ActionArea = React.createClass({
         let queryValStr = this.queryVal.value,
             queryStr = '',
             projectionStr = '',
-            optionsStr = '';
+            optionsStr = '{';
         
         if(this.queryKey.value) {
             //If the query value is a string, make sure it satrts and end with double quotes
@@ -200,8 +200,20 @@ var ActionArea = React.createClass({
         }
         
         if(this.sortField.value) {
-            optionsStr += '{"sort": [["' + this.sortField.value + '", "' + this.sortDirection.value + '"]]}';
+            optionsStr += '"sort": [["' + this.sortField.value + '", "' + this.sortDirection.value + '"]],';
         }
+
+        if(this.limitNum.value) {
+            optionsStr += '"limit": ' + this.limitNum.value + ',';
+        }
+
+        if(this.skipNum.value) {
+            optionsStr += '"skip": ' + this.skipNum.value + ',';
+        }
+
+        //Format options 
+        optionsStr += '}';
+        optionsStr = optionsStr.replace(',}', '}');
 
         this.props.onRun(queryStr, projectionStr, optionsStr);
     },
@@ -238,6 +250,13 @@ var ActionArea = React.createClass({
                                 <option value="asc">Ascending</option>
                                 <option value="desc">Descending</option>
                             </select>
+                        </div>
+                        <div>
+                            Limit:&nbsp; <input type="text" placeholder="Number to show" ref={(ref) => this.limitNum = ref} />
+                            
+                        </div>
+                        <div>
+                            Skip:&nbsp; <input type="text" placeholder="Number to skip" ref={(ref) => this.skipNum = ref} />
                         </div>
                         <input type="submit" value="Run" />
                     </div>
