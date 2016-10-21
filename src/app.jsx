@@ -309,6 +309,10 @@ var ResultArea = React.createClass({
                 
                 data += '}';
             }
+
+            if(!data) {
+                data = '{ No results found ';
+            }
             
             this.replaceState({result: data});
             
