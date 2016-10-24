@@ -1,3 +1,5 @@
+const PAGE_LIMIT = 20;
+
 var PageContainer = React.createClass({
     getInitialState: function() {
         return {
@@ -23,12 +25,19 @@ var PageContainer = React.createClass({
             showResultArea: false
         });  
     },
-    handleRun: function(query, projection, options) {
+    handleRun: function(query, projection, options, userEnteredLimit) {
         this.query = query;
         this.projection = projection;
         this.options = options;
+        this.userEnteredLimit = userEnteredLimit;
         this.setState({
             showResultArea: true 
+        });
+    },
+    moreClick: function(options) {
+        this.options = options;
+        this.setState({
+            showResultArea: true
         });
     },
     render: function() {
@@ -41,6 +50,7 @@ var PageContainer = React.createClass({
                 <div className="column">
                     { this.state.showActionArea ? <ActionArea db={this.state.selectedDB} col={this.state.selectedCol} onRun={this.handleRun} /> : null }
                     { this.state.showResultArea ? <ResultArea db={this.state.selectedDB} col={this.state.selectedCol} query={this.query} projection={this.projection} options={this.options} /> : null }
+                    { this.state.showResultArea ? <Pagination options={this.options} userEnteredLimit={this.userEnteredLimit} onMoreClick={this.moreClick} /> : null }
                 </div>
             </div>
         );
@@ -175,7 +185,8 @@ var ActionArea = React.createClass({
         let queryValStr = this.queryVal.value,
             queryStr = '',
             projectionStr = '',
-            optionsStr = '{';
+            optionsStr = '{',
+            userEnteredLimit = this.limitNum.value ? this.limitNum.value : -1;
         
         if(this.queryKey.value) {
             //If the query value is a string, make sure it satrts and end with double quotes
@@ -203,19 +214,23 @@ var ActionArea = React.createClass({
             optionsStr += '"sort": [["' + this.sortField.value + '", "' + this.sortDirection.value + '"]],';
         }
 
-        if(this.limitNum.value) {
+        if(this.limitNum.value && this.limitNum.value < 20) {
             optionsStr += '"limit": ' + this.limitNum.value + ',';
+        } else { //If not entered by user, set to default of 20
+            optionsStr += '"limit": ' + PAGE_LIMIT + ',';
         }
-
+        
         if(this.skipNum.value) {
             optionsStr += '"skip": ' + this.skipNum.value + ',';
+        } else { //If not entered by user, set to default of 0
+            optionsStr += '"skip": 0,';
         }
 
         //Format options 
         optionsStr += '}';
         optionsStr = optionsStr.replace(',}', '}');
 
-        this.props.onRun(queryStr, projectionStr, optionsStr);
+        this.props.onRun(queryStr, projectionStr, optionsStr, userEnteredLimit);
     },
     render: function() {
         return (
@@ -330,7 +345,7 @@ var ResultArea = React.createClass({
         if(this.serverRequest) {
             this.serverRequest.abort();   
         }
-    },    
+    },   
     render: function() {
         var results = this.state.result.split('}').map(function(r) {
             if(r !== '') {
@@ -348,6 +363,23 @@ var ResultArea = React.createClass({
                 </div>
             </div>
         );
+    }
+});
+
+var Pagination = React.createClass({
+    moreClick: function() {
+        let optionsObj = JSON.parse(this.props.options);
+        optionsObj.skip += PAGE_LIMIT;
+
+        if(this.props.userEnteredLimit === -1 || (this.props.userEnteredLimit > -1 && optionsObj.skip + 20 <= this.props.userEnteredLimit)) {
+            this.props.onMoreClick(JSON.stringify(optionsObj));
+        } else if(optionsObj.skip + 20 - this.props.userEnteredLimit > 0) {
+            optionsObj.limit = this.props.userEnteredLimit - optionsObj.skip;
+            this.props.onMoreClick(JSON.stringify(optionsObj));
+        }
+    },
+    render: function() {
+        return <button onClick={this.moreClick}>More</button>;
     }
 });
 
