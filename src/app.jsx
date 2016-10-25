@@ -373,14 +373,26 @@ var Pagination = React.createClass({
 
         //If there is a full page of items to display
         if(this.props.userEnteredLimit === -1 || (this.props.userEnteredLimit > -1 && optionsObj.skip + PAGE_LIMIT <= this.props.userEnteredLimit)) {
+            //Scroll to top of result area
+            $('.resultArea').animate({scrollTop: 0}, 400);
+
+            //Get the next results 
             this.props.onMoreClick(JSON.stringify(optionsObj));
         } else if(this.props.userEnteredLimit - optionsObj.skip > 0) { //Else if there is less than a full page of items to display 
+            //Scroll to top of result area
+            $('.resultArea').animate({scrollTop: 0}, 400);
+
+            //Update the limit and get the next results 
             optionsObj.limit = this.props.userEnteredLimit - optionsObj.skip;
             this.props.onMoreClick(JSON.stringify(optionsObj));
         }
     },
     render: function() {
-        return <button onClick={this.moreClick}>More</button>;
+        return (
+            <div className="pagination">
+                <button onClick={this.moreClick}>More</button>
+            </div>
+        );
     }
 });
 
