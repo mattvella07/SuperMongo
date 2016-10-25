@@ -371,9 +371,10 @@ var Pagination = React.createClass({
         let optionsObj = JSON.parse(this.props.options);
         optionsObj.skip += PAGE_LIMIT;
 
-        if(this.props.userEnteredLimit === -1 || (this.props.userEnteredLimit > -1 && optionsObj.skip + 20 <= this.props.userEnteredLimit)) {
+        //If there is a full page of items to display
+        if(this.props.userEnteredLimit === -1 || (this.props.userEnteredLimit > -1 && optionsObj.skip + PAGE_LIMIT <= this.props.userEnteredLimit)) {
             this.props.onMoreClick(JSON.stringify(optionsObj));
-        } else if(optionsObj.skip + 20 - this.props.userEnteredLimit > 0) {
+        } else if(this.props.userEnteredLimit - optionsObj.skip > 0) { //Else if there is less than a full page of items to display 
             optionsObj.limit = this.props.userEnteredLimit - optionsObj.skip;
             this.props.onMoreClick(JSON.stringify(optionsObj));
         }
