@@ -7,7 +7,8 @@ var PageContainer = React.createClass({
             selectedCol: '',
             showCollections: false,
             showActionArea: false,
-            showResultArea: false
+            showResultArea: false,
+            showPaginationArea: false
         };
     },
     handleDBClick: function(selectedDB) {
@@ -50,7 +51,7 @@ var PageContainer = React.createClass({
                 <div className="column">
                     { this.state.showActionArea ? <ActionArea db={this.state.selectedDB} col={this.state.selectedCol} onRun={this.handleRun} /> : null }
                     { this.state.showResultArea ? <ResultArea db={this.state.selectedDB} col={this.state.selectedCol} query={this.query} projection={this.projection} options={this.options} /> : null }
-                    { this.state.showResultArea ? <Pagination options={this.options} userEnteredLimit={this.userEnteredLimit} onMoreClick={this.moreClick} /> : null }
+                    { this.state.showResultArea ? <Pagination db={this.state.selectedDB} col={this.state.selectedCol} query={this.query} options={this.options} userEnteredLimit={this.userEnteredLimit} totalCount={this.totalCount} onMoreClick={this.moreClick} /> : null }
                 </div>
             </div>
         );
@@ -367,6 +368,38 @@ var ResultArea = React.createClass({
 });
 
 var Pagination = React.createClass({
+    componentWillReceiveProps: function(nextProps) {
+        this.hasMoreItems();
+    },
+    componentDidMount: function() {
+        this.hasMoreItems();
+    },
+    hasMoreItems: function(nextProps) {
+        //Get count 
+        let currProps = nextProps || this.props,
+            countStr = '/api/count/' + currProps.db + '/' + currProps.col;
+        
+        if(currProps.query) {
+            countStr += '/' + currProps.query;
+        } else {
+            countStr += '/{}';
+        }
+
+        if(currProps.options) {
+            countStr += '/' + currProps.options;
+        } else {
+            countStr += '/{}';
+        }
+
+        $.get(countStr, function(result) {
+            if(result) {
+                let optionsObj = JSON.parse(this.props.options);
+                if(result - (optionsObj.skip + PAGE_LIMIT) > 0 && (this.props.userEnteredLimit === -1 || this.props.userEnteredLimit - (optionsObj.skip + PAGE_LIMIT) > 0)) {
+                    console.log('more exist');
+                }
+            } 
+        }.bind(this));
+    },
     moreClick: function() {
         let optionsObj = JSON.parse(this.props.options);
         optionsObj.skip += PAGE_LIMIT;
