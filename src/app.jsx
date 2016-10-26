@@ -201,30 +201,30 @@ var ActionArea = React.createClass({
                 }
             }
             if(this.queryComparison.value === ':') {
-                queryStr += '{"' + this.queryKey.value + '"' + this.queryComparison.value + ' ' + queryValStr + '}';
+                queryStr += '{"' + this.queryKey.value + '"' + this.queryComparison.value + queryValStr + '}';
             } else {
-                queryStr += '{"' + this.queryKey.value + '": {"' + this.queryComparison.value + '": ' + queryValStr + '} }';
+                queryStr += '{"' + this.queryKey.value + '":{"' + this.queryComparison.value + '":' + queryValStr + '} }';
             }
         }
         
         if(this.projectionField.value) {
-            projectionStr += '{"' + this.projectionField.value + '": ' + this.projectionValue.value + '}';
+            projectionStr += '{"' + this.projectionField.value + '":' + this.projectionValue.value + '}';
         }
         
         if(this.sortField.value) {
-            optionsStr += '"sort": [["' + this.sortField.value + '", "' + this.sortDirection.value + '"]],';
+            optionsStr += '"sort":[["' + this.sortField.value + '","' + this.sortDirection.value + '"]],';
         }
 
         if(this.limitNum.value && this.limitNum.value < 20) {
-            optionsStr += '"limit": ' + this.limitNum.value + ',';
+            optionsStr += '"limit":' + this.limitNum.value + ',';
         } else { //If not entered by user, set to default of 20
-            optionsStr += '"limit": ' + PAGE_LIMIT + ',';
+            optionsStr += '"limit":' + PAGE_LIMIT + ',';
         }
         
         if(this.skipNum.value) {
-            optionsStr += '"skip": ' + this.skipNum.value + ',';
+            optionsStr += '"skip":' + this.skipNum.value + ',';
         } else { //If not entered by user, set to default of 0
-            optionsStr += '"skip": 0,';
+            optionsStr += '"skip":0,';
         }
 
         //Format options 
@@ -369,7 +369,7 @@ var ResultArea = React.createClass({
 
 var Pagination = React.createClass({
     componentWillReceiveProps: function(nextProps) {
-        this.hasMoreItems();
+        this.hasMoreItems(nextProps);
     },
     componentDidMount: function() {
         this.hasMoreItems();
@@ -385,17 +385,30 @@ var Pagination = React.createClass({
             countStr += '/{}';
         }
 
-        if(currProps.options) {
-            countStr += '/' + currProps.options;
+        //If user didn't enter a limit, remove the default limit of 20
+        //to get the total number of items 
+        if(currProps.userEnteredLimit === -1) {
+            countStr += '/' + currProps.options.replace('"limit":' + PAGE_LIMIT, '');
+        } else if(currProps.userEnteredLimit > PAGE_LIMIT) {
+            countStr += '/' + currProps.options.replace('"limit":' + PAGE_LIMIT, '"limit": ' + currProps.userEnteredLimit);
         } else {
-            countStr += '/{}';
+            countStr += '/' + currProps.options;
         }
+
+        //If default limit of 20 is removed make sure no commas are left over 
+        countStr = countStr.replace(',}', '}');
+        countStr = countStr.replace('{,', '{');
 
         $.get(countStr, function(result) {
             if(result) {
-                let optionsObj = JSON.parse(this.props.options);
-                if(result - (optionsObj.skip + PAGE_LIMIT) > 0 && (this.props.userEnteredLimit === -1 || this.props.userEnteredLimit - (optionsObj.skip + PAGE_LIMIT) > 0)) {
-                    console.log('more exist');
+                let optionsObj = JSON.parse(currProps.options);
+
+                if(result - (optionsObj.skip + PAGE_LIMIT) > 0 && (currProps.userEnteredLimit === -1 || currProps.userEnteredLimit - (optionsObj.skip + PAGE_LIMIT) > 0)) {
+                    //console.log('more exist');
+                    $('.moreButton').removeClass('disabled');
+                } else {
+                    //console.log('no more');
+                    $('.moreButton').addClass('disabled');
                 }
             } 
         }.bind(this));
@@ -423,7 +436,7 @@ var Pagination = React.createClass({
     render: function() {
         return (
             <div className="pagination">
-                <button onClick={this.moreClick}>More</button>
+                <button className="moreButton" onClick={this.moreClick}>More</button>
             </div>
         );
     }

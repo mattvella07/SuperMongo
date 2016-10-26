@@ -36,8 +36,12 @@ body {
             height: 10%;
             display: flex; 
             justify-content: flex-end;
-            button {
+            .moreButton {
                 height: 25px;
+                opacity: 1.0;
+                &.disabled {
+                    opacity: 0.3;
+                }
             }
         }
         .database,
