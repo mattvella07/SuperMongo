@@ -89,7 +89,7 @@ var DatabaseList = React.createClass({
         return (
             <div className="databaseList">
                 <h3>Databases</h3>
-                {dbs}            
+                { (dbs.length <= 1) ? 'NONE' : dbs }            
             </div>
         );
     }
@@ -145,8 +145,10 @@ var CollectionList = React.createClass({
         this.serverRequest.abort();
     },
     render: function() {
-        var self = this;
-        var collections = this.state.collectionNames.split(',').map(function(col) {
+        let self = this,
+            collections = '';
+        
+        collections = this.state.collectionNames.split(',').map(function(col) {
             if(col !== '') {
                 return (
                     <Collection col={col} onColClick={self.props.onColClick} >
@@ -154,10 +156,11 @@ var CollectionList = React.createClass({
                 );
             }
         });
+
         return (
             <div className="collectionList">
                 <h3>Collections in <i>{this.props.db}</i></h3>
-                {collections}
+                { (collections.length <= 1) ? 'NONE' : collections }
             </div>  
         );
     }
@@ -403,11 +406,10 @@ var Pagination = React.createClass({
             if(result) {
                 let optionsObj = JSON.parse(currProps.options);
 
+                //If more items exist, make sure button is enabled
                 if(result - (optionsObj.skip + PAGE_LIMIT) > 0 && (currProps.userEnteredLimit === -1 || currProps.userEnteredLimit - (optionsObj.skip + PAGE_LIMIT) > 0)) {
-                    //console.log('more exist');
                     $('.moreButton').removeClass('disabled');
-                } else {
-                    //console.log('no more');
+                } else { //If no more items exist, make sure button is disabled 
                     $('.moreButton').addClass('disabled');
                 }
             } 
