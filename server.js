@@ -1,9 +1,9 @@
-var express = require('express'),
+var config = require('./lib/config'),
+    express = require('express'),
     MongoClient = require('mongodb').MongoClient,
     assert = require('assert'),
     app = express();
-var dbUrl = 'mongodb://localhost:27017/',
-    port = 3000;
+var dbUrl = `mongodb://${config.mongodb.host}:${config.mongodb.port}/`;
 
 app.use(express.static('src'));
 app.use(express.static('dist'));
@@ -106,6 +106,6 @@ app.get('/api/count/:DBName/:ColName/:Query/:Options', function(req, res) {
     });
 });
 
-app.listen(port, function() {
-   console.log('Listening on port ' + port); 
+app.listen(config.express.port, function() {
+   console.log('Listening on port ' + config.express.port); 
 });
