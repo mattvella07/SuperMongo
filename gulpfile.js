@@ -6,10 +6,9 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglifyjs'),
     cleanCSS = require('gulp-clean-css'),
     rename = require('gulp-rename'),
-    del = require('del'),
-    path = require('path');
+    del = require('del');
 
-var jsPaths = ['./*.js', './src/*.js', './src/*.jsx'];
+var jsPaths = ['./*.js', './src/*.js', './src/*.jsx', './lib/*.js'];
 
 //Clean dist folder
 gulp.task('clean', function() {

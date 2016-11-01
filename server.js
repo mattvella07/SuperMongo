@@ -1,114 +1,16 @@
 var config = require('./lib/config'),
     routes = require('./lib/routes'),
     express = require('express'),
-    //MongoClient = require('mongodb').MongoClient,
-    assert = require('assert'),
     app = express();
-//var dbUrl = `mongodb://${config.mongodb.host}:${config.mongodb.port}/`;
 
+//Serve static files
 app.use(express.static('src'));
 app.use(express.static('dist'));
 
+//API routes
 app.use('/', routes);
 
-/* app.get('/api/databases', function(req, res) {
-    MongoClient.connect(dbUrl, function(err, db) {
-        if(err) {
-            res.send(err); 
-        } else {
-            db.admin().listDatabases(function(err, dbs) {
-                if(err) {
-                    res.send(err);
-                } else {
-                    res.json(dbs.databases);
-                }
-                db.close();
-            }); 
-            
-        }
-    });
-});
-
-app.get('/api/collections/:DBName', function(req, res) {
-    MongoClient.connect(dbUrl + req.params.DBName, function(err, db) {
-        if(err) {
-            res.send(err);
-        } else {
-            db.listCollections().toArray(function(err, items) {
-                if(err) {
-                    res.send(err); 
-                } else {
-                    res.json(items);
-                }
-                db.close();
-            });
-            
-        }
-    });
-});
-
-app.get('/api/find/:DBName/:ColName/:Query/:Projection/:Options', function(req, res) {
-    MongoClient.connect(dbUrl + req.params.DBName, function(err, db) {
-        if(err) {
-            res.send(err);
-        } else {
-            var collection = db.collection(req.params.ColName),
-                query = {},
-                projection = {},
-                options = {};
-            
-            try {
-                query = JSON.parse(req.params.Query);
-                projection = JSON.parse(req.params.Projection);
-                options = JSON.parse(req.params.Options);
-
-                collection.find(query, projection, options).toArray(function(err, items) {
-                    if(err) {
-                        res.send(err);
-                    } else {
-                        res.json(items);
-                    }
-                    
-                    db.close();
-                });
-                
-            } catch (error) {
-                res.send(error);
-            }
-        }
-    });
-});
-
-app.get('/api/count/:DBName/:ColName/:Query/:Options', function(req, res) {
-    MongoClient.connect(dbUrl + req.params.DBName, function(err, db) {
-        if(err) {
-            res.send(err);
-        } else {
-            var collection = db.collection(req.params.ColName),
-                query = {},
-                options = {};
-
-            try {
-                query = JSON.parse(req.params.Query);
-                options = JSON.parse(req.params.Options);
-
-                collection.count(query, options, function(err, count) {
-                    if(err) {
-                        res.send(err);
-                    } else {
-                        res.json(count);
-                    }
-
-                    db.close();
-                });
-
-            } catch (error) {
-                res.send(error);
-            }
-        }
-    });
-}); */
-
+//Start server
 app.listen(config.express.port, function() {
    console.log('Listening on port ' + config.express.port); 
 });
