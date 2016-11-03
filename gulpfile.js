@@ -8,7 +8,7 @@ var gulp = require('gulp'),
     rename = require('gulp-rename'),
     del = require('del');
 
-var jsPaths = ['./*.js', './src/*.js', './src/*.jsx', './lib/*.js', './lib/routes/*.js'];
+var jsPaths = ['./*.js', './src/*.jsx', './lib/*.js', './lib/routes/*.js', './lib/routes/test/*.js'];
 
 //Clean dist folder
 gulp.task('clean', function() {
@@ -30,7 +30,7 @@ gulp.task('less', function() {
 gulp.task('lint', function() {
     return jsPaths.map(function(path) {
         return gulp.src(path)
-            .pipe(react())
+            .pipe(react({es6module: true}))
             .pipe(jshint({
                 esversion: 6
             }))
@@ -38,10 +38,10 @@ gulp.task('lint', function() {
     });
 });
 
-//Minify JS
+//Minify Javascript and copy it to dist directory 
 gulp.task('minifyJS', function() {
     return gulp.src('./src/*.jsx')
-        .pipe(react())
+        .pipe(react({es6module: true}))
         .pipe(babel({
             presets: ['es2015']
         }))
