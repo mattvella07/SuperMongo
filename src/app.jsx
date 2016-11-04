@@ -64,20 +64,6 @@ var PageContainer = React.createClass({
     }
 });
 
-//DatabaseList
-
-//Database
-
-//CollectionList
-
-//Collection
-
-//ActionArea
-
-//ResultArea
-
-//Pagination
-
 ReactDOM.render(
     <PageContainer allDBsApi="/api/databases" />,
     document.getElementById('content')
