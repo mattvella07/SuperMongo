@@ -2,8 +2,10 @@ import React from 'react';
 
 var ResultArea = React.createClass({
     getInitialState: function() {
+        //Set initial state
         return {
-            result: ''
+            result: '',
+            isLoading: true
         };
     },
     getData: function(nextProps) {
@@ -48,13 +50,14 @@ var ResultArea = React.createClass({
                 data = '{ No results found ';
             }
             
+            //Using state, set data and hide loading message 
             this.replaceState({result: data});
-            
-            $('#resultsLoading').hide();
-            
+            this.setState({ isLoading: false });
         }.bind(this));
     },
     componentWillReceiveProps: function(nextProps) {
+        //Show loading message using state and get data 
+        this.setState({ isLoading: true });
         this.getData(nextProps);
     },
     componentDidMount: function() {
@@ -75,8 +78,8 @@ var ResultArea = React.createClass({
         });
         
         return (
-            <div className="resultArea">
-                <p id="resultsLoading">Loading...</p>
+            <div className="resultArea" id="resultArea">
+                { this.state.isLoading ? <p id="resultsLoading">Loading...</p> : null }
                 <div>
                     {results}
                 </div>

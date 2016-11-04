@@ -1,7 +1,14 @@
 import React from 'react';
+var classNames = require('classnames'),
+    scroll = require('react-scroll').animateScroll;
 const PAGE_LIMIT = 20;
 
 var Pagination = React.createClass({
+    getInitialState: function() {
+        return {
+            isDisabled: false
+        };
+    },
     componentWillReceiveProps: function(nextProps) {
         this.hasMoreItems(nextProps);
     },
@@ -39,9 +46,9 @@ var Pagination = React.createClass({
 
                 //If more items exist, make sure button is enabled
                 if(result - (optionsObj.skip + PAGE_LIMIT) > 0 && (currProps.userEnteredLimit === -1 || currProps.userEnteredLimit - (optionsObj.skip + PAGE_LIMIT) > 0)) {
-                    $('.moreButton').removeClass('disabled');
+                    this.setState({ isDisabled: false });
                 } else { //If no more items exist, make sure button is disabled 
-                    $('.moreButton').addClass('disabled');
+                    this.setState({ isDisabled: true });
                 }
             } 
         }.bind(this));
@@ -53,13 +60,13 @@ var Pagination = React.createClass({
         //If there is a full page of items to display
         if(this.props.userEnteredLimit === -1 || (this.props.userEnteredLimit > -1 && optionsObj.skip + PAGE_LIMIT <= this.props.userEnteredLimit)) {
             //Scroll to top of result area
-            $('.resultArea').animate({scrollTop: 0}, 400);
+            scroll.scrollToTop({containerId: 'resultArea'});
 
             //Get the next results 
             this.props.onMoreClick(JSON.stringify(optionsObj));
         } else if(this.props.userEnteredLimit - optionsObj.skip > 0) { //Else if there is less than a full page of items to display 
             //Scroll to top of result area
-            $('.resultArea').animate({scrollTop: 0}, 400);
+            scroll.scrollToTop({containerId: 'resultArea'});
 
             //Update the limit and get the next results 
             optionsObj.limit = this.props.userEnteredLimit - optionsObj.skip;
@@ -67,9 +74,13 @@ var Pagination = React.createClass({
         }
     },
     render: function() {
+        let btnClasses = classNames({
+            'moreButton': true,
+            'disabled': this.state.isDisabled
+        });
         return (
             <div className="pagination">
-                <button className="moreButton" onClick={this.moreClick}>More</button>
+                <button className={btnClasses} onClick={this.moreClick}>More</button>
             </div>
         );
     }
