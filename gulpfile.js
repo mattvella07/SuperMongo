@@ -6,9 +6,14 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglifyjs'),
     cleanCSS = require('gulp-clean-css'),
     rename = require('gulp-rename'),
-    del = require('del');
+    del = require('del'),
+    concat = require('gulp-concat');
 
-var jsPaths = ['./*.js', './src/*.jsx', './lib/*.js', './lib/routes/*.js', './lib/routes/test/*.js'];
+var browserify = require('browserify'),
+    babelify = require('babelify'),
+    source = require('vinyl-source-stream');
+
+var jsPaths = ['./*.js', './src/components/*.jsx', './src/*.jsx', './lib/*.js', './lib/routes/*.js', './lib/routes/test/*.js'];
 
 //Clean dist folder
 gulp.task('clean', function() {
@@ -39,7 +44,8 @@ gulp.task('lint', function() {
 });
 
 //Minify Javascript and copy it to dist directory 
-gulp.task('minifyJS', function() {
+//Original
+/*gulp.task('minifyJS', function() {
     return gulp.src('./src/*.jsx')
         .pipe(react({es6module: true}))
         .pipe(babel({
@@ -50,6 +56,19 @@ gulp.task('minifyJS', function() {
             suffix: '.min'
         }))
         .pipe(gulp.dest('dist'));
+});*/
+
+//New
+gulp.task('minifyJS', function () {
+  browserify({
+    entries: 'src/app.jsx',
+    extensions: ['.jsx'],
+    debug: true
+  })
+  .transform(babelify)
+  .bundle()
+  .pipe(source('app.min.js'))
+  .pipe(gulp.dest('dist'));
 });
 
 //Watch files for changes 
