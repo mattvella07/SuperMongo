@@ -2,14 +2,15 @@ var gulp = require('gulp'),
     react = require('gulp-react'),
     jshint = require('gulp-jshint'),
     less = require('gulp-less'),
-    uglify = require('gulp-uglifyjs'),
+    uglify = require('gulp-uglify'),
     cleanCSS = require('gulp-clean-css'),
     rename = require('gulp-rename'),
     del = require('del'),
     browserify = require('browserify'),
     babelify = require('babelify'),
     source = require('vinyl-source-stream'),
-    streamify = require('gulp-streamify');
+    streamify = require('gulp-streamify'),
+    pump = require('pump');
 
 var jsPaths = ['./*.js', './src/components/*.jsx', './src/*.jsx', './lib/*.js', './lib/routes/*.js', './lib/routes/test/*.js'];
 
@@ -19,40 +20,38 @@ gulp.task('clean', function() {
 });
 
 //Compile LESS and Minify CSS 
-gulp.task('less', function() {
-    return gulp.src('./src/styles/*.less')
-        .pipe(less())
-        .pipe(cleanCSS())
-        .pipe(rename({
-            suffix: '.min'
-        }))
-        .pipe(gulp.dest('dist'));
+gulp.task('less', function(cb) {
+    pump([
+        gulp.src('./src/styles/*.less'),
+        less(),
+        cleanCSS(),
+        rename({ suffix: '.min' }),
+        gulp.dest('dist')
+    ], cb);
 });
 
 //Lint JavaScript
-gulp.task('lint', function() {
-    return jsPaths.map(function(path) {
-        return gulp.src(path)
-            .pipe(react({es6module: true}))
-            .pipe(jshint({
-                esversion: 6
-            }))
-            .pipe(jshint.reporter('default'));
-    });
+gulp.task('lint', function(cb) {
+    pump([
+        gulp.src(jsPaths),
+        react({es6module: true}),
+        jshint({esversion: 6}),
+        jshint.reporter('default')
+    ], cb);
 });
 
 //Minify JavaScript and move it to dist folder 
-gulp.task('minifyJS', function () {
-  browserify({
-    entries: 'src/app.jsx',
-    extensions: ['.jsx'],
-    debug: true
-  })
-  .transform(babelify)
-  .bundle()
-  .pipe(source('app.min.js'))
-  .pipe(streamify(uglify()))
-  .pipe(gulp.dest('dist'));
+gulp.task('minifyJS', function(cb) {
+    pump([
+        browserify({
+            entries: 'src/app.jsx',
+            extensions: ['.jsx'],
+            debug: true
+        }).transform(babelify).bundle(),
+        source('app.min.js'),
+        streamify(uglify()),
+        gulp.dest('dist')
+    ], cb);
 });
 
 //Watch files for changes 
