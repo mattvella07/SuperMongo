@@ -33,17 +33,7 @@ var ResultArea = React.createClass({
         
         $.get(getStr, function(result) {
             for(let x = 0; x < result.length; x++) {
-                var item = result[x];
-                
-                data += '{';
-                
-                for(var propname in item) {
-                    if(item.hasOwnProperty(propname)) {
-                        data += propname + ': ' + item[propname] + ', ';
-                    }
-                }
-                
-                data += '}';
+                data += JSON.stringify(result[x]).split(':').join(' : ').split(',').join(', ');
             }
 
             if(!data) {
