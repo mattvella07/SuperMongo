@@ -16,10 +16,10 @@
   "dependencies": {
     "babel-core": "^6.18.2",
     "classnames": "^2.2.5",
-    "express": "^4.13.4",
-    "mongodb": "^2.1.10",
-    "react": "^15.1.0",
-    "react-dom": "^15.1.0",
+    "express": "^4.14.0",
+    "mongodb": "^2.2.11",
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2",
     "react-scroll": "^1.4.4"
   },
   "devDependencies": {
@@ -27,9 +27,9 @@
     "babel-preset-react": "^6.16.0",
     "babelify": "^7.3.0",
     "browserify": "^13.1.1",
-    "del": "^2.2.0",
+    "del": "^2.2.2",
     "gulp": "^3.9.1",
-    "gulp-clean-css": "^2.0.8",
+    "gulp-clean-css": "^2.0.13",
     "gulp-jshint": "^2.0.2",
     "gulp-less": "^3.2.0",
     "gulp-react": "^3.1.0",
