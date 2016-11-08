@@ -1,14 +1,20 @@
 import React from 'react';
 
-var ResultArea = React.createClass({
-    getInitialState: function() {
+class ResultArea extends React.Component {
+    constructor(props) {
+        super(props);
+
         //Set initial state
-        return {
+        this.state = {
             result: '',
             isLoading: true
         };
-    },
-    getData: function(nextProps) {
+
+        //Bind functions to this context 
+        this.getData = this.getData.bind(this);
+    }
+
+    getData(nextProps) {
         let currProps = nextProps || this.props,
             getStr = '/api/find/' + currProps.db + '/' + currProps.col,
             data = '';
@@ -41,24 +47,28 @@ var ResultArea = React.createClass({
             }
             
             //Using state, set data and hide loading message 
-            this.replaceState({result: data});
+            this.setState({ result: data });
             this.setState({ isLoading: false });
         }.bind(this));
-    },
-    componentWillReceiveProps: function(nextProps) {
+    }
+
+    componentWillReceiveProps(nextProps) {
         //Show loading message using state and get data 
         this.setState({ isLoading: true });
         this.getData(nextProps);
-    },
-    componentDidMount: function() {
+    }
+
+    componentDidMount() {
         this.getData();
-    },    
-    componentWillUnmount: function() {
+    }
+
+    componentWillUnmount() {
         if(this.serverRequest) {
             this.serverRequest.abort();   
         }
-    },   
-    render: function() {
+    }
+
+    render() {
         var results = this.state.result.split('}').map(function(r) {
             if(r !== '') {
                 return (
@@ -76,6 +86,6 @@ var ResultArea = React.createClass({
             </div>
         );
     }
-});
+}
 
 export default ResultArea; 

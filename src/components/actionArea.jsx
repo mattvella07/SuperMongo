@@ -1,8 +1,15 @@
 import React from 'react';
 const PAGE_LIMIT = 20;
 
-var ActionArea = React.createClass({
-    onSubmit: function(e) {
+class ActionArea extends React.Component {
+    constructor(props) {
+        super(props);
+
+        //Bind functions to this context 
+        this.onSubmit = this.onSubmit.bind(this);
+    } 
+
+    onSubmit(e) {
         e.preventDefault();
         
         let queryValStr = this.queryVal.value,
@@ -54,8 +61,9 @@ var ActionArea = React.createClass({
         optionsStr = optionsStr.replace(',}', '}');
 
         this.props.onRun(queryStr, projectionStr, optionsStr, userEnteredLimit);
-    },
-    render: function() {
+    }
+
+    render() {
         return (
             <div className="actionArea">
                 <form onSubmit={this.onSubmit} >
@@ -102,6 +110,6 @@ var ActionArea = React.createClass({
             </div>
         );
     }
-});
+}
 
 export default ActionArea; 

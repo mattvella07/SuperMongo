@@ -1,13 +1,17 @@
 import React from 'react';
 import Collection from './collection.jsx';
 
-var CollectionList = React.createClass({
-    getInitialState: function() {
-        return {
+class CollectionList extends React.Component {
+    constructor(props) {
+        super(props);
+
+        //Set initial state
+        this.state = {
             collectionNames: ''
         };
-    },
-    componentWillReceiveProps: function(nextProps) {
+    }
+
+    componentWillReceiveProps(nextProps) {
         $.get('/api/collections/' + nextProps.db, function(result) {
             var newData = '';
             for(let x = 0; x < result.length; x++) {
@@ -16,10 +20,11 @@ var CollectionList = React.createClass({
                 }
             }
             
-            this.replaceState({ collectionNames: newData});
+            this.setState({ collectionNames: newData});
         }.bind(this));
-    },
-    componentDidMount: function() {
+    }
+
+    componentDidMount() {
         $.get('/api/collections/' + this.props.db, function(result) {
             for(let x = 0; x < result.length; x++) {
                 if(result[x].name.indexOf('system.') !== 0) {
@@ -29,11 +34,13 @@ var CollectionList = React.createClass({
                 }
             }
         }.bind(this));
-    },
-    componentWillUnmount: function() {
+    }
+
+    componentWillUnmount() {
         this.serverRequest.abort();
-    },
-    render: function() {
+    }
+
+    render() {
         let self = this,
             collections = '';
         
@@ -53,6 +60,6 @@ var CollectionList = React.createClass({
             </div>  
         );
     }
-});
+}
 
 export default CollectionList;

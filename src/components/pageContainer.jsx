@@ -5,9 +5,12 @@ import ActionArea from './actionArea.jsx';
 import ResultArea from './resultArea.jsx';
 import Pagination from './pagination.jsx';
 
-var PageContainer = React.createClass({
-    getInitialState: function() {
-        return {
+class PageContainer extends React.Component {
+    constructor(props) {
+        super(props);
+
+        //Set initial state
+        this.state = {
             selectedDB: '',
             selectedCol: '',
             showCollections: false,
@@ -15,23 +18,32 @@ var PageContainer = React.createClass({
             showResultArea: false,
             showPaginationArea: false
         };
-    },
-    handleDBClick: function(selectedDB) {
+
+        //Bind functions to this context 
+        this.handleDBClick = this.handleDBClick.bind(this);
+        this.handleColClick = this.handleColClick.bind(this);
+        this.handleRun = this.handleRun.bind(this);
+        this.moreClick = this.moreClick.bind(this);
+    }
+
+    handleDBClick(selectedDB) {
         this.setState({
             selectedDB: selectedDB,
             showCollections: true,
             showActionArea: false,
             showResultArea: false
         });
-    },
-    handleColClick: function(selectedCol) {
+    }
+
+    handleColClick(selectedCol) {
         this.setState({
             selectedCol: selectedCol,
             showActionArea: true,
             showResultArea: false
         });  
-    },
-    handleRun: function(query, projection, options, userEnteredLimit) {
+    }
+
+    handleRun(query, projection, options, userEnteredLimit) {
         this.query = query;
         this.projection = projection;
         this.options = options;
@@ -39,14 +51,16 @@ var PageContainer = React.createClass({
         this.setState({
             showResultArea: true 
         });
-    },
-    moreClick: function(options) {
+    }
+
+    moreClick(options) {
         this.options = options;
         this.setState({
             showResultArea: true
         });
-    },
-    render: function() {
+    }
+
+    render() {
         return (
             <div className="pageContainer">  
                 <div className="column sideBar">
@@ -61,6 +75,6 @@ var PageContainer = React.createClass({
             </div>
         );
     }
-});
+}
 
 export default PageContainer;

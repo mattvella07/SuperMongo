@@ -1,13 +1,17 @@
 import React from 'react';
 import Database from './database.jsx';
 
-var DatabaseList = React.createClass({
-    getInitialState: function() {
-        return {
+class DatabaseList extends React.Component {
+    constructor(props) {
+        super(props);
+
+        //Set initial state
+        this.state = {
             dbNames: ''
         };
-    },
-    componentDidMount: function() {
+    }
+
+    componentDidMount() {
         $.get(this.props.source, function(result) {
             for(let x = 0; x < result.length; x++) {
                 this.setState({
@@ -15,11 +19,13 @@ var DatabaseList = React.createClass({
                 });
             }
         }.bind(this));
-    },
-    componentWillUnmount: function() {
+    }
+
+    componentWillUnmount() {
         this.serverRequest.abort();
-    },
-    render: function() {
+    }
+
+    render() {
         var self = this;
         var dbs = this.state.dbNames.split(',').map(function(db) {
             if(db !== '') {
@@ -36,6 +42,6 @@ var DatabaseList = React.createClass({
             </div>
         );
     }
-});
+}
 
 export default DatabaseList;

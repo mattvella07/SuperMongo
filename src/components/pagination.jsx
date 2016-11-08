@@ -3,19 +3,29 @@ var classNames = require('classnames'),
     scroll = require('react-scroll').animateScroll;
 const PAGE_LIMIT = 20;
 
-var Pagination = React.createClass({
-    getInitialState: function() {
-        return {
+class Pagination extends React.Component {
+    constructor(props) {
+        super(props);
+
+        //Set initial state
+        this.state = {
             isDisabled: false
         };
-    },
-    componentWillReceiveProps: function(nextProps) {
+
+        //Bind functions to this context 
+        this.hasMoreItems = this.hasMoreItems.bind(this);
+        this.moreClick = this.moreClick.bind(this);
+    }
+
+    componentWillReceiveProps(nextProps) {
         this.hasMoreItems(nextProps);
-    },
-    componentDidMount: function() {
+    }
+
+    componentDidMount() {
         this.hasMoreItems();
-    },
-    hasMoreItems: function(nextProps) {
+    }
+
+    hasMoreItems(nextProps) {
         //Get count 
         let currProps = nextProps || this.props,
             countStr = '/api/count/' + currProps.db + '/' + currProps.col;
@@ -52,8 +62,9 @@ var Pagination = React.createClass({
                 }
             } 
         }.bind(this));
-    },
-    moreClick: function() {
+    } 
+
+    moreClick() {
         let optionsObj = JSON.parse(this.props.options);
         optionsObj.skip += PAGE_LIMIT;
 
@@ -72,8 +83,9 @@ var Pagination = React.createClass({
             optionsObj.limit = this.props.userEnteredLimit - optionsObj.skip;
             this.props.onMoreClick(JSON.stringify(optionsObj));
         }
-    },
-    render: function() {
+    }
+
+    render() {
         let btnClasses = classNames({
             'moreButton': true,
             'disabled': this.state.isDisabled
@@ -84,6 +96,6 @@ var Pagination = React.createClass({
             </div>
         );
     }
-});
+}
 
 export default Pagination;
