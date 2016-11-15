@@ -12,8 +12,6 @@ class PageContainer extends React.Component {
 
         //Set initial state
         this.state = {
-            selectedDB: '',
-            selectedCol: '',
             showCollections: false,
             showActionArea: false,
             showFindResultArea: false,
@@ -30,8 +28,8 @@ class PageContainer extends React.Component {
     }
 
     handleDBClick(selectedDB) {
+        this.selectedDB = selectedDB;
         this.setState({
-            selectedDB: selectedDB,
             showCollections: true,
             showActionArea: false,
             showFindResultArea: false,
@@ -40,8 +38,8 @@ class PageContainer extends React.Component {
     }
 
     handleColClick(selectedCol) {
+        this.selectedCol = selectedCol;
         this.setState({
-            selectedCol: selectedCol,
             showActionArea: true,
             showFindResultArea: false,
             showInsertResultArea: false
@@ -80,13 +78,13 @@ class PageContainer extends React.Component {
             <div className="pageContainer">  
                 <div className="column sideBar">
                     <DatabaseList source={this.props.allDBsApi} onDBClick={this.handleDBClick} />
-                    { this.state.showCollections ? <CollectionList db={this.state.selectedDB} onColClick={this.handleColClick} /> : null }
+                    { this.state.showCollections ? <CollectionList db={this.selectedDB} onColClick={this.handleColClick} /> : null }
                 </div>
                 <div className="column">
-                    { this.state.showActionArea ? <ActionArea db={this.state.selectedDB} col={this.state.selectedCol} onFind={this.handleFind} onInsert={this.handleInsert} /> : null }
-                    { this.state.showFindResultArea ? <FindResultArea db={this.state.selectedDB} col={this.state.selectedCol} query={this.query} projection={this.projection} options={this.options} /> : null }
-                    { this.state.showFindResultArea ? <Pagination db={this.state.selectedDB} col={this.state.selectedCol} query={this.query} options={this.options} userEnteredLimit={this.userEnteredLimit} totalCount={this.totalCount} onMoreClick={this.moreClick} /> : null }
-                    { this.state.showInsertResultArea ? <InsertResultArea db={this.state.selectedDB} col={this.state.selectedCol} objToInsert={this.objToInsert} /> : null }
+                    { this.state.showActionArea ? <ActionArea db={this.selectedDB} col={this.selectedCol} onFind={this.handleFind} onInsert={this.handleInsert} /> : null }
+                    { this.state.showFindResultArea ? <FindResultArea db={this.selectedDB} col={this.selectedCol} query={this.query} projection={this.projection} options={this.options} /> : null }
+                    { this.state.showFindResultArea ? <Pagination db={this.selectedDB} col={this.selectedCol} query={this.query} options={this.options} userEnteredLimit={this.userEnteredLimit} totalCount={this.totalCount} onMoreClick={this.moreClick} /> : null }
+                    { this.state.showInsertResultArea ? <InsertResultArea db={this.selectedDB} col={this.selectedCol} objToInsert={this.objToInsert} /> : null }
                 </div>
             </div>
         );
