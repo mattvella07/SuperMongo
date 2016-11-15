@@ -1,6 +1,5 @@
 import React from 'react';
-var classNames = require('classnames'),
-    scroll = require('react-scroll').animateScroll;
+var scroll = require('react-scroll').animateScroll;
 const PAGE_LIMIT = 20;
 
 class Pagination extends React.Component {
@@ -64,9 +63,9 @@ class Pagination extends React.Component {
         }.bind(this));
     } 
 
-    moreClick() {
+    moreClick(e) {
         let optionsObj = JSON.parse(this.props.options);
-        optionsObj.skip += PAGE_LIMIT;
+            optionsObj.skip += PAGE_LIMIT;
 
         //If there is a full page of items to display
         if(this.props.userEnteredLimit === -1 || (this.props.userEnteredLimit > -1 && optionsObj.skip + PAGE_LIMIT <= this.props.userEnteredLimit)) {
@@ -86,13 +85,9 @@ class Pagination extends React.Component {
     }
 
     render() {
-        let btnClasses = classNames({
-            'moreButton': true,
-            'disabled': this.state.isDisabled
-        });
         return (
             <div className="pagination">
-                <button className={btnClasses} onClick={this.moreClick}>More</button>
+                <button className="moreButton" onClick={this.moreClick} disabled={this.state.isDisabled} >More</button>
             </div>
         );
     }

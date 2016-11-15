@@ -4,8 +4,14 @@ class ActionInsert extends React.Component {
     constructor(props) {
         super(props);
 
+        //Set initial state
+        this.state = {
+            isDisabled: true
+        };
+
         //Bind functions to this context 
         this.onSubmit = this.onSubmit.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
     onSubmit(e) {
@@ -32,14 +38,20 @@ class ActionInsert extends React.Component {
         this.props.onInsert(insertStr);
     }
 
+    handleChange(e) {
+        if(this.insertKey.value.toString().trim() !== '' && this.insertVal.value !== '') {
+            console.log('text change! ' + this.insertKey.value + '  ' + this.insertVal.value);
+        }
+    }
+
     render() {
         return (
             <form onSubmit={this.onSubmit}>
                 <div>
-                    <input type="text" placeholder="Key" ref={(ref) => this.insertKey = ref} /> 
-                    <input type="text" placeholder="Value" ref={(ref) => this.insertVal = ref} />&nbsp;
+                    <input type="text" placeholder="Key" onChange={this.handleChange} ref={(ref) => this.insertKey = ref} /> 
+                    <input type="text" placeholder="Value" onChange={this.handleChange} ref={(ref) => this.insertVal = ref} />&nbsp;
                 </div>
-                <input type="submit" value="Insert" />
+                <input type="submit" value="Insert" disabled={this.state.isDisabled} />
             </form>
         );
     }
