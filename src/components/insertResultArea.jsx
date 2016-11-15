@@ -12,13 +12,11 @@ class InsertResultArea extends React.Component {
         let currProps = nextProps || this.props,
             insertStr = '/api/insert/' + currProps.db + '/' + currProps.col; 
 
-        /*if(currProps.objToInsert) {
+        if(currProps.objToInsert) {
             insertStr += '/' + currProps.objToInsert;
         } else {
             insertStr += '/{}';
-        }*/
-
-        insertStr += '/{"hello": "one"}';
+        }
 
         $.post(insertStr, function(result) {
             console.log('insert result: ' + JSON.stringify(result));

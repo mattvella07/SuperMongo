@@ -10,8 +10,26 @@ class ActionInsert extends React.Component {
 
     onSubmit(e) {
         e.preventDefault();
+
+        let insertValStr = this.insertVal.value,
+            insertStr = '';
         
-        this.props.onInsert({});
+        if(this.insertKey.value) {
+            //If the insert value is a string, make sure it satrts and end with double quotes
+            if(isNaN(insertValStr) && insertValStr[0] !== '"' && insertValStr[insertValStr.length - 1] !== '"') {
+                //If single quotes were used replace them with double quotes, else just add double quotes 
+                if(insertValStr[0] === "'" && insertValStr[insertValStr.length - 1] === "'") {
+                    insertValStr = insertValStr.replace("'" , '"');
+                    insertValStr = insertValStr.replace("'" , '"');
+                } else {
+                    insertValStr = '"' + insertValStr + '"';
+                }
+            }
+
+            insertStr += '{"' + this.insertKey.value + '": ' + insertValStr + '}'; 
+        }
+        
+        this.props.onInsert(insertStr);
     }
 
     render() {
