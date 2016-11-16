@@ -39,8 +39,10 @@ class ActionInsert extends React.Component {
     }
 
     handleChange(e) {
-        if(this.insertKey.value.toString().trim() !== '' && this.insertVal.value !== '') {
-            console.log('text change! ' + this.insertKey.value + '  ' + this.insertVal.value);
+        if(this.insertKey.value.toString().trim() !== '' && this.insertVal.value.toString().trim() !== '') {
+            this.setState({ isDisabled: false });
+        } else {
+            this.setState({ isDisabled: true });
         }
     }
 
@@ -48,10 +50,12 @@ class ActionInsert extends React.Component {
         return (
             <form onSubmit={this.onSubmit}>
                 <div>
-                    <input type="text" placeholder="Key" onChange={this.handleChange} ref={(ref) => this.insertKey = ref} /> 
-                    <input type="text" placeholder="Value" onChange={this.handleChange} ref={(ref) => this.insertVal = ref} />&nbsp;
+                    <div>
+                        <input type="text" placeholder="Key" onChange={this.handleChange} ref={(ref) => this.insertKey = ref} /> 
+                        <input type="text" placeholder="Value" onChange={this.handleChange} ref={(ref) => this.insertVal = ref} />&nbsp;
+                    </div>
+                    <input type="submit" value="Insert" disabled={this.state.isDisabled} />
                 </div>
-                <input type="submit" value="Insert" disabled={this.state.isDisabled} />
             </form>
         );
     }
