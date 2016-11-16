@@ -1,4 +1,5 @@
 import React from 'react';
+import ActionFindQuery from './actionFindQuery.jsx';
 const PAGE_LIMIT = 20;
 
 class ActionFind extends React.Component {
@@ -7,6 +8,8 @@ class ActionFind extends React.Component {
 
         //Bind functions to this context 
         this.onSubmit = this.onSubmit.bind(this);
+        this.addItem = this.addItem.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
     onSubmit(e) {
@@ -63,21 +66,22 @@ class ActionFind extends React.Component {
         this.props.onFind(queryStr, projectionStr, optionsStr, userEnteredLimit);
     }
 
+    addItem(e) {
+        console.log(e.target.className);
+    }
+    
+    handleChange(index, queryKey, queryComparison, queryVal) {
+        console.log('handleChange: ' + index + ' ' + queryKey + ' ' + queryComparison + ' ' + queryVal);
+    }
+
     render() {
         return (
             <form onSubmit={this.onSubmit} >
                 <div>
                     <div>
-                        Query:&nbsp; <input type="text" placeholder="Key" ref={(ref) => this.queryKey = ref} /> 
-                        <select name="comparison" ref={(ref) => this.queryComparison = ref} > 
-                            <option value=":">Equals</option>
-                            <option value="$lt">Less than</option>
-                            <option value="$lte">Less than or equal to</option>
-                            <option value="$gt">Greater than</option>
-                            <option value="$gte">Greater than or equal to</option>
-                            <option value="$ne">Not equal</option>
-                        </select>
-                        <input type="text" placeholder="Value" ref={(ref) => this.queryVal = ref} />&nbsp;
+                        Query:&nbsp; 
+                        <ActionFindQuery index={0} valueChange={this.handleChange} />
+                        <button type="button" className="queryItem" onClick={this.addItem}>+</button>
                     </div>
                     <div>
                         Projection:&nbsp; <select name="hideOrShow" ref={(ref) => this.projectionValue = ref} >
