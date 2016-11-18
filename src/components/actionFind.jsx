@@ -6,39 +6,60 @@ class ActionFind extends React.Component {
     constructor(props) {
         super(props);
 
+        //Set initial state
+        this.state = {
+            numQuery: 1
+        };
+
         //Bind functions to this context 
         this.onSubmit = this.onSubmit.bind(this);
         this.addItem = this.addItem.bind(this);
-        this.handleChange = this.handleChange.bind(this);
+        this.removeItem = this.removeItem.bind(this);
+        this.queryChange = this.queryChange.bind(this);
+
+        this.queryKeys = [];
+        this.queryComparisons = [];
+        this.queryVals = [];
     }
 
     onSubmit(e) {
         e.preventDefault();
 
-        let queryValStr = this.queryVal.value,
-            queryStr = '',
+        let queryStr = '{',
             projectionStr = '',
             optionsStr = '{',
             userEnteredLimit = this.limitNum.value ? this.limitNum.value : -1;
         
-        if(this.queryKey.value) {
-            //If the query value is a string, make sure it satrts and end with double quotes
-            if(isNaN(queryValStr) && queryValStr[0] !== '"' && queryValStr[queryValStr.length - 1] !== '"') {
-                //If single quotes were used replace them with double quotes, else just add double quotes 
-                if(queryValStr[0] === "'" && queryValStr[queryValStr.length - 1] === "'") {
-                    queryValStr = queryValStr.replace("'" , '"');
-                    queryValStr = queryValStr.replace("'" , '"');
-                } else {
-                    queryValStr = '"' + queryValStr + '"';
+
+        //Query
+        for(let x = 0; x < this.state.numQuery; x++) {
+            if(this.queryKeys[x] && this.queryVals[x]) {
+                let queryValStr = this.queryVals[x].value;
+
+                if(this.queryKeys[x].value) {
+                    //If the query value is a string, make sure it satrts and end with double quotes
+                    if(isNaN(queryValStr) && queryValStr[0] !== '"' && queryValStr[queryValStr.length - 1] !== '"') {
+                        //If single quotes were used replace them with double quotes, else just add double quotes 
+                        if(queryValStr[0] === "'" && queryValStr[queryValStr.length - 1] === "'") {
+                            queryValStr = queryValStr.replace("'" , '"');
+                            queryValStr = queryValStr.replace("'" , '"');
+                        } else {
+                            queryValStr = '"' + queryValStr + '"';
+                        }
+                    }
+                    if(this.queryComparisons[x].value === ':') {
+                        queryStr += '"' + this.queryKeys[x].value + '"' + this.queryComparisons[x].value + queryValStr + ',';
+                    } else {
+                        queryStr += '"' + this.queryKeys[x].value + '":{"' + this.queryComparisons[x].value + '":' + queryValStr + '},';
+                    }
                 }
             }
-            if(this.queryComparison.value === ':') {
-                queryStr += '{"' + this.queryKey.value + '"' + this.queryComparison.value + queryValStr + '}';
-            } else {
-                queryStr += '{"' + this.queryKey.value + '":{"' + this.queryComparison.value + '":' + queryValStr + '} }';
-            }
         }
+        queryStr += '}';
+        queryStr = queryStr.replace(',}', '}');
+        console.log('query str: ' + queryStr);
         
+
         if(this.projectionField.value) {
             projectionStr += '{"' + this.projectionField.value + '":' + this.projectionValue.value + '}';
         }
@@ -67,20 +88,34 @@ class ActionFind extends React.Component {
     }
 
     addItem(e) {
-        console.log(e.target.className);
+        //console.log(e.target.className);
+        this.setState({ numQuery: this.state.numQuery + 1 });
+    }
+
+    removeItem(e) {
+        //console.log(e.target.className);
+        this.setState({ numQuery: this.state.numQuery - 1 });
     }
     
-    handleChange(index, queryKey, queryComparison, queryVal) {
-        console.log('handleChange: ' + index + ' ' + queryKey + ' ' + queryComparison + ' ' + queryVal);
+    queryChange(index, queryKey, queryComparison, queryVal) {
+        //Store query 
+        this.queryKeys[index] = queryKey;
+        this.queryComparisons[index] = queryComparison;
+        this.queryVals[index] = queryVal;
     }
 
     render() {
+        let queryItems = []; 
+        for(let i = 0; i < this.state.numQuery; i++) {
+            queryItems.push(<ActionFindQuery index={i} valueChange={this.queryChange} removeItem={this.removeItem} />);
+        }
+
         return (
             <form onSubmit={this.onSubmit} >
                 <div>
                     <div>
                         Query:&nbsp; 
-                        <ActionFindQuery index={0} valueChange={this.handleChange} />
+                        {queryItems}
                         <button type="button" className="queryItem" onClick={this.addItem}>+</button>
                     </div>
                     <div>
