@@ -80,7 +80,7 @@ class PageContainer extends React.Component {
                     <DatabaseList source={this.props.allDBsApi} onDBClick={this.handleDBClick} />
                     { this.state.showCollections ? <CollectionList db={this.selectedDB} onColClick={this.handleColClick} /> : null }
                 </div>
-                <div className="column">
+                <div className="column mainContainer">
                     { this.state.showActionArea ? <ActionArea db={this.selectedDB} col={this.selectedCol} onFind={this.handleFind} onInsert={this.handleInsert} /> : null }
                     { this.state.showFindResultArea ? <FindResultArea db={this.selectedDB} col={this.selectedCol} query={this.query} projection={this.projection} options={this.options} /> : null }
                     { this.state.showFindResultArea ? <Pagination db={this.selectedDB} col={this.selectedCol} query={this.query} options={this.options} userEnteredLimit={this.userEnteredLimit} totalCount={this.totalCount} onMoreClick={this.moreClick} /> : null }

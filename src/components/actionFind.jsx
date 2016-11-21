@@ -1,5 +1,6 @@
 import React from 'react';
 import ActionFindQuery from './actionFindQuery.jsx';
+import ActionFindProjection from './actionFindProjection.jsx';
 const PAGE_LIMIT = 20;
 
 class ActionFind extends React.Component {
@@ -8,7 +9,8 @@ class ActionFind extends React.Component {
 
         //Set initial state
         this.state = {
-            numQuery: 1
+            numQuery: 1,
+            numProjection: 1
         };
 
         //Bind functions to this context 
@@ -16,21 +18,24 @@ class ActionFind extends React.Component {
         this.addItem = this.addItem.bind(this);
         this.removeItem = this.removeItem.bind(this);
         this.queryChange = this.queryChange.bind(this);
+        this.projectionChange = this.projectionChange.bind(this);
 
+        //Variables for storing user entered values 
         this.queryKeys = [];
         this.queryComparisons = [];
         this.queryVals = [];
+        this.projectionVals = [];
+        this.projectionFields = [];
     }
 
     onSubmit(e) {
         e.preventDefault();
 
         let queryStr = '{',
-            projectionStr = '',
+            projectionStr = '{',
             optionsStr = '{',
             userEnteredLimit = this.limitNum.value ? this.limitNum.value : -1;
         
-
         //Query
         for(let x = 0; x < this.state.numQuery; x++) {
             if(this.queryKeys[x] && this.queryVals[x]) {
@@ -57,13 +62,17 @@ class ActionFind extends React.Component {
         }
         queryStr += '}';
         queryStr = queryStr.replace(',}', '}');
-        console.log('query str: ' + queryStr);
         
-
-        if(this.projectionField.value) {
-            projectionStr += '{"' + this.projectionField.value + '":' + this.projectionValue.value + '}';
+        //Projection
+        for(let x = 0; x < this.state.numProjection; x++) {
+            if(this.projectionFields[x] && this.projectionFields[x].value) {
+                projectionStr += '"' + this.projectionFields[x].value + '":' + this.projectionVals[x].value + ',';
+            }
         }
-        
+        projectionStr += '}';
+        projectionStr = projectionStr.replace(',}', '}');
+        console.log('Projection str: ' + projectionStr);
+
         if(this.sortField.value) {
             optionsStr += '"sort":[["' + this.sortField.value + '","' + this.sortDirection.value + '"]],';
         }
@@ -88,13 +97,29 @@ class ActionFind extends React.Component {
     }
 
     addItem(e) {
-        //console.log(e.target.className);
-        this.setState({ numQuery: this.state.numQuery + 1 });
+        let itemToAdd = e.target.className;
+
+        switch(itemToAdd) {
+            case 'queryItem':
+                this.setState({ numQuery: this.state.numQuery + 1 });
+                break;
+            case 'projectionItem': 
+                this.setState({ numProjection: this.state.numProjection + 1 });
+                break;
+        }
     }
 
     removeItem(e) {
-        //console.log(e.target.className);
-        this.setState({ numQuery: this.state.numQuery - 1 });
+        let itemToAdd = e.target.className;
+
+        switch (itemToAdd) {
+            case 'queryItem': 
+                this.setState({ numQuery: this.state.numQuery - 1 });
+                break;
+            case 'projectionItem': 
+                this.setState({ numProjection: this.state.numProjection - 1 });
+                break;
+        }
     }
     
     queryChange(index, queryKey, queryComparison, queryVal) {
@@ -104,10 +129,22 @@ class ActionFind extends React.Component {
         this.queryVals[index] = queryVal;
     }
 
+    projectionChange(index, projectionVal, projectionField) {
+        //Store projection
+        this.projectionVals[index] = projectionVal;
+        this.projectionFields[index] = projectionField;
+    }
+
     render() {
-        let queryItems = []; 
+        let queryItems = [],
+            projectionItems = [];
+
         for(let i = 0; i < this.state.numQuery; i++) {
             queryItems.push(<ActionFindQuery index={i} valueChange={this.queryChange} removeItem={this.removeItem} />);
+        }
+
+        for (let i = 0; i < this.state.numProjection; i++) {
+            projectionItems.push(<ActionFindProjection index={i} valueChange={this.projectionChange} removeItem={this.removeItem} />);
         }
 
         return (
@@ -119,11 +156,9 @@ class ActionFind extends React.Component {
                         <button type="button" className="queryItem" onClick={this.addItem}>+</button>
                     </div>
                     <div>
-                        Projection:&nbsp; <select name="hideOrShow" ref={(ref) => this.projectionValue = ref} >
-                            <option value="1">Show</option>
-                            <option value="0">Hide</option>
-                        </select>
-                        <input type="text" placeholder="Field" ref={(ref) => this.projectionField = ref} />
+                        Projection:&nbsp; 
+                        {projectionItems}
+                        <button type="button" className="projectionItem" onClick={this.addItem}>+</button>
                     </div>
                     <div>
                         Sort:&nbsp; <input type="text" placeholder="Field" ref={(ref) => this.sortField = ref} />

@@ -25,7 +25,7 @@ class ActionFindQuery extends React.Component {
                     <option value="$ne">Not equal</option>
                 </select>
                 <input type="text" placeholder="Value" onChange={this.handleChange} ref={(ref) => this.queryVal = ref} />&nbsp;
-                { this.props.index > 0 ? <button type="button" onClick={this.props.removeItem}>x</button> : null }
+                { this.props.index > 0 ? <button type="button" className="queryItem" onClick={this.props.removeItem}>x</button> : null }
             </div>
         );
     }
