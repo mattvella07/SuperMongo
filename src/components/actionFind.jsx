@@ -118,6 +118,9 @@ class ActionFind extends React.Component {
             case 'projectionItem': 
                 this.setState({ numProjection: this.state.numProjection + 1 });
                 break;
+            case 'sortItem': 
+                this.setState({ numSort: this.state.numSort + 1 });
+                break;
         }
     }
 
@@ -130,6 +133,9 @@ class ActionFind extends React.Component {
                 break;
             case 'projectionItem': 
                 this.setState({ numProjection: this.state.numProjection - 1 });
+                break;
+            case 'sortItem': 
+                this.setState({ numSort: this.state.numSort - 1 });
                 break;
         }
     }
@@ -186,6 +192,7 @@ class ActionFind extends React.Component {
                     <div>
                         Sort: 
                         {sortItems}
+                        <button type="button" className="sortItem" onClick={this.addItem}>+</button>
                     </div>
                     <div>
                         Limit:&nbsp; <input type="text" placeholder="Number to show" ref={(ref) => this.limitNum = ref} />        

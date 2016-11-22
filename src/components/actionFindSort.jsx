@@ -20,6 +20,7 @@ class ActionFindSort extends React.Component {
                     <option value="asc">Ascending</option>
                     <option value="desc">Descending</option>
                 </select>
+                { this.props.index > 0 ? <button type="button" className="sortItem" onClick={this.props.removeItem}>x</button> : null }
             </div>
         );
     }
