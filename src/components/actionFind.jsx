@@ -109,7 +109,7 @@ class ActionFind extends React.Component {
     }
 
     addItem(e) {
-        let itemToAdd = e.target.className;
+        let itemToAdd = e.target.className.toString().replace('fa fa-plus-circle', '').trim();
 
         switch(itemToAdd) {
             case 'queryItem':
@@ -125,7 +125,7 @@ class ActionFind extends React.Component {
     }
 
     removeItem(e) {
-        let itemToAdd = e.target.className;
+        let itemToAdd = e.target.className.toString().replace('fa fa-times-circle', '').trim();
 
         switch (itemToAdd) {
             case 'queryItem': 
@@ -182,17 +182,17 @@ class ActionFind extends React.Component {
                     <div>
                         Query:
                         {queryItems}
-                        <button type="button" className="queryItem" onClick={this.addItem}>+</button>
+                        <button type="button" className="queryItem fa fa-plus-circle" onClick={this.addItem}></button>
                     </div>
                     <div>
                         Projection:
                         {projectionItems}
-                        <button type="button" className="projectionItem" onClick={this.addItem}>+</button>
+                        <button type="button" className="projectionItem fa fa-plus-circle" onClick={this.addItem}></button>
                     </div>
                     <div>
                         Sort: 
                         {sortItems}
-                        <button type="button" className="sortItem" onClick={this.addItem}>+</button>
+                        <button type="button" className="sortItem fa fa-plus-circle" onClick={this.addItem}></button>
                     </div>
                     <div>
                         Limit:&nbsp; <input type="text" placeholder="Number to show" ref={(ref) => this.limitNum = ref} />        
