@@ -82,7 +82,7 @@ class ActionInsert extends React.Component {
                 <div>
                     <div>
                         {items}
-                        <button type="button" onClick={this.addItem}>+</button>
+                        <button type="button" className="fa fa-plus-circle" onClick={this.addItem}></button>
                     </div>
                     <input type="submit" value="Insert" disabled={this.state.isDisabled} />
                 </div>
