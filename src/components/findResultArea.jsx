@@ -79,10 +79,7 @@ class FindResultArea extends React.Component {
         
         return (
             <div className="resultArea" id="resultArea">
-                { this.state.isLoading ? <p id="resultsLoading">Loading...</p> : null }
-                <div>
-                    {results}
-                </div>
+                { this.state.isLoading ? <p id="resultsLoading">Loading...</p> : <div> {results} </div> }
             </div>
         );
     }
