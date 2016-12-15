@@ -53,9 +53,9 @@ class ActionFind extends React.Component {
                         if(queryValStr[0] === "'" && queryValStr[queryValStr.length - 1] === "'") {
                             queryValStr = queryValStr.replace("'" , '"');
                             queryValStr = queryValStr.replace("'" , '"');
-                        } else {
+                        } else if(queryValStr.trim() !== 'true' && queryValStr.trim() !== 'false') { //Else, its a string and not a bool value 
                             queryValStr = '"' + queryValStr + '"';
-                        }
+                        } 
                     }
                     if(this.queryComparisons[x].value === ':') {
                         queryStr += '"' + this.queryKeys[x].value + '"' + this.queryComparisons[x].value + queryValStr + ',';
