@@ -18,8 +18,6 @@ class FindResultArea extends React.Component {
         let currProps = nextProps || this.props,
             getStr = '/api/find/' + currProps.db + '/' + currProps.col,
             data = '';
-
-        console.log(`props query: ${currProps.query}`);
         
         if(currProps.query) {
             getStr += '/' + currProps.query;
