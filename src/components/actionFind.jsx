@@ -2,6 +2,7 @@ import React from 'react';
 import ActionFindQuery from './actionFindQuery.jsx';
 import ActionFindProjection from './actionFindProjection.jsx';
 import ActionFindSort from './actionFindSort.jsx';
+var classNames = require('classnames');
 const PAGE_LIMIT = 20;
 
 class ActionFind extends React.Component {
@@ -12,7 +13,12 @@ class ActionFind extends React.Component {
         this.state = {
             numQuery: 1,
             numProjection: 1,
-            numSort: 1
+            numSort: 1,
+            showQuery: false,
+            showProjection: false,
+            showSort: false,
+            showLimit: false,
+            showSkip: false
         };
 
         //Bind functions to this context 
@@ -39,8 +45,8 @@ class ActionFind extends React.Component {
         let queryStr = '{',
             projectionStr = '{',
             optionsStr = '{',
-            userEnteredLimit = this.limitNum.value ? this.limitNum.value : -1;
-        
+            userEnteredLimit = (this.limitNum && this.limitNum.value) ? this.limitNum.value : -1;
+
         //Query
         for(let x = 0; x < this.state.numQuery; x++) {
             if(this.queryKeys[x] && this.queryVals[x]) {
@@ -67,7 +73,7 @@ class ActionFind extends React.Component {
         }
         queryStr += '}';
         queryStr = queryStr.replace(',}', '}');
-        
+
         //Projection
         for(let x = 0; x < this.state.numProjection; x++) {
             if(this.projectionFields[x] && this.projectionFields[x].value) {
@@ -88,14 +94,14 @@ class ActionFind extends React.Component {
         optionsStr = optionsStr.replace(',]', ']');
 
         //Limit
-        if(this.limitNum.value && this.limitNum.value < 20) {
+        if(this.limitNum && this.limitNum.value && this.limitNum.value < 20) {
             optionsStr += '"limit":' + this.limitNum.value + ',';
         } else { //If not entered by user, set to default of 20
             optionsStr += '"limit":' + PAGE_LIMIT + ',';
         }
-        
+
         //Skip
-        if(this.skipNum.value) {
+        if(this.skipNum && this.skipNum.value) {
             optionsStr += '"skip":' + this.skipNum.value + ',';
         } else { //If not entered by user, set to default of 0
             optionsStr += '"skip":0,';
@@ -162,7 +168,32 @@ class ActionFind extends React.Component {
     render() {
         let queryItems = [],
             projectionItems = [],
-            sortItems = [];
+            sortItems = [],
+            queryClass = classNames({
+                'fa': true,
+                'fa-caret-right': !this.state.showQuery,
+                'fa-caret-down': this.state.showQuery
+            }),
+            projectionClass = classNames({
+                'fa': true,
+                'fa-caret-right': !this.state.showProjection,
+                'fa-caret-down': this.state.showProjection
+            }),
+            sortClass = classNames({
+                'fa': true,
+                'fa-caret-right': !this.state.showSort,
+                'fa-caret-down': this.state.showSort
+            }),
+            limitClass = classNames({
+                'fa': true,
+                'fa-caret-right': !this.state.showLimit,
+                'fa-caret-down': this.state.showLimit
+            }),
+            skipClass = classNames({
+                'fa': true,
+                'fa-caret-right': !this.state.showSkip,
+                'fa-caret-down': this.state.showSkip
+            });
 
         for(let i = 0; i < this.state.numQuery; i++) {
             queryItems.push(<ActionFindQuery index={i} valueChange={this.queryChange} removeItem={this.removeItem} />);
@@ -180,25 +211,27 @@ class ActionFind extends React.Component {
             <form onSubmit={this.onSubmit} >
                 <div>
                     <div>
-                        Query:
-                        {queryItems}
-                        <button type="button" className="queryItem fa fa-plus-circle" onClick={this.addItem}></button>
+                        <div onClick={ () => this.setState({ showQuery: !this.state.showQuery }) }><i className={queryClass}></i>Query</div>
+                        { this.state.showQuery ? <div>{queryItems}</div> : null }
+                        { this.state.showQuery ? <button type="button" className="queryItem fa fa-plus-circle" onClick={this.addItem}></button> : null }
                     </div>
                     <div>
-                        Projection:
-                        {projectionItems}
-                        <button type="button" className="projectionItem fa fa-plus-circle" onClick={this.addItem}></button>
+                        <div onClick={ () => this.setState({ showProjection: !this.state.showProjection }) }><i className={projectionClass}></i>Projection</div>
+                        { this.state.showProjection ? <div>{projectionItems}</div> : null }
+                        { this.state.showProjection ? <button type="button" className="projectionItem fa fa-plus-circle" onClick={this.addItem}></button> : null }
                     </div>
                     <div>
-                        Sort: 
-                        {sortItems}
-                        <button type="button" className="sortItem fa fa-plus-circle" onClick={this.addItem}></button>
+                        <div onClick={ () => this.setState({ showSort: !this.state.showSort }) }><i className={sortClass}></i>Sort</div>
+                        { this.state.showSort ? <div>{sortItems}</div> : null }
+                        { this.state.showSort ? <button type="button" className="sortItem fa fa-plus-circle" onClick={this.addItem}></button> : null }
                     </div>
                     <div>
-                        Limit:&nbsp; <input type="text" placeholder="Number to show" ref={(ref) => this.limitNum = ref} />        
+                        <div onClick={ () => this.setState({ showLimit: !this.state.showLimit }) }><i className={limitClass}></i>Limit</div>
+                        { this.state.showLimit ? <input type="text" placeholder="Number to show" ref={(ref) => this.limitNum = ref} /> : null }    
                     </div>
                     <div>
-                        Skip:&nbsp; <input type="text" placeholder="Number to skip" ref={(ref) => this.skipNum = ref} />
+                        <div onClick={ () => this.setState({ showSkip: !this.state.showSkip }) }><i className={skipClass}></i>Skip</div>
+                        { this.state.showSkip ? <input type="text" placeholder="Number to skip" ref={(ref) => this.skipNum = ref} /> : null }
                     </div>
                     <input type="submit" value="Run" />
                 </div>
