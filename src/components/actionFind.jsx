@@ -77,7 +77,7 @@ class ActionFind extends React.Component {
         //Projection
         for(let x = 0; x < this.state.numProjection; x++) {
             if(this.projectionFields[x] && this.projectionFields[x].value) {
-                projectionStr += '"' + this.projectionFields[x].value + '":' + this.projectionVals[x].value + ',';
+                projectionStr += '"' + encodeURIComponent(this.projectionFields[x].value) + '":' + this.projectionVals[x].value + ',';
             }
         }
         projectionStr += '}';
@@ -87,7 +87,7 @@ class ActionFind extends React.Component {
         optionsStr += '"sort":[';
         for(let x = 0; x < this.state.numSort; x++) {
             if(this.sortFields[x] && this.sortFields[x].value) {
-                optionsStr += '["' + this.sortFields[x].value + '","' + this.sortDirections[x].value + '"],';
+                optionsStr += '["' + encodeURIComponent(this.sortFields[x].value) + '","' + this.sortDirections[x].value + '"],';
             }
         }
         optionsStr += '],';
