@@ -50,7 +50,7 @@ class ActionFind extends React.Component {
         //Query
         for(let x = 0; x < this.state.numQuery; x++) {
             if(this.queryKeys[x] && this.queryVals[x]) {
-                let queryValStr = this.queryVals[x].value;
+                let queryValStr = encodeURIComponent(this.queryVals[x].value);
 
                 if(this.queryKeys[x].value) {
                     //If the query value is a string, make sure it satrts and end with double quotes
@@ -64,9 +64,9 @@ class ActionFind extends React.Component {
                         } 
                     }
                     if(this.queryComparisons[x].value === ':') {
-                        queryStr += '"' + this.queryKeys[x].value + '"' + this.queryComparisons[x].value + queryValStr + ',';
+                        queryStr += '"' + encodeURIComponent(this.queryKeys[x].value) + '"' + this.queryComparisons[x].value + queryValStr + ',';
                     } else {
-                        queryStr += '"' + this.queryKeys[x].value + '":{"' + this.queryComparisons[x].value + '":' + queryValStr + '},';
+                        queryStr += '"' + encodeURIComponent(this.queryKeys[x].value) + '":{"' + this.queryComparisons[x].value + '":' + queryValStr + '},';
                     }
                 }
             }
