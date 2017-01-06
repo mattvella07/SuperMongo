@@ -27,7 +27,7 @@ class ActionInsert extends React.Component {
         let insertStr = '{';
         
         for(let x = 0; x < this.state.numItems; x++) {
-            let insertValStr = this.insertVals[x].value;
+            let insertValStr = encodeURIComponent(this.insertVals[x].value);
         
             if(this.insertKeys[x].value) {
                 //If the insert value is a string, make sure it satrts and end with double quotes
@@ -41,7 +41,7 @@ class ActionInsert extends React.Component {
                     }
                 }
 
-                insertStr += '"' + this.insertKeys[x].value + '": ' + insertValStr + ','; 
+                insertStr += '"' + encodeURIComponent(this.insertKeys[x].value) + '": ' + insertValStr + ','; 
             }
         }
         insertStr += '}';
