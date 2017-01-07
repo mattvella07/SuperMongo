@@ -36,7 +36,7 @@ class ActionInsert extends React.Component {
                     if(insertValStr[0] === "'" && insertValStr[insertValStr.length - 1] === "'") {
                         insertValStr = insertValStr.replace("'" , '"');
                         insertValStr = insertValStr.replace("'" , '"');
-                    } else {
+                    } else if(insertValStr.trim() !== 'true' && insertValStr.trim() !== 'false') { //Else, its a string and not a bool value
                         insertValStr = '"' + insertValStr + '"';
                     }
                 }
