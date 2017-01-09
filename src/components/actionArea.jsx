@@ -1,6 +1,6 @@
 import React from 'react';
 import ActionFind from './actionFind.jsx';
-import ActionInsert from './actionInsert.jsx';
+import ActionInsertOrRemove from './actionInsertOrRemove.jsx';
 
 class ActionArea extends React.Component {
     constructor(props) {
@@ -25,10 +25,11 @@ class ActionArea extends React.Component {
                 <select name="operations" onChange={this.opChange} value={this.state.operation} > 
                     <option value="find">Find</option>
                     <option value="insert">Insert</option>
+                    <option value="remove">Remove</option>
                 </select>
 
                 { this.state.operation === 'find' ? <ActionFind db={this.props.selectedDB} col={this.props.selectedCol} onFind={this.props.onFind} /> : null }
-                { this.state.operation === 'insert' ? <ActionInsert db={this.props.selectedDB} col={this.props.selectedCol} onInsert={this.props.onInsert} /> : null }
+                { this.state.operation === 'insert' || this.state.operation === 'remove' ? <ActionInsertOrRemove db={this.props.selectedDB} col={this.props.selectedCol} op={this.state.operation} onInsert={this.props.onInsert} onRemove={this.props.onRemove} /> : null }
                 
             </div>
         );

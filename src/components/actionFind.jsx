@@ -74,6 +74,8 @@ class ActionFind extends React.Component {
         queryStr += '}';
         queryStr = queryStr.replace(',}', '}');
 
+        console.log(queryStr);
+
         //Projection
         for(let x = 0; x < this.state.numProjection; x++) {
             if(this.projectionFields[x] && this.projectionFields[x].value) {

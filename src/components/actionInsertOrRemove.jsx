@@ -1,7 +1,7 @@
 import React from 'react';
-import ActionInsertItem from './actionInsertItem.jsx';
+import ActionKeyValueItem from './actionKeyValueItem.jsx';
 
-class ActionInsert extends React.Component {
+class ActionInsertOrRemove extends React.Component {
     constructor(props) {
         super(props);
 
@@ -17,46 +17,50 @@ class ActionInsert extends React.Component {
         this.addItem = this.addItem.bind(this);
         this.removeItem = this.removeItem.bind(this);
 
-        this.insertKeys = [];
-        this.insertVals = [];
+        this.keys = [];
+        this.vals = [];
     }
 
     onSubmit(e) {
         e.preventDefault();
 
-        let insertStr = '{';
+        let completeStr = '{';
         
         for(let x = 0; x < this.state.numItems; x++) {
-            let insertValStr = encodeURIComponent(this.insertVals[x].value);
+            let valStr = encodeURIComponent(this.vals[x].value);
         
-            if(this.insertKeys[x].value) {
+            if(this.keys[x].value) {
                 //If the insert value is a string, make sure it satrts and end with double quotes
-                if(isNaN(insertValStr) && insertValStr[0] !== '"' && insertValStr[insertValStr.length - 1] !== '"') {
+                if(isNaN(valStr) && valStr[0] !== '"' && valStr[valStr.length - 1] !== '"') {
                     //If single quotes were used replace them with double quotes, else just add double quotes 
-                    if(insertValStr[0] === "'" && insertValStr[insertValStr.length - 1] === "'") {
-                        insertValStr = insertValStr.replace("'" , '"');
-                        insertValStr = insertValStr.replace("'" , '"');
-                    } else if(insertValStr.trim() !== 'true' && insertValStr.trim() !== 'false') { //Else, its a string and not a bool value
-                        insertValStr = '"' + insertValStr + '"';
+                    if(valStr[0] === "'" && valStr[valStr.length - 1] === "'") {
+                        valStr = valStr.replace("'" , '"');
+                        valStr = valStr.replace("'" , '"');
+                    } else if(valStr.trim() !== 'true' && valStr.trim() !== 'false') { //Else, its a string and not a bool value
+                        valStr = '"' + valStr + '"';
                     }
                 }
 
-                insertStr += '"' + encodeURIComponent(this.insertKeys[x].value) + '": ' + insertValStr + ','; 
+                completeStr += '"' + encodeURIComponent(this.keys[x].value) + '": ' + valStr + ','; 
             }
         }
-        insertStr += '}';
-        insertStr = insertStr.replace(',}', '}');
+        completeStr += '}';
+        completeStr = completeStr.replace(',}', '}');
 
-        this.props.onInsert(insertStr);
+        if(this.props.op === 'insert') {
+            this.props.onInsert(completeStr);
+        } else if(this.props.op === 'remove') {
+            this.props.onRemove(completeStr);
+        }
     }
 
-    handleChange(index, insertKey, insertVal) {
+    handleChange(index, k, v) {
         //Store keys and values to be insertted on form submit 
-        this.insertKeys[index] = insertKey;
-        this.insertVals[index] = insertVal;
+        this.keys[index] = k;
+        this.vals[index] = v;
 
         //Determine whether to enable button or not 
-        if(insertKey && insertVal && insertKey.value.toString().trim() !== '' && insertVal.value.toString().trim() !== '') {
+        if(k && v && k.value.toString().trim() !== '' && v.value.toString().trim() !== '') {
             this.setState({ isDisabled: false });
         } else {
             this.setState({ isDisabled: true });
@@ -74,7 +78,7 @@ class ActionInsert extends React.Component {
     render() {
         let items = [];
         for (let i = 0; i < this.state.numItems; i++) {
-            items.push(<ActionInsertItem index={i} textChange={this.handleChange} removeItem={this.removeItem} />);
+            items.push(<ActionKeyValueItem index={i} textChange={this.handleChange} removeItem={this.removeItem} />);
         }
 
         return (
@@ -84,11 +88,11 @@ class ActionInsert extends React.Component {
                         {items}
                         <button type="button" className="fa fa-plus-circle" onClick={this.addItem}></button>
                     </div>
-                    <input type="submit" value="Insert" disabled={this.state.isDisabled} />
+                    <input type="submit" value={this.props.op} disabled={this.state.isDisabled} />
                 </div>
             </form>
         );
     }
 }
 
-export default ActionInsert;
+export default ActionInsertOrRemove;

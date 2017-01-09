@@ -24,6 +24,7 @@ class PageContainer extends React.Component {
         this.handleColClick = this.handleColClick.bind(this);
         this.handleFind = this.handleFind.bind(this);
         this.handleInsert = this.handleInsert.bind(this);
+        this.handleRemove = this.handleRemove.bind(this);
         this.moreClick = this.moreClick.bind(this);
     }
 
@@ -53,7 +54,8 @@ class PageContainer extends React.Component {
         this.userEnteredLimit = userEnteredLimit;
         this.setState({
             showFindResultArea: true,
-            showInsertResultArea: false
+            showInsertResultArea: false,
+            showRemoveResultArea: false
         });
     }
 
@@ -61,6 +63,16 @@ class PageContainer extends React.Component {
         this.objToInsert = objToInsert;
         this.setState({
             showInsertResultArea: true,
+            showFindResultArea: false,
+            showRemoveResultArea: false
+        });
+    }
+
+    handleRemove(objToRemove) {
+        this.objToRemove = objToRemove;
+        this.setState({
+            showRemoveResultArea: true,
+            showInsertResultArea: false,
             showFindResultArea: false
         });
     }
@@ -81,10 +93,11 @@ class PageContainer extends React.Component {
                     { this.state.showCollections ? <CollectionList db={this.selectedDB} onColClick={this.handleColClick} /> : null }
                 </div>
                 <div className="column mainContainer">
-                    { this.state.showActionArea ? <ActionArea db={this.selectedDB} col={this.selectedCol} onFind={this.handleFind} onInsert={this.handleInsert} /> : null }
+                    { this.state.showActionArea ? <ActionArea db={this.selectedDB} col={this.selectedCol} onFind={this.handleFind} onInsert={this.handleInsert} onRemove={this.handleRemove} /> : null }
                     { this.state.showFindResultArea ? <FindResultArea db={this.selectedDB} col={this.selectedCol} query={this.query} projection={this.projection} options={this.options} /> : null }
                     { this.state.showFindResultArea ? <Pagination db={this.selectedDB} col={this.selectedCol} query={this.query} options={this.options} userEnteredLimit={this.userEnteredLimit} totalCount={this.totalCount} onMoreClick={this.moreClick} /> : null }
                     { this.state.showInsertResultArea ? <InsertResultArea db={this.selectedDB} col={this.selectedCol} objToInsert={this.objToInsert} /> : null }
+                    { this.state.showRemoveResultArea ? null : null }
                 </div>
             </div>
         );
