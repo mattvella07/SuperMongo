@@ -29,7 +29,8 @@ class ActionArea extends React.Component {
                 </select>
 
                 { this.state.operation === 'find' ? <ActionFind db={this.props.selectedDB} col={this.props.selectedCol} onFind={this.props.onFind} /> : null }
-                { this.state.operation === 'insert' || this.state.operation === 'remove' ? <ActionInsertOrRemove db={this.props.selectedDB} col={this.props.selectedCol} op={this.state.operation} onInsert={this.props.onInsert} onRemove={this.props.onRemove} /> : null }
+                { this.state.operation === 'insert' ? <ActionInsertOrRemove db={this.props.selectedDB} col={this.props.selectedCol} op={this.state.operation} onInsert={this.props.onInsert} /> : null }
+                { this.state.operation === 'remove' ? <ActionInsertOrRemove db={this.props.selectedDB} col={this.props.selectedCol} op={this.state.operation} onRemove={this.props.onRemove} /> : null }
                 
             </div>
         );

@@ -4,7 +4,7 @@ import CollectionList from './collectionList.jsx';
 import ActionArea from './actionArea.jsx';
 import FindResultArea from './findResultArea.jsx';
 import Pagination from './pagination.jsx';
-import InsertResultArea from './insertResultArea.jsx';
+import InsertOrRemoveResultArea from './insertOrRemoveResultArea.jsx';
 
 class PageContainer extends React.Component {
     constructor(props) {
@@ -96,8 +96,8 @@ class PageContainer extends React.Component {
                     { this.state.showActionArea ? <ActionArea db={this.selectedDB} col={this.selectedCol} onFind={this.handleFind} onInsert={this.handleInsert} onRemove={this.handleRemove} /> : null }
                     { this.state.showFindResultArea ? <FindResultArea db={this.selectedDB} col={this.selectedCol} query={this.query} projection={this.projection} options={this.options} /> : null }
                     { this.state.showFindResultArea ? <Pagination db={this.selectedDB} col={this.selectedCol} query={this.query} options={this.options} userEnteredLimit={this.userEnteredLimit} totalCount={this.totalCount} onMoreClick={this.moreClick} /> : null }
-                    { this.state.showInsertResultArea ? <InsertResultArea db={this.selectedDB} col={this.selectedCol} objToInsert={this.objToInsert} /> : null }
-                    { this.state.showRemoveResultArea ? null : null }
+                    { this.state.showInsertResultArea ? <InsertOrRemoveResultArea db={this.selectedDB} col={this.selectedCol} dataObj={this.objToInsert} op='insert' /> : null }
+                    { this.state.showRemoveResultArea ? <InsertOrRemoveResultArea db={this.selectedDB} col={this.selectedCol} dataObj={this.objToRemove} op='remove' /> : null }
                 </div>
             </div>
         );

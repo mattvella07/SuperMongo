@@ -11,26 +11,26 @@ class InsertResultArea extends React.Component {
         };
 
         //Bind functions to this context 
-        this.insertData = this.insertData.bind(this);
+        this.insertOrRemoveData = this.insertOrRemoveData.bind(this);
     }
 
-    insertData(nextProps) {
+    insertOrRemoveData(nextProps) {
         let currProps = nextProps || this.props,
-            insertStr = '/api/insert/' + currProps.db + '/' + currProps.col,
+            apiStr = '/api/' + currProps.op + '/' + currProps.db + '/' + currProps.col,
             res = ''; 
 
-        if(currProps.objToInsert) {
-            insertStr += '/' + currProps.objToInsert;
+        if(currProps.dataObj) {
+            apiStr += '/' + currProps.dataObj;
         } else {
-            insertStr += '/{}';
+            apiStr += '/{}';
         }
 
-        $.post(insertStr, function(result) {
+        $.post(apiStr, function(result) {
             //console.log('insert result: ' + JSON.stringify(result));
             if(result && JSON.stringify(result).indexOf('ok') !== -1) {
-                res = 'Item inserted successfully!';
+                res = currProps.op === 'insert' ? 'Item inserted successfully!' : 'Item removed successfully!';
             } else {
-                res = 'Failed to insert item.';
+                res = `Failed to ${currProps.op} item.`;
             }
 
             //Using state, set data and hide loading message 
@@ -42,11 +42,11 @@ class InsertResultArea extends React.Component {
     componentWillReceiveProps(nextProps) {
         //Show loading message using state and insert data 
         this.setState({ isLoading: true });
-        this.insertData(nextProps);
+        this.insertOrRemoveData(nextProps);
     }
 
     componentDidMount() {
-        this.insertData();
+        this.insertOrRemoveData();
     }
 
     componentWillUnmount() {

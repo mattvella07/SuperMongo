@@ -7,7 +7,7 @@ class ActionInsertOrRemove extends React.Component {
 
         //Set initial state
         this.state = {
-            isDisabled: true,
+            isDisabled: this.props.op === 'insert' ? true : false,
             numItems: 1
         };
 
@@ -27,21 +27,23 @@ class ActionInsertOrRemove extends React.Component {
         let completeStr = '{';
         
         for(let x = 0; x < this.state.numItems; x++) {
-            let valStr = encodeURIComponent(this.vals[x].value);
+            if(this.keys[x] && this.vals[x]) {
+                let valStr = encodeURIComponent(this.vals[x].value);
         
-            if(this.keys[x].value) {
-                //If the insert value is a string, make sure it satrts and end with double quotes
-                if(isNaN(valStr) && valStr[0] !== '"' && valStr[valStr.length - 1] !== '"') {
-                    //If single quotes were used replace them with double quotes, else just add double quotes 
-                    if(valStr[0] === "'" && valStr[valStr.length - 1] === "'") {
-                        valStr = valStr.replace("'" , '"');
-                        valStr = valStr.replace("'" , '"');
-                    } else if(valStr.trim() !== 'true' && valStr.trim() !== 'false') { //Else, its a string and not a bool value
-                        valStr = '"' + valStr + '"';
+                if(this.keys[x].value) {
+                    //If the insert value is a string, make sure it satrts and end with double quotes
+                    if(isNaN(valStr) && valStr[0] !== '"' && valStr[valStr.length - 1] !== '"') {
+                        //If single quotes were used replace them with double quotes, else just add double quotes 
+                        if(valStr[0] === "'" && valStr[valStr.length - 1] === "'") {
+                            valStr = valStr.replace("'" , '"');
+                            valStr = valStr.replace("'" , '"');
+                        } else if(valStr.trim() !== 'true' && valStr.trim() !== 'false') { //Else, its a string and not a bool value
+                            valStr = '"' + valStr + '"';
+                        }
                     }
-                }
 
-                completeStr += '"' + encodeURIComponent(this.keys[x].value) + '": ' + valStr + ','; 
+                    completeStr += '"' + encodeURIComponent(this.keys[x].value) + '": ' + valStr + ','; 
+                }
             }
         }
         completeStr += '}';
@@ -50,7 +52,13 @@ class ActionInsertOrRemove extends React.Component {
         if(this.props.op === 'insert') {
             this.props.onInsert(completeStr);
         } else if(this.props.op === 'remove') {
-            this.props.onRemove(completeStr);
+            if(completeStr === '{}') {
+                if(confirm('Not entering a key and value will delete the entire collection.  Are you sure you want to proceed?')) {
+                    this.props.onRemove(completeStr);
+                } 
+            } else {
+                this.props.onRemove(completeStr);
+            }
         }
     }
 
@@ -60,10 +68,12 @@ class ActionInsertOrRemove extends React.Component {
         this.vals[index] = v;
 
         //Determine whether to enable button or not 
-        if(k && v && k.value.toString().trim() !== '' && v.value.toString().trim() !== '') {
-            this.setState({ isDisabled: false });
-        } else {
-            this.setState({ isDisabled: true });
+        if(this.props.op === 'insert') {
+            if(k && v && k.value.toString().trim() !== '' && v.value.toString().trim() !== '') {
+                this.setState({ isDisabled: false });
+            } else {
+                this.setState({ isDisabled: true });
+            }
         }
     }
 
