@@ -68,8 +68,9 @@ class PageContainer extends React.Component {
         });
     }
 
-    handleRemove(objToRemove) {
+    handleRemove(objToRemove, justOne) {
         this.objToRemove = objToRemove;
+        this.justOne = justOne;
         this.setState({
             showRemoveResultArea: true,
             showInsertResultArea: false,
@@ -97,7 +98,7 @@ class PageContainer extends React.Component {
                     { this.state.showFindResultArea ? <FindResultArea db={this.selectedDB} col={this.selectedCol} query={this.query} projection={this.projection} options={this.options} /> : null }
                     { this.state.showFindResultArea ? <Pagination db={this.selectedDB} col={this.selectedCol} query={this.query} options={this.options} userEnteredLimit={this.userEnteredLimit} totalCount={this.totalCount} onMoreClick={this.moreClick} /> : null }
                     { this.state.showInsertResultArea ? <InsertOrRemoveResultArea db={this.selectedDB} col={this.selectedCol} dataObj={this.objToInsert} op='insert' /> : null }
-                    { this.state.showRemoveResultArea ? <InsertOrRemoveResultArea db={this.selectedDB} col={this.selectedCol} dataObj={this.objToRemove} op='remove' /> : null }
+                    { this.state.showRemoveResultArea ? <InsertOrRemoveResultArea db={this.selectedDB} col={this.selectedCol} dataObj={this.objToRemove} justOne={this.justOne} op='remove' /> : null }
                 </div>
             </div>
         );

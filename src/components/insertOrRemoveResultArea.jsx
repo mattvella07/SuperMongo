@@ -20,13 +20,20 @@ class InsertResultArea extends React.Component {
             res = ''; 
 
         if(currProps.dataObj) {
-            apiStr += '/' + currProps.dataObj;
+            apiStr += `/${currProps.dataObj}`;
         } else {
             apiStr += '/{}';
         }
 
+        if(currProps.op === 'remove') {
+            if(currProps.justOne) {
+                apiStr += `/${currProps.justOne}`;
+            } else {
+                apiStr += '/{}';
+            }
+        }
+
         $.post(apiStr, function(result) {
-            //console.log('insert result: ' + JSON.stringify(result));
             if(result && JSON.stringify(result).indexOf('ok') !== -1) {
                 res = currProps.op === 'insert' ? 'Item inserted successfully!' : 'Item removed successfully!';
             } else {

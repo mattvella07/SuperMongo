@@ -52,12 +52,18 @@ class ActionInsertOrRemove extends React.Component {
         if(this.props.op === 'insert') {
             this.props.onInsert(completeStr);
         } else if(this.props.op === 'remove') {
+            let justOneStr = '{}';
+
+            if(this.justOne) {
+                justOneStr = `{"single": ${this.justOne.checked}}`;
+            } 
+            
             if(completeStr === '{}') {
                 if(confirm('Not entering a key and value will delete the entire collection.  Are you sure you want to proceed?')) {
-                    this.props.onRemove(completeStr);
+                    this.props.onRemove(completeStr, justOneStr);
                 } 
             } else {
-                this.props.onRemove(completeStr);
+                this.props.onRemove(completeStr, justOneStr);
             }
         }
     }
@@ -98,6 +104,7 @@ class ActionInsertOrRemove extends React.Component {
                         {items}
                         <button type="button" className="fa fa-plus-circle" onClick={this.addItem}></button>
                     </div>
+                    { this.props.op === 'remove' ? <div><label><input type="checkbox" value="justOne" ref={(ref) => this.justOne = ref} />Just One</label></div> : null }
                     <input type="submit" value={this.props.op} disabled={this.state.isDisabled} />
                 </div>
             </form>
