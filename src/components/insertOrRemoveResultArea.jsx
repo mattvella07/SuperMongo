@@ -50,16 +50,14 @@ class InsertResultArea extends React.Component {
         }
 
         $.post(apiStr, function(result) {
-            if(result && JSON.stringify(result).indexOf('ok') !== -1) {
+            if(result && JSON.stringify(result).indexOf('ok') !== -1 && (currProps.op === 'insert' || result.n > 0)) {
                 if(currProps.op === 'insert') {
-                    res = 'Item inserted successfully!';
-                } else if(currProps.op === 'remove') {
-                    res = 'Item removed successfully!';
-                } else if(currProps.op === 'update') {
-                    res = 'Item updated successfully!';
+                    res = `Item ${currProps.op}ed successfully!`;
                 } else {
-                    res = '';
+                    res = `Item ${currProps.op}d successfully!`;
                 }
+            } else if(result && JSON.stringify(result).indexOf('ok') !== -1) {
+                res = `Unable to find item that you wanted to ${currProps.op}.`;
             } else {
                 res = `Failed to ${currProps.op} item.`;
             }
