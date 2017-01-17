@@ -25,6 +25,7 @@ class PageContainer extends React.Component {
         this.handleFind = this.handleFind.bind(this);
         this.handleInsert = this.handleInsert.bind(this);
         this.handleRemove = this.handleRemove.bind(this);
+        this.handleUpdate = this.handleUpdate.bind(this);
         this.moreClick = this.moreClick.bind(this);
     }
 
@@ -34,7 +35,9 @@ class PageContainer extends React.Component {
             showCollections: true,
             showActionArea: false,
             showFindResultArea: false,
-            showInsertResultArea: false
+            showInsertResultArea: false,
+            showRemoveResultArea: false,
+            showUpdateResultArea: false
         });
     }
 
@@ -43,7 +46,9 @@ class PageContainer extends React.Component {
         this.setState({
             showActionArea: true,
             showFindResultArea: false,
-            showInsertResultArea: false
+            showInsertResultArea: false,
+             showRemoveResultArea: false,
+            showUpdateResultArea: false
         });  
     }
 
@@ -55,7 +60,8 @@ class PageContainer extends React.Component {
         this.setState({
             showFindResultArea: true,
             showInsertResultArea: false,
-            showRemoveResultArea: false
+            showRemoveResultArea: false,
+            showUpdateResultArea: false
         });
     }
 
@@ -64,7 +70,8 @@ class PageContainer extends React.Component {
         this.setState({
             showInsertResultArea: true,
             showFindResultArea: false,
-            showRemoveResultArea: false
+            showRemoveResultArea: false,
+            showUpdateResultArea: false
         });
     }
 
@@ -73,6 +80,19 @@ class PageContainer extends React.Component {
         this.justOne = justOne;
         this.setState({
             showRemoveResultArea: true,
+            showInsertResultArea: false,
+            showFindResultArea: false,
+            showUpdateResultArea: false
+        });
+    }
+
+    handleUpdate(criteria, objToUpdate, options) {
+        this.criteria = criteria;
+        this.objToUpdate = objToUpdate;
+        this.updateOptions = options;
+        this.setState({
+            showUpdateResultArea: true,
+            showRemoveResultArea: false,
             showInsertResultArea: false,
             showFindResultArea: false
         });
@@ -94,11 +114,12 @@ class PageContainer extends React.Component {
                     { this.state.showCollections ? <CollectionList db={this.selectedDB} onColClick={this.handleColClick} /> : null }
                 </div>
                 <div className="column mainContainer">
-                    { this.state.showActionArea ? <ActionArea db={this.selectedDB} col={this.selectedCol} onFind={this.handleFind} onInsert={this.handleInsert} onRemove={this.handleRemove} /> : null }
+                    { this.state.showActionArea ? <ActionArea db={this.selectedDB} col={this.selectedCol} onFind={this.handleFind} onInsert={this.handleInsert} onRemove={this.handleRemove} onUpdate={this.handleUpdate} /> : null }
                     { this.state.showFindResultArea ? <FindResultArea db={this.selectedDB} col={this.selectedCol} query={this.query} projection={this.projection} options={this.options} /> : null }
                     { this.state.showFindResultArea ? <Pagination db={this.selectedDB} col={this.selectedCol} query={this.query} options={this.options} userEnteredLimit={this.userEnteredLimit} totalCount={this.totalCount} onMoreClick={this.moreClick} /> : null }
                     { this.state.showInsertResultArea ? <InsertOrRemoveResultArea db={this.selectedDB} col={this.selectedCol} dataObj={this.objToInsert} op='insert' /> : null }
                     { this.state.showRemoveResultArea ? <InsertOrRemoveResultArea db={this.selectedDB} col={this.selectedCol} dataObj={this.objToRemove} justOne={this.justOne} op='remove' /> : null }
+                    { this.state.showUpdateResultArea ? <InsertOrRemoveResultArea db={this.selectedDB} col={this.selectedCol} criteria={this.criteria} dataObj={this.objToUpdate} options={this.updateOptions} op='update' /> : null }
                 </div>
             </div>
         );

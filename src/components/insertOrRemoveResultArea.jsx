@@ -19,6 +19,14 @@ class InsertResultArea extends React.Component {
             apiStr = '/api/' + currProps.op + '/' + currProps.db + '/' + currProps.col,
             res = ''; 
 
+        if(currProps.op === 'update') {
+            if(currProps.criteria) {
+                 apiStr += `/${currProps.criteria}`;
+            } else {
+                 apiStr += '/{}';
+            }
+        }
+
         if(currProps.dataObj) {
             apiStr += `/${currProps.dataObj}`;
         } else {
@@ -33,9 +41,25 @@ class InsertResultArea extends React.Component {
             }
         }
 
+        if(currProps.op === 'update') {
+            if(currProps.options) {
+                 apiStr += `/${currProps.options}`;
+            } else {
+                apiStr += '/{}';
+            }
+        }
+
         $.post(apiStr, function(result) {
             if(result && JSON.stringify(result).indexOf('ok') !== -1) {
-                res = currProps.op === 'insert' ? 'Item inserted successfully!' : 'Item removed successfully!';
+                if(currProps.op === 'insert') {
+                    res = 'Item inserted successfully!';
+                } else if(currProps.op === 'remove') {
+                    res = 'Item removed successfully!';
+                } else if(currProps.op === 'update') {
+                    res = 'Item updated successfully!';
+                } else {
+                    res = '';
+                }
             } else {
                 res = `Failed to ${currProps.op} item.`;
             }

@@ -69,7 +69,7 @@ class ActionInsertOrRemove extends React.Component {
     }
 
     handleChange(index, k, v) {
-        //Store keys and values to be insertted on form submit 
+        //Store keys and values to be inserted on form submit 
         this.keys[index] = k;
         this.vals[index] = v;
 

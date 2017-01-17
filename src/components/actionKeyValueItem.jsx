@@ -1,4 +1,5 @@
 import React from 'react';
+var classNames = require('classnames');
 
 class ActionInsertItem extends React.Component {
     constructor(props) {
@@ -13,11 +14,18 @@ class ActionInsertItem extends React.Component {
     }
 
     render() {
+        let removeBtnClass = classNames({
+            'criteriaItem': this.props.type && this.props.type === 'criteriaItem' ? true : false,
+            'updatedItem': this.props.type && this.props.type === 'updatedItem' ? true : false,
+            'fa': true,
+            'fa-times-circle': true
+        });
+
         return (
             <div>
                 <input type="text" placeholder="Key" onChange={this.handleChange} ref={(ref) => this.key = ref} /> 
                 <input type="text" placeholder="Value" onChange={this.handleChange} ref={(ref) => this.val = ref} />
-                { this.props.index > 0 ? <button type="button" className="fa fa-times-circle" onClick={this.props.removeItem}></button> : null }
+                { this.props.index > 0 ? <button type="button" className={removeBtnClass} onClick={this.props.removeItem}></button> : null }
             </div>
         );
     }

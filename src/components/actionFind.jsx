@@ -126,14 +126,13 @@ class ActionFind extends React.Component {
                 break;
             case 'sortItem': 
                 this.setState({ numSort: this.state.numSort + 1 });
-                break;
         }
     }
 
     removeItem(e) {
-        let itemToAdd = e.target.className.toString().replace('fa fa-times-circle', '').trim();
+        let itemToRemove = e.target.className.toString().replace('fa fa-times-circle', '').trim();
 
-        switch (itemToAdd) {
+        switch (itemToRemove) {
             case 'queryItem': 
                 this.setState({ numQuery: this.state.numQuery - 1 });
                 break;
@@ -142,7 +141,6 @@ class ActionFind extends React.Component {
                 break;
             case 'sortItem': 
                 this.setState({ numSort: this.state.numSort - 1 });
-                break;
         }
     }
     

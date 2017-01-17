@@ -1,0 +1,201 @@
+import React from 'react';
+import ActionKeyValueItem from './actionKeyValueItem.jsx';
+var classNames = require('classnames');
+
+class ActionUpdate extends React.Component {
+    constructor(props) {
+        super(props);
+
+        //Set initial state
+        this.state = {
+            numCriteria: 1,
+            numUpdatedItem: 1,
+            showCriteria: false,
+            showUpdatedItem: false
+        };
+
+        //Bind functions to this context 
+        this.onSubmit = this.onSubmit.bind(this);
+        this.addItem = this.addItem.bind(this);
+        this.removeItem = this.removeItem.bind(this);
+        this.criteriaChange = this.criteriaChange.bind(this);
+        this.updatedItemChange = this.updatedItemChange.bind(this);
+
+        this.criteriaKeys = [];
+        this.criteriaVals = [];
+        this.updatedItemKeys = [];
+        this.updatedItemVals = [];
+    }
+
+    onSubmit(e) {
+        e.preventDefault();
+
+        let criteriaStr = '{',
+            updatedItemStr = '{',
+            optionsStr = '[';
+
+        //Criteria
+        for(let x = 0; x < this.state.numCriteria; x++) {
+            if(this.criteriaKeys[x] && this.criteriaVals[x]) {
+                let criteriaValStr = encodeURIComponent(this.criteriaVals[x].value);
+
+                if(this.criteriaKeys[x].value) {
+                    if(isNaN(criteriaValStr) && criteriaValStr[0] !== '"' && criteriaValStr[criteriaValStr.length - 1] !== '"') {
+                        //If single quotes were used replace them with double quotes, else just add double quotes 
+                        if(criteriaValStr[0] === "'" && criteriaValStr[criteriaValStr.length - 1] === "'") {
+                            criteriaValStr = criteriaValStr.replace("'", '"');
+                            criteriaValStr = criteriaValStr.replace("'", '"');
+                        } else if(criteriaValStr.trim() !== 'true' && criteriaValStr.trim() !== 'false') { //Else, its a string and not a bool value 
+                            criteriaValStr = '"' + criteriaValStr + '"';
+                        }
+                    }
+
+                    criteriaStr += '"' + encodeURIComponent(this.criteriaKeys[x].value) + '": ' + criteriaValStr + ',';
+                }
+            }
+        }
+
+        criteriaStr += '}';
+        criteriaStr = criteriaStr.replace(',}', '}');
+
+        //Updated Item
+        for(let x = 0; x < this.state.numUpdatedItem; x++) {
+            if(this.updatedItemKeys[x] && this.updatedItemVals[x]) {
+                let updatedItemValStr = encodeURIComponent(this.updatedItemVals[x].value);
+
+                if(this.updatedItemKeys[x].value) {
+                    if(isNaN(updatedItemValStr) && updatedItemValStr[0] !== '"' && updatedItemValStr[updatedItemValStr.length - 1] !== '"') {
+                        //If single quotes were used replace them with double quotes, else just add double quotes 
+                        if(updatedItemValStr[0] === "'" && updatedItemValStr[updatedItemValStr.length - 1] === "'") {
+                            updatedItemValStr = updatedItemValStr.replace("'", '"');
+                            updatedItemValStr = updatedItemValStr.replace("'", '"');
+                        } else if(updatedItemValStr.trim() !== 'true' && updatedItemValStr.trim() !== 'false') { //Else, its a string and not a bool value 
+                            updatedItemValStr = '"' + updatedItemValStr + '"';
+                        }
+                    }
+
+                    updatedItemStr += '"' + encodeURIComponent(this.updatedItemKeys[x].value) + '": ' + updatedItemValStr + ',';
+                }
+            }
+        }
+
+        updatedItemStr += '}';
+        updatedItemStr = updatedItemStr.replace(',}', '}');
+
+        //Multi
+        if(this.multi) {
+            optionsStr += `{"multi": ${this.multi.checked}},`;
+        }
+
+        //Upsert
+        if(this.upsert) {
+            optionsStr += `{"upsert": ${this.upsert.checked}}`;
+        }
+
+        if(optionsStr[optionsStr.length - 1] === ',') {
+            optionsStr[optionsStr.length - 1] = '';
+        }
+        
+        optionsStr += ']';
+
+        this.props.onUpdate(criteriaStr, updatedItemStr, optionsStr);
+    }
+
+    addItem(e) {
+        let itemToAdd = e.target.className.toString().replace('fa fa-plus-circle', '').trim();
+
+        switch(itemToAdd) {
+            case 'criteriaItem':
+                this.setState({ numCriteria: this.state.numCriteria + 1 });
+                break;
+            case 'updatedItem':
+                this.setState({ numUpdatedItem: this.state.numUpdatedItem + 1});
+        }
+    }
+
+    removeItem(e) {
+        let itemToRemove = e.target.className.toString().replace('fa fa-times-circle', '').trim();
+
+        switch(itemToRemove) {
+            case 'criteriaItem':
+                this.setState({ numCriteria: this.state.numCriteria - 1 });
+                break;
+            case 'updatedItem':
+                this.setState({ numUpdatedItem: this.state.numUpdatedItem - 1 });
+        }
+    }
+
+    criteriaChange(index, k, v) {
+        //Store keys and values for the criteria
+        this.criteriaKeys[index] = k;
+        this.criteriaVals[index] = v;
+
+        //Determine whether to enable button or not 
+        /*if(this.props.op === 'insert') {
+            if(k && v && k.value.toString().trim() !== '' && v.value.toString().trim() !== '') {
+                this.setState({ isDisabled: false });
+            } else {
+                this.setState({ isDisabled: true });
+            }
+        }*/
+    }
+
+    updatedItemChange(index, k, v) {
+        //Store keys and values for the updated item 
+        this.updatedItemKeys[index] = k;
+        this.updatedItemVals[index] = v;
+
+        //Determine whether to enable button or not 
+    }
+
+    render() {
+        let criteriaItems = [],
+            updatedItems = [],
+            criteriaClass = classNames({
+                'fa': true,
+                'fa-caret-right': !this.state.showCriteria,
+                'fa-caret-down': this.state.showCriteria
+            }),
+            updatedItemClass = classNames({
+                'fa': true,
+                'fa-caret-right': !this.state.showUpdatedItem,
+                'fa-caret-down': this.state.showUpdatedItem
+            });
+
+        for(let i = 0; i < this.state.numCriteria; i++) {
+            criteriaItems.push(<ActionKeyValueItem index={i} textChange={this.criteriaChange}  removeItem={this.removeItem} type='criteriaItem' />);
+        }
+
+        for(let i = 0; i < this.state.numUpdatedItem; i++) {
+            updatedItems.push(<ActionKeyValueItem index={i} textChange={this.updatedItemChange} removeItem={this.removeItem} type='updatedItem' />);
+        }
+
+        return (
+            <form onSubmit={this.onSubmit} >
+                <div>
+                    <div> 
+                        <div onClick={() => this.setState({ showCriteria: !this.state.showCriteria }) }><i className={criteriaClass}></i>Criteria</div>
+                        { this.state.showCriteria ? <div>{criteriaItems}</div> : null }
+                        { this.state.showCriteria ? <button type="button" className="criteriaItem fa fa-plus-circle" onClick={this.addItem}></button> : null }
+                    </div>
+                    <div> 
+                        <div onClick={() => this.setState({ showUpdatedItem: !this.state.showUpdatedItem }) }><i className={updatedItemClass}></i>Updated Item</div>
+                        { this.state.showUpdatedItem ? <div>{updatedItems}</div> : null }
+                        { this.state.showUpdatedItem ? <button type="button" className="updatedItem fa fa-plus-circle" onClick={this.addItem}></button> : null }
+                    </div>
+
+                    <div>
+                        <label><input type="checkbox" value="multi" ref={(ref) => this.multi = ref} />Multi</label>
+                    </div>
+
+                    <div>
+                        <label><input type="checkbox" value="upsert" ref={(ref) => this.upsert = ref} />Upsert</label>
+                    </div>
+                    <input type="submit" value="Update" />
+                </div>
+            </form>
+        );
+    }
+}
+
+export default ActionUpdate;
