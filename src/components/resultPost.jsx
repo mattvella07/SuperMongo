@@ -1,6 +1,6 @@
 import React from 'react';
 
-class InsertResultArea extends React.Component {
+class ResultPost extends React.Component {
     constructor(props) {
         super(props);
 
@@ -96,4 +96,4 @@ class InsertResultArea extends React.Component {
     }
 }
 
-export default InsertResultArea;
+export default ResultPost;

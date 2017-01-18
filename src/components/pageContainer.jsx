@@ -2,9 +2,9 @@ import React from 'react';
 import DatabaseList from './databaseList.jsx';
 import CollectionList from './collectionList.jsx';
 import ActionArea from './actionArea.jsx';
-import FindResultArea from './findResultArea.jsx';
+import ResultGet from './resultGet.jsx';
 import Pagination from './pagination.jsx';
-import InsertOrRemoveResultArea from './insertOrRemoveResultArea.jsx';
+import ResultPost from './resultPost.jsx';
 
 class PageContainer extends React.Component {
     constructor(props) {
@@ -115,11 +115,11 @@ class PageContainer extends React.Component {
                 </div>
                 <div className="column mainContainer">
                     { this.state.showActionArea ? <ActionArea onFind={this.handleFind} onInsert={this.handleInsert} onRemove={this.handleRemove} onUpdate={this.handleUpdate} /> : null }
-                    { this.state.showFindResultArea ? <FindResultArea db={this.selectedDB} col={this.selectedCol} query={this.query} projection={this.projection} options={this.options} /> : null }
+                    { this.state.showFindResultArea ? <ResultGet db={this.selectedDB} col={this.selectedCol} query={this.query} projection={this.projection} options={this.options} /> : null }
                     { this.state.showFindResultArea ? <Pagination db={this.selectedDB} col={this.selectedCol} query={this.query} options={this.options} userEnteredLimit={this.userEnteredLimit} totalCount={this.totalCount} onMoreClick={this.moreClick} /> : null }
-                    { this.state.showInsertResultArea ? <InsertOrRemoveResultArea db={this.selectedDB} col={this.selectedCol} dataObj={this.objToInsert} op='insert' /> : null }
-                    { this.state.showRemoveResultArea ? <InsertOrRemoveResultArea db={this.selectedDB} col={this.selectedCol} dataObj={this.objToRemove} justOne={this.justOne} op='remove' /> : null }
-                    { this.state.showUpdateResultArea ? <InsertOrRemoveResultArea db={this.selectedDB} col={this.selectedCol} criteria={this.criteria} dataObj={this.objToUpdate} options={this.updateOptions} op='update' /> : null }
+                    { this.state.showInsertResultArea ? <ResultPost db={this.selectedDB} col={this.selectedCol} dataObj={this.objToInsert} op='insert' /> : null }
+                    { this.state.showRemoveResultArea ? <ResultPost db={this.selectedDB} col={this.selectedCol} dataObj={this.objToRemove} justOne={this.justOne} op='remove' /> : null }
+                    { this.state.showUpdateResultArea ? <ResultPost db={this.selectedDB} col={this.selectedCol} criteria={this.criteria} dataObj={this.objToUpdate} options={this.updateOptions} op='update' /> : null }
                 </div>
             </div>
         );

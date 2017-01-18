@@ -1,6 +1,6 @@
 import React from 'react';
 
-class FindResultArea extends React.Component {
+class ResultGet extends React.Component {
     constructor(props) {
         super(props);
 
@@ -85,4 +85,4 @@ class FindResultArea extends React.Component {
     }
 }
 
-export default FindResultArea; 
+export default ResultGet; 
