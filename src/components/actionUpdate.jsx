@@ -32,7 +32,7 @@ class ActionUpdate extends React.Component {
 
         let criteriaStr = '{',
             updatedItemStr = '{',
-            optionsStr = '[';
+            optionsStr = '{';
 
         //Criteria
         for(let x = 0; x < this.state.numCriteria; x++) {
@@ -84,19 +84,21 @@ class ActionUpdate extends React.Component {
 
         //Multi
         if(this.multi) {
-            optionsStr += `{"multi": ${this.multi.checked}},`;
+            optionsStr += `"multi": ${this.multi.checked},`;
         }
 
         //Upsert
         if(this.upsert) {
-            optionsStr += `{"upsert": ${this.upsert.checked}}`;
+            optionsStr += `"upsert": ${this.upsert.checked}`;
         }
 
         if(optionsStr[optionsStr.length - 1] === ',') {
             optionsStr[optionsStr.length - 1] = '';
         }
         
-        optionsStr += ']';
+        optionsStr += '}';
+
+        console.log('options: ' + optionsStr);
 
         //If user doesn't enter criteria, confirm before updating
         if(criteriaStr === '{}' && this.multi.checked) {
