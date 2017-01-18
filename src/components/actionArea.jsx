@@ -1,7 +1,8 @@
 import React from 'react';
 import ActionFind from './actionFind.jsx';
-import ActionInsertOrRemove from './actionInsertOrRemove.jsx';
+import ActionInsert from './actionInsert.jsx';
 import ActionUpdate from './actionUpdate.jsx';
+import ActionRemove from './actionRemove.jsx';
 
 class ActionArea extends React.Component {
     constructor(props) {
@@ -30,9 +31,9 @@ class ActionArea extends React.Component {
                     <option value="update">Update</option>
                 </select>
 
-                { this.state.operation === 'find' ? <ActionFind db={this.props.selectedDB} col={this.props.selectedCol} onFind={this.props.onFind} /> : null }
-                { this.state.operation === 'insert' ? <ActionInsertOrRemove db={this.props.selectedDB} col={this.props.selectedCol} op={this.state.operation} onInsert={this.props.onInsert} /> : null }
-                { this.state.operation === 'remove' ? <ActionInsertOrRemove db={this.props.selectedDB} col={this.props.selectedCol} op={this.state.operation} onRemove={this.props.onRemove} /> : null }
+                { this.state.operation === 'find' ? <ActionFind onFind={this.props.onFind} /> : null }
+                { this.state.operation === 'insert' ? <ActionInsert onInsert={this.props.onInsert} /> : null }
+                { this.state.operation === 'remove' ? <ActionRemove onRemove={this.props.onRemove} /> : null }
                 { this.state.operation === 'update' ? <ActionUpdate onUpdate={this.props.onUpdate} /> : null }
             </div>
         );

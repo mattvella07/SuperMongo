@@ -1,5 +1,6 @@
 import React from 'react';
 import ActionKeyValueItem from './actionKeyValueItem.jsx';
+import ActionKeyValueComparison from './actionKeyValueComparison.jsx';
 var classNames = require('classnames');
 
 class ActionUpdate extends React.Component {
@@ -22,6 +23,7 @@ class ActionUpdate extends React.Component {
         this.updatedItemChange = this.updatedItemChange.bind(this);
 
         this.criteriaKeys = [];
+        this.criteriaComparisons = [];
         this.criteriaVals = [];
         this.updatedItemKeys = [];
         this.updatedItemVals = [];
@@ -31,7 +33,7 @@ class ActionUpdate extends React.Component {
         e.preventDefault();
 
         let criteriaStr = '{',
-            updatedItemStr = '{',
+            updatedItemStr = this.multi && this.multi.checked ? '{"$set": {' : '{',
             optionsStr = '{';
 
         //Criteria
@@ -50,7 +52,11 @@ class ActionUpdate extends React.Component {
                         }
                     }
 
-                    criteriaStr += '"' + encodeURIComponent(this.criteriaKeys[x].value) + '": ' + criteriaValStr + ',';
+                    if(this.criteriaComparisons[x].value === ':') {
+                        criteriaStr += '"' + encodeURIComponent(this.criteriaKeys[x].value) + '"' + this.criteriaComparisons[x].value + criteriaValStr + ',';
+                    } else {
+                        criteriaStr += '"' + encodeURIComponent(this.criteriaKeys[x].value) + '":{"' + this.criteriaComparisons[x].value + '":' + criteriaValStr + '},';
+                    }
                 }
             }
         }
@@ -79,7 +85,7 @@ class ActionUpdate extends React.Component {
             }
         }
 
-        updatedItemStr += '}';
+        updatedItemStr += this.multi && this.multi.checked ? '}}' : '}';
         updatedItemStr = updatedItemStr.replace(',}', '}');
 
         //Multi
@@ -97,8 +103,6 @@ class ActionUpdate extends React.Component {
         }
         
         optionsStr += '}';
-
-        console.log('options: ' + optionsStr);
 
         //If user doesn't enter criteria, confirm before updating
         if(criteriaStr === '{}' && this.multi.checked) {
@@ -138,9 +142,10 @@ class ActionUpdate extends React.Component {
         }
     }
 
-    criteriaChange(index, k, v) {
+    criteriaChange(index, k, comp, v) {
         //Store keys and values for the criteria
         this.criteriaKeys[index] = k;
+        this.criteriaComparisons[index] = comp;
         this.criteriaVals[index] = v;
     }
 
@@ -165,7 +170,7 @@ class ActionUpdate extends React.Component {
             });
 
         for(let i = 0; i < this.state.numCriteria; i++) {
-            criteriaItems.push(<ActionKeyValueItem index={i} textChange={this.criteriaChange}  removeItem={this.removeItem} type='criteriaItem' />);
+            criteriaItems.push(<ActionKeyValueComparison index={i} valueChange={this.criteriaChange} removeItem={this.removeItem} type='criteriaItem' />);
         }
 
         for(let i = 0; i < this.state.numUpdatedItem; i++) {

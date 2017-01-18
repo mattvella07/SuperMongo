@@ -1,13 +1,13 @@
 import React from 'react';
 import ActionKeyValueItem from './actionKeyValueItem.jsx';
 
-class ActionInsertOrRemove extends React.Component {
+class ActionInsert extends React.Component {
     constructor(props) {
         super(props);
 
         //Set initial state
         this.state = {
-            isDisabled: this.props.op === 'insert' ? true : false,
+            isDisabled: true,
             numItems: 1
         };
 
@@ -17,8 +17,8 @@ class ActionInsertOrRemove extends React.Component {
         this.addItem = this.addItem.bind(this);
         this.removeItem = this.removeItem.bind(this);
 
-        this.keys = [];
-        this.vals = [];
+        this.insertKeys = [];
+        this.insertVals = [];
     }
 
     onSubmit(e) {
@@ -26,11 +26,12 @@ class ActionInsertOrRemove extends React.Component {
 
         let completeStr = '{';
         
+        //Item to insert
         for(let x = 0; x < this.state.numItems; x++) {
-            if(this.keys[x] && this.vals[x]) {
-                let valStr = encodeURIComponent(this.vals[x].value);
+            if(this.insertKeys[x] && this.insertVals[x]) {
+                let valStr = encodeURIComponent(this.insertVals[x].value);
         
-                if(this.keys[x].value) {
+                if(this.insertKeys[x].value) {
                     //If the insert value is a string, make sure it satrts and end with double quotes
                     if(isNaN(valStr) && valStr[0] !== '"' && valStr[valStr.length - 1] !== '"') {
                         //If single quotes were used replace them with double quotes, else just add double quotes 
@@ -42,44 +43,26 @@ class ActionInsertOrRemove extends React.Component {
                         }
                     }
 
-                    completeStr += '"' + encodeURIComponent(this.keys[x].value) + '": ' + valStr + ','; 
+                    completeStr += '"' + encodeURIComponent(this.insertKeys[x].value) + '": ' + valStr + ','; 
                 }
             }
         }
         completeStr += '}';
         completeStr = completeStr.replace(',}', '}');
 
-        if(this.props.op === 'insert') {
-            this.props.onInsert(completeStr);
-        } else if(this.props.op === 'remove') {
-            let justOneStr = '{}';
-
-            if(this.justOne) {
-                justOneStr = `{"single": ${this.justOne.checked}}`;
-            } 
-            
-            if(completeStr === '{}') {
-                if(confirm('Not entering a key and value will delete the entire collection.  Are you sure you want to proceed?')) {
-                    this.props.onRemove(completeStr, justOneStr);
-                } 
-            } else {
-                this.props.onRemove(completeStr, justOneStr);
-            }
-        }
+        this.props.onInsert(completeStr);
     }
 
     handleChange(index, k, v) {
         //Store keys and values to be inserted on form submit 
-        this.keys[index] = k;
-        this.vals[index] = v;
+        this.insertKeys[index] = k;
+        this.insertVals[index] = v;
 
         //Determine whether to enable button or not 
-        if(this.props.op === 'insert') {
-            if(k && v && k.value.toString().trim() !== '' && v.value.toString().trim() !== '') {
-                this.setState({ isDisabled: false });
-            } else {
-                this.setState({ isDisabled: true });
-            }
+        if(k && v && k.value.toString().trim() !== '' && v.value.toString().trim() !== '') {
+            this.setState({ isDisabled: false });
+        } else {
+            this.setState({ isDisabled: true });
         }
     }
 
@@ -104,12 +87,11 @@ class ActionInsertOrRemove extends React.Component {
                         {items}
                         <button type="button" className="fa fa-plus-circle" onClick={this.addItem}></button>
                     </div>
-                    { this.props.op === 'remove' ? <div><label><input type="checkbox" value="justOne" ref={(ref) => this.justOne = ref} />Just One</label></div> : null }
-                    <input type="submit" value={this.props.op} disabled={this.state.isDisabled} />
+                    <input type="submit" value="Insert" disabled={this.state.isDisabled} />
                 </div>
             </form>
         );
     }
 }
 
-export default ActionInsertOrRemove;
+export default ActionInsert;

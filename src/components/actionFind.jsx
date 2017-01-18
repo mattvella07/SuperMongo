@@ -1,5 +1,5 @@
 import React from 'react';
-import ActionFindQuery from './actionFindQuery.jsx';
+import ActionKeyValueComparison from './actionKeyValueComparison.jsx';
 import ActionFindProjection from './actionFindProjection.jsx';
 import ActionFindSort from './actionFindSort.jsx';
 var classNames = require('classnames');
@@ -63,6 +63,7 @@ class ActionFind extends React.Component {
                             queryValStr = '"' + queryValStr + '"';
                         } 
                     }
+                    
                     if(this.queryComparisons[x].value === ':') {
                         queryStr += '"' + encodeURIComponent(this.queryKeys[x].value) + '"' + this.queryComparisons[x].value + queryValStr + ',';
                     } else {
@@ -194,7 +195,7 @@ class ActionFind extends React.Component {
             });
 
         for(let i = 0; i < this.state.numQuery; i++) {
-            queryItems.push(<ActionFindQuery index={i} valueChange={this.queryChange} removeItem={this.removeItem} />);
+            queryItems.push(<ActionKeyValueComparison index={i} valueChange={this.queryChange} removeItem={this.removeItem} type='queryItem' />);
         }
 
         for (let i = 0; i < this.state.numProjection; i++) {

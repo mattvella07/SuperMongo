@@ -114,7 +114,7 @@ class PageContainer extends React.Component {
                     { this.state.showCollections ? <CollectionList db={this.selectedDB} onColClick={this.handleColClick} /> : null }
                 </div>
                 <div className="column mainContainer">
-                    { this.state.showActionArea ? <ActionArea db={this.selectedDB} col={this.selectedCol} onFind={this.handleFind} onInsert={this.handleInsert} onRemove={this.handleRemove} onUpdate={this.handleUpdate} /> : null }
+                    { this.state.showActionArea ? <ActionArea onFind={this.handleFind} onInsert={this.handleInsert} onRemove={this.handleRemove} onUpdate={this.handleUpdate} /> : null }
                     { this.state.showFindResultArea ? <FindResultArea db={this.selectedDB} col={this.selectedCol} query={this.query} projection={this.projection} options={this.options} /> : null }
                     { this.state.showFindResultArea ? <Pagination db={this.selectedDB} col={this.selectedCol} query={this.query} options={this.options} userEnteredLimit={this.userEnteredLimit} totalCount={this.totalCount} onMoreClick={this.moreClick} /> : null }
                     { this.state.showInsertResultArea ? <InsertOrRemoveResultArea db={this.selectedDB} col={this.selectedCol} dataObj={this.objToInsert} op='insert' /> : null }
