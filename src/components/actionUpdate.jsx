@@ -12,7 +12,8 @@ class ActionUpdate extends React.Component {
             numCriteria: 1,
             numUpdatedItem: 1,
             showCriteria: false,
-            showUpdatedItem: false
+            showUpdatedItem: false,
+            selectedReplace: 'all'
         };
 
         //Bind functions to this context 
@@ -21,6 +22,8 @@ class ActionUpdate extends React.Component {
         this.removeItem = this.removeItem.bind(this);
         this.criteriaChange = this.criteriaChange.bind(this);
         this.updatedItemChange = this.updatedItemChange.bind(this);
+        this.multiChanged = this.multiChanged.bind(this);
+        this.replaceChanged = this.replaceChanged.bind(this);
 
         this.criteriaKeys = [];
         this.criteriaComparisons = [];
@@ -33,7 +36,7 @@ class ActionUpdate extends React.Component {
         e.preventDefault();
 
         let criteriaStr = '{',
-            updatedItemStr = this.multi && this.multi.checked ? '{"$set": {' : '{',
+            updatedItemStr = (this.multi && this.multi.checked) || (this.state.selectedReplace === 'specified') ? '{"$set": {' : '{',
             optionsStr = '{';
 
         //Criteria
@@ -85,7 +88,7 @@ class ActionUpdate extends React.Component {
             }
         }
 
-        updatedItemStr += this.multi && this.multi.checked ? '}}' : '}';
+        updatedItemStr += (this.multi && this.multi.checked) || (this.state.selectedReplace === 'specified') ? '}}' : '}';
         updatedItemStr = updatedItemStr.replace(',}', '}');
 
         //Multi
@@ -155,6 +158,16 @@ class ActionUpdate extends React.Component {
         this.updatedItemVals[index] = v;
     }
 
+    multiChanged(e) {
+        if(this.multi && this.multi.checked) {
+            this.setState({selectedReplace: 'specified'});
+        }
+    }
+
+    replaceChanged(e) {
+        this.setState({selectedReplace: e.target.value});
+    }
+
     render() {
         let criteriaItems = [],
             updatedItems = [],
@@ -192,7 +205,12 @@ class ActionUpdate extends React.Component {
                     </div>
 
                     <div>
-                        <label><input type="checkbox" value="multi" ref={(ref) => this.multi = ref} />Multi</label>
+                        <input type="radio" name="replace" value="all" checked={this.state.selectedReplace === 'all'} onChange={this.replaceChanged} />Replace entire document<br/>
+                        <input type="radio" name="replace" value="specified" checked={this.state.selectedReplace === 'specified'} onChange={this.replaceChanged} />Update only specified fields<br/>
+                    </div>
+
+                    <div>
+                        <label><input type="checkbox" value="multi" ref={(ref) => this.multi = ref} onChange={this.multiChanged} />Multi</label>
                     </div>
 
                     <div>
