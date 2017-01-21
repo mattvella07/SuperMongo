@@ -1,5 +1,6 @@
 import React from 'react';
 import ActionKeyValueComparison from './actionKeyValueComparison.jsx';
+const SweetAlert = require('react-swal');
 
 class ActionRemove extends React.Component {
     constructor(props) {
@@ -61,9 +62,10 @@ class ActionRemove extends React.Component {
         } 
             
         if(completeStr === '{}') {
-            if(confirm('Not entering a key and value will delete the entire collection.  Are you sure you want to proceed?')) {
-                this.props.onRemove(completeStr, justOneStr);
-            } 
+            let self = this;
+            swal({title: "Are you sure you want to proceed?", text: "Not entering a key and value will delete the entire collection.", 
+                  type: "warning", confirmButtonText: "Yes, delete", showCancelButton: true, cancelButtonText: "No"}, 
+                  (isConfirm) => { if(isConfirm) { self.props.onRemove(completeStr, justOneStr); } }); 
         } else {
             this.props.onRemove(completeStr, justOneStr);
         }
