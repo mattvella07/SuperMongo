@@ -2,6 +2,7 @@ import React from 'react';
 import ActionKeyValueItem from './actionKeyValueItem.jsx';
 import ActionKeyValueComparison from './actionKeyValueComparison.jsx';
 var classNames = require('classnames');
+const SweetAlert = require('react-swal');
 
 class ActionUpdate extends React.Component {
     constructor(props) {
@@ -108,14 +109,11 @@ class ActionUpdate extends React.Component {
         optionsStr += '}';
 
         //If user doesn't enter criteria, confirm before updating
-        if(criteriaStr === '{}' && this.multi.checked) {
-            if(confirm('Not entering any criteria for the update and selecting multi will update every item in the collection.  Are you sure you want to proceed?')) {
-                this.props.onUpdate(criteriaStr, updatedItemStr, optionsStr);
-            } 
-        } else if(criteriaStr === '{}') {
-            if(confirm('Not entering any criteria for the update will update the first item in the collection.  Are you sure you want to proceed?')) {
-                this.props.onUpdate(criteriaStr, updatedItemStr, optionsStr);
-            } 
+        if(criteriaStr === '{}') {
+            let self = this;
+            swal({title: "Are you sure you want to proceed?", text: "Not entering any criteria for the update will update the first item in the collection.", 
+                  type: "warning", confirmButtonText: "Yes, update", showCancelButton: true, cancelButtonText: "No"}, 
+                  (isConfirm) => { if(isConfirm) { self.props.onUpdate(criteriaStr, updatedItemStr, optionsStr); } });
         } else {
             this.props.onUpdate(criteriaStr, updatedItemStr, optionsStr);
         }
