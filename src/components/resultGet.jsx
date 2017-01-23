@@ -18,7 +18,7 @@ class ResultGet extends React.Component {
         let currProps = nextProps || this.props,
             getStr = '/api/find/' + currProps.db + '/' + currProps.col,
             data = '';
-        
+
         if(currProps.query) {
             getStr += '/' + currProps.query;
         } else {

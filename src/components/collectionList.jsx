@@ -9,10 +9,28 @@ class CollectionList extends React.Component {
         this.state = {
             collectionNames: ''
         };
+
+        //Bind functions to this context
+        this.getCollections = this.getCollections.bind(this);
+        this.dropCollection = this.dropCollection.bind(this);
     }
 
-    componentWillReceiveProps(nextProps) {
-        $.get('/api/collections/' + nextProps.db, function(result) {
+    dropCollection(colToDrop) {
+        let apiStr = `/api/dropCollection/${this.props.db}/${colToDrop}`;
+
+        $.post(apiStr, function(result) {
+            //Delete successful 
+            this.props.onColDrop();
+        }.bind(this));
+
+        //After col deleted, get new list of collections 
+        this.getCollections();
+    }
+
+    getCollections(nextProps) {
+        let currProps = nextProps || this.props;
+
+        $.get(`/api/collections/${currProps.db}`, function(result) {
             var newData = '';
             for(let x = 0; x < result.length; x++) {
                 if(result[x].name.indexOf('system.') !== 0) {
@@ -24,16 +42,12 @@ class CollectionList extends React.Component {
         }.bind(this));
     }
 
+    componentWillReceiveProps(nextProps) {
+        this.getCollections(nextProps);
+    }
+
     componentDidMount() {
-        $.get('/api/collections/' + this.props.db, function(result) {
-            for(let x = 0; x < result.length; x++) {
-                if(result[x].name.indexOf('system.') !== 0) {
-                    this.setState({
-                        collectionNames: this.state.collectionNames.concat(",", result[x].name) 
-                    }); 
-                }
-            }
-        }.bind(this));
+        this.getCollections();
     }
 
     componentWillUnmount() {
@@ -47,7 +61,7 @@ class CollectionList extends React.Component {
         collections = this.state.collectionNames.split(',').map(function(col) {
             if(col !== '') {
                 return (
-                    <Collection col={col} onColClick={self.props.onColClick} >
+                    <Collection db={self.props.db} col={col} onColClick={self.props.onColClick} onColDrop={self.dropCollection} >
                     </Collection>
                 );
             }

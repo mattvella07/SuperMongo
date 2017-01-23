@@ -22,6 +22,7 @@ class PageContainer extends React.Component {
         //Bind functions to this context 
         this.handleDBClick = this.handleDBClick.bind(this);
         this.handleColClick = this.handleColClick.bind(this);
+        this.handleColDrop = this.handleColDrop.bind(this);
         this.handleFind = this.handleFind.bind(this);
         this.handleInsert = this.handleInsert.bind(this);
         this.handleRemove = this.handleRemove.bind(this);
@@ -47,9 +48,19 @@ class PageContainer extends React.Component {
             showActionArea: true,
             showFindResultArea: false,
             showInsertResultArea: false,
-             showRemoveResultArea: false,
+            showRemoveResultArea: false,
             showUpdateResultArea: false
         });  
+    }
+
+    handleColDrop() {
+        this.setState({
+            showActionArea: false,
+            showFindResultArea: false,
+            showInsertResultArea: false,
+            showRemoveResultArea: false,
+            showUpdateResultArea: false
+        });
     }
 
     handleFind(query, projection, options, userEnteredLimit) {
@@ -111,7 +122,7 @@ class PageContainer extends React.Component {
             <div className="pageContainer">  
                 <div className="column sideBar">
                     <DatabaseList source={this.props.allDBsApi} onDBClick={this.handleDBClick} />
-                    { this.state.showCollections ? <CollectionList db={this.selectedDB} onColClick={this.handleColClick} /> : null }
+                    { this.state.showCollections ? <CollectionList db={this.selectedDB} onColClick={this.handleColClick} onColDrop={this.handleColDrop} /> : null }
                 </div>
                 <div className="column mainContainer">
                     { this.state.showActionArea ? <ActionArea onFind={this.handleFind} onInsert={this.handleInsert} onRemove={this.handleRemove} onUpdate={this.handleUpdate} /> : null }

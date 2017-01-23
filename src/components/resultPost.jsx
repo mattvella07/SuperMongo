@@ -16,7 +16,7 @@ class ResultPost extends React.Component {
 
     insertOrRemoveData(nextProps) {
         let currProps = nextProps || this.props,
-            apiStr = '/api/' + currProps.op + '/' + currProps.db + '/' + currProps.col,
+            apiStr = `/api/${currProps.op}/${currProps.db}/${currProps.col}`,
             res = ''; 
 
         if(currProps.op === 'update') {

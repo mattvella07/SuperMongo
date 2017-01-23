@@ -49,11 +49,21 @@ body {
         .collection {
             background-color: #1B3F8B;
             padding: 1px 5px;
+            display: flex;
+            justify-content: space-between;
             &:hover {
                 background-color: rgba(139, 175, 223, 0.5);
+                .collectionRemove {
+                    display: flex;
+                }
             }
             &.clicked {
                 background-color: rgba(139, 175, 223, 1);
+            }
+            .collectionRemove {
+                display: none;
+                background: none;
+                border: none;
             }
         }
         .column {
