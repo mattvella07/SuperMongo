@@ -89,7 +89,7 @@ class ActionRemove extends React.Component {
     render() {
         let items = [];
         for (let i = 0; i < this.state.numItems; i++) {
-            items.push(<ActionKeyValueComparison index={i} valueChange={this.handleChange} removeItem={this.removeItem} />);
+            items.push(<ActionKeyValueComparison index={i} valueChange={this.handleChange} removeItem={this.removeItem} type='criteriaItem' />);
         }
 
         return (

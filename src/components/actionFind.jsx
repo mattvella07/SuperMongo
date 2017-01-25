@@ -18,7 +18,9 @@ class ActionFind extends React.Component {
             showProjection: false,
             showSort: false,
             showLimit: false,
-            showSkip: false
+            showSkip: false,
+            skipVal: '',
+            limitVal: ''
         };
 
         //Bind functions to this context 
@@ -45,7 +47,7 @@ class ActionFind extends React.Component {
         let queryStr = '{',
             projectionStr = '{',
             optionsStr = '{',
-            userEnteredLimit = (this.limitNum && this.limitNum.value) ? this.limitNum.value : -1;
+            userEnteredLimit = (this.state.limitVal) ? this.state.limitVal : -1;
 
         //Query
         for(let x = 0; x < this.state.numQuery; x++) {
@@ -95,15 +97,15 @@ class ActionFind extends React.Component {
         optionsStr = optionsStr.replace(',]', ']');
 
         //Limit
-        if(this.limitNum && this.limitNum.value && this.limitNum.value < 20) {
-            optionsStr += '"limit":' + this.limitNum.value + ',';
+        if(this.state.limitVal && this.state.limitVal < 20) {
+            optionsStr += '"limit":' + this.state.limitVal + ',';
         } else { //If not entered by user, set to default of 20
             optionsStr += '"limit":' + PAGE_LIMIT + ',';
         }
 
         //Skip
-        if(this.skipNum && this.skipNum.value) {
-            optionsStr += '"skip":' + this.skipNum.value + ',';
+        if(this.state.skipVal) {
+            optionsStr += '"skip":' + this.state.skipVal + ',';
         } else { //If not entered by user, set to default of 0
             optionsStr += '"skip":0,';
         }
@@ -195,15 +197,15 @@ class ActionFind extends React.Component {
             });
 
         for(let i = 0; i < this.state.numQuery; i++) {
-            queryItems.push(<ActionKeyValueComparison index={i} valueChange={this.queryChange} removeItem={this.removeItem} type='queryItem' />);
+            queryItems.push(<ActionKeyValueComparison index={i} keys={this.queryKeys} comparisons={this.queryComparisons} vals={this.queryVals} valueChange={this.queryChange} removeItem={this.removeItem} type='queryItem' />);
         }
 
         for (let i = 0; i < this.state.numProjection; i++) {
-            projectionItems.push(<ActionFindProjection index={i} valueChange={this.projectionChange} removeItem={this.removeItem} />);
+            projectionItems.push(<ActionFindProjection index={i} projectionVals={this.projectionVals} projectionFields={this.projectionFields} valueChange={this.projectionChange} removeItem={this.removeItem} />);
         }
 
         for (let i = 0; i < this.state.numSort; i++) {
-            sortItems.push(<ActionFindSort index={i} valueChange={this.sortChange} removeItem={this.removeItem} />);
+            sortItems.push(<ActionFindSort index={i} sortFields={this.sortFields} sortDirections={this.sortDirections} valueChange={this.sortChange} removeItem={this.removeItem} />);
         }
 
         return (
@@ -226,11 +228,11 @@ class ActionFind extends React.Component {
                     </div>
                     <div>
                         <div onClick={ () => this.setState({ showLimit: !this.state.showLimit }) }><i className={limitClass}></i>Limit</div>
-                        { this.state.showLimit ? <input type="text" placeholder="Number to show" ref={(ref) => this.limitNum = ref} /> : null }    
+                        { this.state.showLimit ? <input type="text" placeholder="Number to show" value={this.state.limitVal} onChange={ (e) => this.setState({limitVal: e.target.value}) } /> : null }    
                     </div>
                     <div>
                         <div onClick={ () => this.setState({ showSkip: !this.state.showSkip }) }><i className={skipClass}></i>Skip</div>
-                        { this.state.showSkip ? <input type="text" placeholder="Number to skip" ref={(ref) => this.skipNum = ref} /> : null }
+                        { this.state.showSkip ? <input type="text" placeholder="Number to skip" value={this.state.skipVal} onChange={ (e) => this.setState({skipVal: e.target.value}) } /> : null }
                     </div>
                     <input type="submit" value="Run" />
                 </div>
