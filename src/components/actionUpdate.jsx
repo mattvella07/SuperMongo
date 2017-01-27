@@ -185,7 +185,7 @@ class ActionUpdate extends React.Component {
         }
 
         for(let i = 0; i < this.state.numUpdatedItem; i++) {
-            updatedItems.push(<ActionKeyValueItem index={i} textChange={this.updatedItemChange} removeItem={this.removeItem} type='updatedItem' />);
+            updatedItems.push(<ActionKeyValueItem index={i} keys={this.updatedItemKeys} vals={this.updatedItemVals} textChange={this.updatedItemChange} removeItem={this.removeItem} type='updatedItem' />);
         }
 
         return (
