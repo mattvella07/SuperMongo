@@ -7,15 +7,32 @@ class ActionKeyValueComparison extends React.Component {
 
         //Set initial state
         this.state = {
-            key: (this.props.keys && this.props.keys[this.props.index]) ? this.props.keys[this.props.index].value : '',
-            comp: (this.props.comparisons && this.props.comparisons[this.props.index]) ? this.props.comparisons[this.props.index].value : '',
-            val: (this.props.vals && this.props.vals[this.props.index]) ? this.props.vals[this.props.index].value : ''
+            key: this.props.keys[this.props.index] || '',
+            comp: this.props.comparisons[this.props.index] || '',
+            val: this.props.vals[this.props.index] || ''
         };
 
         //Bind functions to this context 
         this.keyChange = this.keyChange.bind(this);
         this.compChange = this.compChange.bind(this);
         this.valChange = this.valChange.bind(this);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        //Set state with new props 
+        if(nextProps) {
+            if(nextProps.keys && nextProps.keys[nextProps.index]) {
+                this.setState({ key: nextProps.keys[nextProps.index]});
+            }
+
+            if(nextProps.comparisons && nextProps.comparisons[nextProps.index]) {
+                this.setState({ comp: nextProps.comparisons[nextProps.index]});
+            }
+
+            if(nextProps.vals && nextProps.vals[nextProps.index]) {
+                this.setState({ val: nextProps.vals[nextProps.index]});
+            }
+        } 
     }
 
     keyChange(e) {
@@ -39,7 +56,8 @@ class ActionKeyValueComparison extends React.Component {
                 'criteriaItem': this.props.type && this.props.type === 'criteriaItem' ? true : false,
                 'fa': true,
                 'fa-times-circle': true
-            });
+            }),
+            self = this;
 
         return (
             <div>
@@ -53,7 +71,7 @@ class ActionKeyValueComparison extends React.Component {
                     <option value="$ne">Not equal</option>
                 </select>
                 <input type="text" placeholder="Value" value={this.state.val} onChange={this.valChange} ref={(ref) => this.val = ref} />&nbsp;
-                { this.props.index > 0 ? <button type="button" className={removeBtnClass} onClick={this.props.removeItem}></button> : null }
+                { this.props.index > 0 ? <button type="button" className={removeBtnClass} onClick={ (e) => { self.props.removeItem(e, self.props.index); }}></button> : null }
             </div>
         );
     }

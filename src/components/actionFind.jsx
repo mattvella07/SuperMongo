@@ -52,25 +52,23 @@ class ActionFind extends React.Component {
         //Query
         for(let x = 0; x < this.state.numQuery; x++) {
             if(this.queryKeys[x] && this.queryVals[x]) {
-                let queryValStr = encodeURIComponent(this.queryVals[x].value);
+                let queryValStr = encodeURIComponent(this.queryVals[x]);
 
-                if(this.queryKeys[x].value) {
-                    //If the query value is a string, make sure it satrts and end with double quotes
-                    if(isNaN(queryValStr) && queryValStr[0] !== '"' && queryValStr[queryValStr.length - 1] !== '"') {
-                        //If single quotes were used replace them with double quotes, else just add double quotes 
-                        if(queryValStr[0] === "'" && queryValStr[queryValStr.length - 1] === "'") {
-                            queryValStr = queryValStr.replace("'" , '"');
-                            queryValStr = queryValStr.replace("'" , '"');
-                        } else if(queryValStr.trim() !== 'true' && queryValStr.trim() !== 'false') { //Else, its a string and not a bool value 
-                            queryValStr = '"' + queryValStr + '"';
-                        } 
-                    }
+                //If the query value is a string, make sure it satrts and end with double quotes
+                if(isNaN(queryValStr) && queryValStr[0] !== '"' && queryValStr[queryValStr.length - 1] !== '"') {
+                    //If single quotes were used replace them with double quotes, else just add double quotes 
+                    if(queryValStr[0] === "'" && queryValStr[queryValStr.length - 1] === "'") {
+                        queryValStr = queryValStr.replace("'" , '"');
+                        queryValStr = queryValStr.replace("'" , '"');
+                    } else if(queryValStr.trim() !== 'true' && queryValStr.trim() !== 'false') { //Else, its a string and not a bool value 
+                        queryValStr = '"' + queryValStr + '"';
+                    } 
+                }
                     
-                    if(this.queryComparisons[x].value === ':') {
-                        queryStr += '"' + encodeURIComponent(this.queryKeys[x].value) + '"' + this.queryComparisons[x].value + queryValStr + ',';
-                    } else {
-                        queryStr += '"' + encodeURIComponent(this.queryKeys[x].value) + '":{"' + this.queryComparisons[x].value + '":' + queryValStr + '},';
-                    }
+                if(this.queryComparisons[x] === ':') {
+                    queryStr += '"' + encodeURIComponent(this.queryKeys[x]) + '"' + this.queryComparisons[x] + queryValStr + ',';
+                } else {
+                    queryStr += '"' + encodeURIComponent(this.queryKeys[x]) + '":{"' + this.queryComparisons[x] + '":' + queryValStr + '},';
                 }
             }
         }
@@ -79,8 +77,8 @@ class ActionFind extends React.Component {
 
         //Projection
         for(let x = 0; x < this.state.numProjection; x++) {
-            if(this.projectionFields[x] && this.projectionFields[x].value) {
-                projectionStr += '"' + encodeURIComponent(this.projectionFields[x].value) + '":' + this.projectionVals[x].value + ',';
+            if(this.projectionFields[x]) {
+                projectionStr += '"' + encodeURIComponent(this.projectionFields[x]) + '":' + this.projectionVals[x] + ',';
             }
         }
         projectionStr += '}';
@@ -89,8 +87,8 @@ class ActionFind extends React.Component {
         //Sort 
         optionsStr += '"sort":[';
         for(let x = 0; x < this.state.numSort; x++) {
-            if(this.sortFields[x] && this.sortFields[x].value) {
-                optionsStr += '["' + encodeURIComponent(this.sortFields[x].value) + '","' + this.sortDirections[x].value + '"],';
+            if(this.sortFields[x]) {
+                optionsStr += '["' + encodeURIComponent(this.sortFields[x]) + '","' + this.sortDirections[x] + '"],';
             }
         }
         optionsStr += '],';
@@ -132,38 +130,80 @@ class ActionFind extends React.Component {
         }
     }
 
-    removeItem(e) {
+    removeItem(e, idx) {
         let itemToRemove = e.target.className.toString().replace('fa fa-times-circle', '').trim();
 
         switch (itemToRemove) {
             case 'queryItem': 
+                //Since user is removing this item, clear contents 
+                if(idx !== (this.state.numQuery - 1)) {
+                    for(let x = idx; x < this.state.numQuery - 1; x++) {
+                        this.queryKeys[x] = this.queryKeys[x + 1];
+                        this.queryComparisons[x] = this.queryComparisons[x + 1];
+                        this.queryVals[x] = this.queryVals[x + 1];
+                    }
+                }
+
+                this.queryKeys[this.state.numQuery - 1] = '';
+                this.queryComparisons[this.state.numQuery - 1] = '';
+                this.queryVals[this.state.numQuery - 1] = '';
+
+                //this.queryKeys.splice(idx, 1);
+                //this.queryComparisons.splice(idx, 1);
+                //this.queryVals.splice(idx, 1);
+
+                //Remove item
                 this.setState({ numQuery: this.state.numQuery - 1 });
                 break;
             case 'projectionItem': 
+                //Since user is removing this item, clear contents 
+                if(idx !== (this.state.numProjection - 1)) {
+                    for(let x = idx; x < this.state.numProjection - 1; x++) {
+                        this.projectionVals[x] = this.projectionVals[x + 1];
+                        this.projectionFields[x] = this.projectionFields[x + 1];
+                    }
+                }
+
+                this.projectionVals[this.state.numProjection - 1] = '';
+                this.projectionFields[this.state.numProjection - 1] = '';
+
+                //Remove item
                 this.setState({ numProjection: this.state.numProjection - 1 });
                 break;
             case 'sortItem': 
+                //Since user is removing this item, clear contents 
+                if(idx !== (this.state.numSort - 1)) {
+                    for(let x = idx; x < this.state.numSort - 1; x++) {
+                        this.sortFields[x] = this.sortFields[x + 1];
+                        this.sortDirections[x] = this.sortDirections[x + 1];
+                    }
+                }
+
+                this.sortFields[this.state.numSort - 1] = '';
+                this.sortDirections[this.state.numSort - 1] = '';
+
+                //Remove item
                 this.setState({ numSort: this.state.numSort - 1 });
         }
     }
     
     queryChange(index, queryKey, queryComparison, queryVal) {
         //Store query 
-        this.queryKeys[index] = queryKey;
-        this.queryComparisons[index] = queryComparison;
-        this.queryVals[index] = queryVal;
+        this.queryKeys[index] = queryKey.value;
+        this.queryComparisons[index] = queryComparison.value;
+        this.queryVals[index] = queryVal.value;
     }
 
     projectionChange(index, projectionVal, projectionField) {
         //Store projection
-        this.projectionVals[index] = projectionVal;
-        this.projectionFields[index] = projectionField;
+        this.projectionVals[index] = projectionVal.value;
+        this.projectionFields[index] = projectionField.value;
     }
 
     sortChange(index, sortField, sortDirection) {
         //Store sort 
-        this.sortFields[index] = sortField;
-        this.sortDirections[index] = sortDirection;
+        this.sortFields[index] = sortField.value;
+        this.sortDirections[index] = sortDirection.value;
     }
 
     render() {

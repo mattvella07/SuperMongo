@@ -6,13 +6,26 @@ class ActionFindSort extends React.Component {
 
         //Set initial state
         this.state = {
-            field: (this.props.sortFields[this.props.index]) ? this.props.sortFields[this.props.index].value : '',
-            direction: (this.props.sortDirections[this.props.index]) ? this.props.sortDirections[this.props.index].value : ''
+            field: this.props.sortFields[this.props.index] || '',
+            direction: this.props.sortDirections[this.props.index] || ''
         };
 
         //Bind functions to this context 
         this.fieldChange = this.fieldChange.bind(this);
         this.directionChange = this.directionChange.bind(this);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        //Set state with new props 
+        if(nextProps) {
+            if(nextProps.sortFields && nextProps.sortFields[nextProps.index]) {
+                this.setState({ field: nextProps.sortFields[nextProps.index]});
+            }
+
+            if(nextProps.sortDirections && nextProps.sortDirections[nextProps.index]) {
+                this.setState({ direction: nextProps.sortDirections[nextProps.index]});
+            }
+        } 
     }
 
     fieldChange(e) {
@@ -26,6 +39,7 @@ class ActionFindSort extends React.Component {
     }
 
     render() {
+        let self = this; 
         return (
             <div>
                 <input type="text" placeholder="Field" value={this.state.field} onChange={this.fieldChange} ref={(ref) => this.sortField = ref} />
@@ -33,7 +47,7 @@ class ActionFindSort extends React.Component {
                     <option value="asc">Ascending</option>
                     <option value="desc">Descending</option>
                 </select>
-                { this.props.index > 0 ? <button type="button" className="sortItem fa fa-times-circle" onClick={this.props.removeItem}></button> : null }
+        { this.props.index > 0 ? <button type="button" className="sortItem fa fa-times-circle" onClick={ (e) => { self.props.removeItem(e, self.props.index); }}></button> : null }
             </div>
         );
     }

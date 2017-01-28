@@ -31,25 +31,23 @@ class ActionRemove extends React.Component {
         //Item to remove
         for(let x = 0; x < this.state.numItems; x++) {
             if(this.removeKeys[x] && this.removeVals[x]) {
-                let valStr = encodeURIComponent(this.removeVals[x].value);
+                let valStr = encodeURIComponent(this.removeVals[x]);
         
-                if(this.removeKeys[x].value) {
-                    //If the insert value is a string, make sure it satrts and end with double quotes
-                    if(isNaN(valStr) && valStr[0] !== '"' && valStr[valStr.length - 1] !== '"') {
-                        //If single quotes were used replace them with double quotes, else just add double quotes 
-                        if(valStr[0] === "'" && valStr[valStr.length - 1] === "'") {
-                            valStr = valStr.replace("'" , '"');
-                            valStr = valStr.replace("'" , '"');
-                        } else if(valStr.trim() !== 'true' && valStr.trim() !== 'false') { //Else, its a string and not a bool value
-                            valStr = '"' + valStr + '"';
-                        }
+                //If the insert value is a string, make sure it satrts and end with double quotes
+                if(isNaN(valStr) && valStr[0] !== '"' && valStr[valStr.length - 1] !== '"') {
+                    //If single quotes were used replace them with double quotes, else just add double quotes 
+                    if(valStr[0] === "'" && valStr[valStr.length - 1] === "'") {
+                        valStr = valStr.replace("'" , '"');
+                        valStr = valStr.replace("'" , '"');
+                    } else if(valStr.trim() !== 'true' && valStr.trim() !== 'false') { //Else, its a string and not a bool value
+                        valStr = '"' + valStr + '"';
                     }
+                }
 
-                    if(this.removeComparisons[x].value === ':') {
-                        completeStr += '"' + encodeURIComponent(this.removeKeys[x].value) + '"' + this.removeComparisons[x].value + valStr + ',';
-                    } else {
-                        completeStr += '"' + encodeURIComponent(this.removeKeys[x].value) + '":{"' + this.removeComparisons[x].value + '":' + valStr + '},';
-                    }
+                if(this.removeComparisons[x] === ':') {
+                    completeStr += '"' + encodeURIComponent(this.removeKeys[x]) + '"' + this.removeComparisons[x] + valStr + ',';
+                } else {
+                    completeStr += '"' + encodeURIComponent(this.removeKeys[x]) + '":{"' + this.removeComparisons[x] + '":' + valStr + '},';
                 }
             }
         }
@@ -73,23 +71,37 @@ class ActionRemove extends React.Component {
 
     handleChange(index, k, comp, v) {
         //Store keys and values to be removed on form submit 
-        this.removeKeys[index] = k;
-        this.removeComparisons[index] = comp;
-        this.removeVals[index] = v;
+        this.removeKeys[index] = k.value;
+        this.removeComparisons[index] = comp.value;
+        this.removeVals[index] = v.value;
     }
 
     addItem() {
         this.setState({ numItems: this.state.numItems + 1 });
     }
 
-    removeItem() {
+    removeItem(e, idx) {
+        //Since user is removing this item, clear contents 
+        if(idx !== (this.state.numItems - 1)) {
+            for(let x = idx; x < this.state.numItems - 1; x++) {
+                this.removeKeys[x] = this.removeKeys[x + 1];
+                this.removeComparisons[x] = this.removeComparisons[x + 1];
+                this.removeVals[x] = this.removeVals[x + 1];
+            }
+        }
+
+        this.removeKeys[this.state.numItems - 1] = '';
+        this.removeComparisons[this.state.numItems - 1] = '';
+        this.removeVals[this.state.numItems - 1] = '';
+
+        //Remove item
         this.setState({ numItems: this.state.numItems - 1 });
     }
 
     render() {
         let items = [];
         for (let i = 0; i < this.state.numItems; i++) {
-            items.push(<ActionKeyValueComparison index={i} valueChange={this.handleChange} removeItem={this.removeItem} type='criteriaItem' />);
+            items.push(<ActionKeyValueComparison index={i} keys={this.removeKeys} comparisons={this.removeComparisons} vals={this.removeVals} valueChange={this.handleChange} removeItem={this.removeItem} type='criteriaItem' />);
         }
 
         return (

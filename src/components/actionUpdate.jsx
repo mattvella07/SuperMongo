@@ -43,24 +43,22 @@ class ActionUpdate extends React.Component {
         //Criteria
         for(let x = 0; x < this.state.numCriteria; x++) {
             if(this.criteriaKeys[x] && this.criteriaVals[x]) {
-                let criteriaValStr = encodeURIComponent(this.criteriaVals[x].value);
+                let criteriaValStr = encodeURIComponent(this.criteriaVals[x]);
 
-                if(this.criteriaKeys[x].value) {
-                    if(isNaN(criteriaValStr) && criteriaValStr[0] !== '"' && criteriaValStr[criteriaValStr.length - 1] !== '"') {
-                        //If single quotes were used replace them with double quotes, else just add double quotes 
-                        if(criteriaValStr[0] === "'" && criteriaValStr[criteriaValStr.length - 1] === "'") {
-                            criteriaValStr = criteriaValStr.replace("'", '"');
-                            criteriaValStr = criteriaValStr.replace("'", '"');
-                        } else if(criteriaValStr.trim() !== 'true' && criteriaValStr.trim() !== 'false') { //Else, its a string and not a bool value 
-                            criteriaValStr = '"' + criteriaValStr + '"';
-                        }
+                if(isNaN(criteriaValStr) && criteriaValStr[0] !== '"' && criteriaValStr[criteriaValStr.length - 1] !== '"') {
+                    //If single quotes were used replace them with double quotes, else just add double quotes 
+                    if(criteriaValStr[0] === "'" && criteriaValStr[criteriaValStr.length - 1] === "'") {
+                        criteriaValStr = criteriaValStr.replace("'", '"');
+                        criteriaValStr = criteriaValStr.replace("'", '"');
+                    } else if(criteriaValStr.trim() !== 'true' && criteriaValStr.trim() !== 'false') { //Else, its a string and not a bool value 
+                        criteriaValStr = '"' + criteriaValStr + '"';
                     }
+                }
 
-                    if(this.criteriaComparisons[x].value === ':') {
-                        criteriaStr += '"' + encodeURIComponent(this.criteriaKeys[x].value) + '"' + this.criteriaComparisons[x].value + criteriaValStr + ',';
-                    } else {
-                        criteriaStr += '"' + encodeURIComponent(this.criteriaKeys[x].value) + '":{"' + this.criteriaComparisons[x].value + '":' + criteriaValStr + '},';
-                    }
+                if(this.criteriaComparisons[x] === ':') {
+                    criteriaStr += '"' + encodeURIComponent(this.criteriaKeys[x]) + '"' + this.criteriaComparisons[x] + criteriaValStr + ',';
+                } else { 
+                    criteriaStr += '"' + encodeURIComponent(this.criteriaKeys[x]) + '":{"' + this.criteriaComparisons[x] + '":' + criteriaValStr + '},';
                 }
             }
         }
@@ -71,21 +69,19 @@ class ActionUpdate extends React.Component {
         //Updated Item
         for(let x = 0; x < this.state.numUpdatedItem; x++) {
             if(this.updatedItemKeys[x] && this.updatedItemVals[x]) {
-                let updatedItemValStr = encodeURIComponent(this.updatedItemVals[x].value);
+                let updatedItemValStr = encodeURIComponent(this.updatedItemVals[x]);
 
-                if(this.updatedItemKeys[x].value) {
-                    if(isNaN(updatedItemValStr) && updatedItemValStr[0] !== '"' && updatedItemValStr[updatedItemValStr.length - 1] !== '"') {
-                        //If single quotes were used replace them with double quotes, else just add double quotes 
-                        if(updatedItemValStr[0] === "'" && updatedItemValStr[updatedItemValStr.length - 1] === "'") {
-                            updatedItemValStr = updatedItemValStr.replace("'", '"');
-                            updatedItemValStr = updatedItemValStr.replace("'", '"');
-                        } else if(updatedItemValStr.trim() !== 'true' && updatedItemValStr.trim() !== 'false') { //Else, its a string and not a bool value 
-                            updatedItemValStr = '"' + updatedItemValStr + '"';
-                        }
+                if(isNaN(updatedItemValStr) && updatedItemValStr[0] !== '"' && updatedItemValStr[updatedItemValStr.length - 1] !== '"') {
+                    //If single quotes were used replace them with double quotes, else just add double quotes 
+                    if(updatedItemValStr[0] === "'" && updatedItemValStr[updatedItemValStr.length - 1] === "'") {
+                        updatedItemValStr = updatedItemValStr.replace("'", '"');
+                        updatedItemValStr = updatedItemValStr.replace("'", '"');
+                    } else if(updatedItemValStr.trim() !== 'true' && updatedItemValStr.trim() !== 'false') { //Else, its a string and not a bool value 
+                        updatedItemValStr = '"' + updatedItemValStr + '"';
                     }
-
-                    updatedItemStr += '"' + encodeURIComponent(this.updatedItemKeys[x].value) + '": ' + updatedItemValStr + ',';
                 }
+
+                updatedItemStr += '"' + encodeURIComponent(this.updatedItemKeys[x]) + '": ' + updatedItemValStr + ',';
             }
         }
 
@@ -131,29 +127,56 @@ class ActionUpdate extends React.Component {
         }
     }
 
-    removeItem(e) {
+    removeItem(e, idx) {
         let itemToRemove = e.target.className.toString().replace('fa fa-times-circle', '').trim();
 
         switch(itemToRemove) {
             case 'criteriaItem':
+                //Since user is removing this item, clear contents 
+                if(idx !== (this.state.numCriteria - 1)) {
+                    for(let x = idx; x < this.state.numCriteria - 1; x++) {
+                        this.criteriaKeys[x] = this.criteriaKeys[x + 1];
+                        this.criteriaComparisons[x] = this.criteriaComparisons[x + 1];
+                        this.criteriaVals[x] = this.criteriaVals[x + 1];
+                    }
+                }
+
+                this.criteriaKeys[this.state.numCriteria - 1] = '';
+                this.criteriaComparisons[this.state.numCriteria - 1] = '';
+                this.criteriaVals[this.state.numCriteria - 1] = '';
+
+                //Remove item
                 this.setState({ numCriteria: this.state.numCriteria - 1 });
+                
                 break;
             case 'updatedItem':
+                //Since user is removing this item, clear contents
+                if(idx !== (this.state.numUpdatedItem - 1)) {
+                    for(let x = idx; x < this.state.numUpdatedItem - 1; x++) {
+                        this.updatedItemKeys[x] = this.updatedItemKeys[x + 1];
+                        this.updatedItemVals[x] = this.updatedItemVals[x + 1];
+                    }
+                }
+
+                this.updatedItemKeys[this.state.numUpdatedItem - 1] = '';
+                this.updatedItemVals[this.state.numUpdatedItem - 1] = '';
+
+                //Remove item
                 this.setState({ numUpdatedItem: this.state.numUpdatedItem - 1 });
         }
     }
 
     criteriaChange(index, k, comp, v) {
         //Store keys and values for the criteria
-        this.criteriaKeys[index] = k;
-        this.criteriaComparisons[index] = comp;
-        this.criteriaVals[index] = v;
+        this.criteriaKeys[index] = k.value;
+        this.criteriaComparisons[index] = comp.value;
+        this.criteriaVals[index] = v.value;
     }
 
     updatedItemChange(index, k, v) {
         //Store keys and values for the updated item 
-        this.updatedItemKeys[index] = k;
-        this.updatedItemVals[index] = v;
+        this.updatedItemKeys[index] = k.value;
+        this.updatedItemVals[index] = v.value;
     }
 
     multiChanged(e) {
