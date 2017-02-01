@@ -132,36 +132,21 @@ class ActionUpdate extends React.Component {
 
         switch(itemToRemove) {
             case 'criteriaItem':
-                //Since user is removing this item, clear contents 
-                if(idx !== (this.state.numCriteria - 1)) {
-                    for(let x = idx; x < this.state.numCriteria - 1; x++) {
-                        this.criteriaKeys[x] = this.criteriaKeys[x + 1];
-                        this.criteriaComparisons[x] = this.criteriaComparisons[x + 1];
-                        this.criteriaVals[x] = this.criteriaVals[x + 1];
-                    }
-                }
+                //Remove specified item 
+                this.criteriaKeys.splice(idx, 1);
+                this.criteriaComparisons.splice(idx, 1);
+                this.criteriaVals.splice(idx, 1);
 
-                this.criteriaKeys[this.state.numCriteria - 1] = '';
-                this.criteriaComparisons[this.state.numCriteria - 1] = '';
-                this.criteriaVals[this.state.numCriteria - 1] = '';
-
-                //Remove item
+                //Decrease count of Query items 
                 this.setState({ numCriteria: this.state.numCriteria - 1 });
                 
                 break;
             case 'updatedItem':
-                //Since user is removing this item, clear contents
-                if(idx !== (this.state.numUpdatedItem - 1)) {
-                    for(let x = idx; x < this.state.numUpdatedItem - 1; x++) {
-                        this.updatedItemKeys[x] = this.updatedItemKeys[x + 1];
-                        this.updatedItemVals[x] = this.updatedItemVals[x + 1];
-                    }
-                }
+                //Remove specified item
+                this.updatedItemKeys.splice(idx, 1);
+                this.updatedItemVals.splice(idx, 1);
 
-                this.updatedItemKeys[this.state.numUpdatedItem - 1] = '';
-                this.updatedItemVals[this.state.numUpdatedItem - 1] = '';
-
-                //Remove item
+                //Decrease count of Query items 
                 this.setState({ numUpdatedItem: this.state.numUpdatedItem - 1 });
         }
     }

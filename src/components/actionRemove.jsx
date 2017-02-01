@@ -81,20 +81,12 @@ class ActionRemove extends React.Component {
     }
 
     removeItem(e, idx) {
-        //Since user is removing this item, clear contents 
-        if(idx !== (this.state.numItems - 1)) {
-            for(let x = idx; x < this.state.numItems - 1; x++) {
-                this.removeKeys[x] = this.removeKeys[x + 1];
-                this.removeComparisons[x] = this.removeComparisons[x + 1];
-                this.removeVals[x] = this.removeVals[x + 1];
-            }
-        }
+        //Remove specified item 
+        this.removeKeys.splice(idx, 1);
+        this.removeComparisons.splice(idx, 1);
+        this.removeVals.splice(idx, 1);
 
-        this.removeKeys[this.state.numItems - 1] = '';
-        this.removeComparisons[this.state.numItems - 1] = '';
-        this.removeVals[this.state.numItems - 1] = '';
-
-        //Remove item
+        //Decrease count of Query items 
         this.setState({ numItems: this.state.numItems - 1 });
     }
 

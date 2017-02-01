@@ -135,54 +135,28 @@ class ActionFind extends React.Component {
 
         switch (itemToRemove) {
             case 'queryItem': 
-                //Since user is removing this item, clear contents 
-                if(idx !== (this.state.numQuery - 1)) {
-                    for(let x = idx; x < this.state.numQuery - 1; x++) {
-                        this.queryKeys[x] = this.queryKeys[x + 1];
-                        this.queryComparisons[x] = this.queryComparisons[x + 1];
-                        this.queryVals[x] = this.queryVals[x + 1];
-                    }
-                }
+                //Remove specified item
+                this.queryKeys.splice(idx, 1);
+                this.queryComparisons.splice(idx, 1);
+                this.queryVals.splice(idx, 1);
 
-                this.queryKeys[this.state.numQuery - 1] = '';
-                this.queryComparisons[this.state.numQuery - 1] = '';
-                this.queryVals[this.state.numQuery - 1] = '';
-
-                //this.queryKeys.splice(idx, 1);
-                //this.queryComparisons.splice(idx, 1);
-                //this.queryVals.splice(idx, 1);
-
-                //Remove item
+                //Decrease count of Query items 
                 this.setState({ numQuery: this.state.numQuery - 1 });
                 break;
             case 'projectionItem': 
-                //Since user is removing this item, clear contents 
-                if(idx !== (this.state.numProjection - 1)) {
-                    for(let x = idx; x < this.state.numProjection - 1; x++) {
-                        this.projectionVals[x] = this.projectionVals[x + 1];
-                        this.projectionFields[x] = this.projectionFields[x + 1];
-                    }
-                }
+                //Remove specified item
+                this.projectionVals.splice(idx, 1);
+                this.projectionFields.splice(idx, 1);
 
-                this.projectionVals[this.state.numProjection - 1] = '';
-                this.projectionFields[this.state.numProjection - 1] = '';
-
-                //Remove item
+                //Decrease count of Query items 
                 this.setState({ numProjection: this.state.numProjection - 1 });
                 break;
             case 'sortItem': 
-                //Since user is removing this item, clear contents 
-                if(idx !== (this.state.numSort - 1)) {
-                    for(let x = idx; x < this.state.numSort - 1; x++) {
-                        this.sortFields[x] = this.sortFields[x + 1];
-                        this.sortDirections[x] = this.sortDirections[x + 1];
-                    }
-                }
+                //Remove specified item
+                this.sortFields.splice(idx, 1);
+                this.sortDirections.splice(idx, 1);
 
-                this.sortFields[this.state.numSort - 1] = '';
-                this.sortDirections[this.state.numSort - 1] = '';
-
-                //Remove item
+                //Decrease count of Query items 
                 this.setState({ numSort: this.state.numSort - 1 });
         }
     }

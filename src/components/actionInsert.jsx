@@ -71,18 +71,11 @@ class ActionInsert extends React.Component {
     }
 
     removeItem(e, idx) {
-        //Since user is removing this item, clear contents 
-        if(idx !== (this.state.numItems - 1)) {
-            for(let x = idx; x < this.state.numItems - 1; x++) {
-                this.insertKeys[x] = this.insertKeys[x + 1];
-                this.insertVals[x] = this.insertVals[x + 1];
-            }
-        }
+        //Remove specified item
+        this.insertKeys.splice(idx, 1);
+        this.insertVals.splice(idx, 1);
 
-        this.insertKeys[this.state.numItems - 1] = '';
-        this.insertVals[this.state.numItems - 1] = '';
-
-        //Remove item
+        //Decrease count of Query items 
         this.setState({ numItems: this.state.numItems - 1 });
     }
 
