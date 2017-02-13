@@ -22,7 +22,7 @@ class PageContainer extends React.Component {
         //Bind functions to this context 
         this.handleDBClick = this.handleDBClick.bind(this);
         this.handleColClick = this.handleColClick.bind(this);
-        this.handleColDrop = this.handleColDrop.bind(this);
+        this.handleColAddOrDrop = this.handleColAddOrDrop.bind(this);
         this.handleFind = this.handleFind.bind(this);
         this.handleInsert = this.handleInsert.bind(this);
         this.handleRemove = this.handleRemove.bind(this);
@@ -53,7 +53,7 @@ class PageContainer extends React.Component {
         });  
     }
 
-    handleColDrop() {
+    handleColAddOrDrop() {
         this.setState({
             showActionArea: false,
             showFindResultArea: false,
@@ -122,7 +122,7 @@ class PageContainer extends React.Component {
             <div className="pageContainer">  
                 <div className="column sideBar">
                     <DatabaseList source={this.props.allDBsApi} onDBClick={this.handleDBClick} />
-                    { this.state.showCollections ? <CollectionList db={this.selectedDB} onColClick={this.handleColClick} onColDrop={this.handleColDrop} /> : null }
+                    { this.state.showCollections ? <CollectionList db={this.selectedDB} onColClick={this.handleColClick} onColAddOrDrop={this.handleColAddOrDrop} /> : null }
                 </div>
                 <div className="column mainContainer">
                     { this.state.showActionArea ? <ActionArea onFind={this.handleFind} onInsert={this.handleInsert} onRemove={this.handleRemove} onUpdate={this.handleUpdate} /> : null }
