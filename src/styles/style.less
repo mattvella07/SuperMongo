@@ -1,6 +1,14 @@
 @font-face {
-    font-family: 'monterey';
-    src: url('../fonts/ChicagoFLF.ttf');
+    font-family: 'metropolis-extra-light';
+    src: url('../fonts/metropolis.extra-light.otf');
+}
+@font-face {
+    font-family: 'metropolis-light';
+    src: url('../fonts/metropolis.light.otf');
+}
+@font-face {
+    font-family: 'metropolis-medium';
+    src: url('../fonts/metropolis.medium.otf');
 }
 
 body {
@@ -16,7 +24,7 @@ body {
             margin-right: 25px;
             background-color: #1B3F8B;
             color: white;
-            font-family: 'monterey';
+            font-family: 'metropolis-extra-light';
         }
         .databaseList,
         .collectionList,
@@ -29,6 +37,9 @@ body {
         .collectionList {
             height: 50%;
         }
+        .databaseList {
+            margin-bottom: 6px;
+        }
         .collectionList {
             h3 {
                 display: inline;
@@ -37,6 +48,9 @@ body {
                 border: none;
                 background: none;
                 color: white;
+                &.fa-plus-circle {
+                    margin-bottom: 18px;
+                }
             }
         }
         .actionArea, 
@@ -58,9 +72,10 @@ body {
         .database,
         .collection {
             background-color: #1B3F8B;
-            padding: 1px 5px;
+            padding: 3px 5px;
             display: flex;
             justify-content: space-between;
+            align-items: center;
             &:hover {
                 background-color: rgba(139, 175, 223, 0.5);
                 .collectionRemove {
@@ -82,8 +97,13 @@ body {
         }
         .mainContainer {
             width: 100%;
+            font-family: 'metropolis-light';
         }
         .actionArea {
+            .fa-chevron-right,
+            .fa-chevron-down {
+                margin-right: 6px;
+            }
             form {
                 display: flex; 
                 align-items: flex-start;
@@ -99,7 +119,7 @@ body {
                         &.fa-plus-circle {
                             color: green;
                         }
-                        &.fa-times-circle {
+                        &.fa-times {
                             color: red;
                         }
                         &.fa-caret-right,

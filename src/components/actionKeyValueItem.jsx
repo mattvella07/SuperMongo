@@ -44,7 +44,7 @@ class ActionInsertItem extends React.Component {
                 'criteriaItem': this.props.type && this.props.type === 'criteriaItem' ? true : false,
                 'updatedItem': this.props.type && this.props.type === 'updatedItem' ? true : false,
                 'fa': true,
-                'fa-times-circle': true
+                'fa-times': true
             }),
             self = this;
 

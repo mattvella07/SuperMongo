@@ -55,7 +55,7 @@ class ActionKeyValueComparison extends React.Component {
                 'queryItem': this.props.type && this.props.type === 'queryItem' ? true : false,
                 'criteriaItem': this.props.type && this.props.type === 'criteriaItem' ? true : false,
                 'fa': true,
-                'fa-times-circle': true
+                'fa-times': true
             }),
             self = this;
 

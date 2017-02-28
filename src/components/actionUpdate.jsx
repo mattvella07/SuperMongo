@@ -128,7 +128,7 @@ class ActionUpdate extends React.Component {
     }
 
     removeItem(e, idx) {
-        let itemToRemove = e.target.className.toString().replace('fa fa-times-circle', '').trim();
+        let itemToRemove = e.target.className.toString().replace('fa fa-times', '').trim();
 
         switch(itemToRemove) {
             case 'criteriaItem':
@@ -179,13 +179,13 @@ class ActionUpdate extends React.Component {
             updatedItems = [],
             criteriaClass = classNames({
                 'fa': true,
-                'fa-caret-right': !this.state.showCriteria,
-                'fa-caret-down': this.state.showCriteria
+                'fa-chevron-right': !this.state.showCriteria,
+                'fa-chevron-down': this.state.showCriteria
             }),
             updatedItemClass = classNames({
                 'fa': true,
-                'fa-caret-right': !this.state.showUpdatedItem,
-                'fa-caret-down': this.state.showUpdatedItem
+                'fa-chevron-right': !this.state.showUpdatedItem,
+                'fa-chevron-down': this.state.showUpdatedItem
             });
 
         for(let i = 0; i < this.state.numCriteria; i++) {

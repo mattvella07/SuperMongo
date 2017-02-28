@@ -91,8 +91,8 @@ class CollectionList extends React.Component {
 
         return (
             <div className="collectionList">
-                <h3>Collections in <i>{this.props.db}</i></h3> <button type="button"className="fa fa-plus-circle" onClick={this.addCollectionClick}></button>
-                { (collections.length <= 1) ? 'NONE' : collections }
+                <h3>COLLECTIONS in <i>{this.props.db}</i></h3> <button type="button"className="fa fa-plus-circle" onClick={this.addCollectionClick}></button>
+                { (collections.length <= 1) ? <p>NONE</p> : collections }
             </div>  
         );
     }

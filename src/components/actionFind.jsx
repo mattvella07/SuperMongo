@@ -131,7 +131,7 @@ class ActionFind extends React.Component {
     }
 
     removeItem(e, idx) {
-        let itemToRemove = e.target.className.toString().replace('fa fa-times-circle', '').trim();
+        let itemToRemove = e.target.className.toString().replace('fa fa-times', '').trim();
 
         switch (itemToRemove) {
             case 'queryItem': 
@@ -186,28 +186,28 @@ class ActionFind extends React.Component {
             sortItems = [],
             queryClass = classNames({
                 'fa': true,
-                'fa-caret-right': !this.state.showQuery,
-                'fa-caret-down': this.state.showQuery
+                'fa-chevron-right': !this.state.showQuery,
+                'fa-chevron-down': this.state.showQuery
             }),
             projectionClass = classNames({
                 'fa': true,
-                'fa-caret-right': !this.state.showProjection,
-                'fa-caret-down': this.state.showProjection
+                'fa-chevron-right': !this.state.showProjection,
+                'fa-chevron-down': this.state.showProjection
             }),
             sortClass = classNames({
                 'fa': true,
-                'fa-caret-right': !this.state.showSort,
-                'fa-caret-down': this.state.showSort
+                'fa-chevron-right': !this.state.showSort,
+                'fa-chevron-down': this.state.showSort
             }),
             limitClass = classNames({
                 'fa': true,
-                'fa-caret-right': !this.state.showLimit,
-                'fa-caret-down': this.state.showLimit
+                'fa-chevron-right': !this.state.showLimit,
+                'fa-chevron-down': this.state.showLimit
             }),
             skipClass = classNames({
                 'fa': true,
-                'fa-caret-right': !this.state.showSkip,
-                'fa-caret-down': this.state.showSkip
+                'fa-chevron-right': !this.state.showSkip,
+                'fa-chevron-down': this.state.showSkip
             });
 
         for(let i = 0; i < this.state.numQuery; i++) {

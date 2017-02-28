@@ -37,7 +37,7 @@ class DatabaseList extends React.Component {
         });  
         return (
             <div className="databaseList">
-                <h3>Databases</h3>
+                <h3>DATABASES</h3>
                 { (dbs.length <= 1) ? 'NONE' : dbs }            
             </div>
         );

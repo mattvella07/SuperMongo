@@ -47,7 +47,7 @@ class ActionFindProjection extends React.Component {
                     <option value="0">Hide</option>
                 </select>
                 <input type="text" placeholder="Field" value={this.state.field} onChange={this.fieldChange} ref={(ref) => this.projectionField = ref} />
-                { this.props.index > 0 ? <button type="button" className="projectionItem fa fa-times-circle" onClick={ (e) => { self.props.removeItem(e, self.props.index); }}></button> : null }
+                { this.props.index > 0 ? <button type="button" className="projectionItem fa fa-times" onClick={ (e) => { self.props.removeItem(e, self.props.index); }}></button> : null }
             </div>
         );
     }
