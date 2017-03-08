@@ -8,7 +8,8 @@ class Pagination extends React.Component {
 
         //Set initial state
         this.state = {
-            isDisabled: false
+            isDisabled: false,
+            numRecords: 0
         };
 
         //Bind functions to this context 
@@ -38,7 +39,7 @@ class Pagination extends React.Component {
         //If user didn't enter a limit, remove the default limit of 20
         //to get the total number of items 
         if(currProps.userEnteredLimit === -1) {
-            countStr += '/' + currProps.options.replace('"limit":' + PAGE_LIMIT, '');
+            countStr += '/' + currProps.options.replace('"limit":' + PAGE_LIMIT + ',', '');
         } else if(currProps.userEnteredLimit > PAGE_LIMIT) {
             countStr += '/' + currProps.options.replace('"limit":' + PAGE_LIMIT, '"limit": ' + currProps.userEnteredLimit);
         } else {
@@ -51,6 +52,8 @@ class Pagination extends React.Component {
 
         $.get(countStr, function(result) {
             if(result) {
+                this.setState({ numRecords: result });
+
                 let optionsObj = JSON.parse(currProps.options);
 
                 //If more items exist, make sure button is enabled
@@ -59,7 +62,9 @@ class Pagination extends React.Component {
                 } else { //If no more items exist, make sure button is disabled 
                     this.setState({ isDisabled: true });
                 }
-            } 
+            } else {
+                this.setState({ isDisabled: true });
+            }
         }.bind(this));
     } 
 
@@ -87,6 +92,7 @@ class Pagination extends React.Component {
     render() {
         return (
             <div className="pagination">
+                <p>{this.state.numRecords.toLocaleString('en-US')} record(s) found</p>
                 <button className="moreButton" onClick={this.moreClick} disabled={this.state.isDisabled} >More</button>
             </div>
         );
