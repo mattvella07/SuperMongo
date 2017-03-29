@@ -44,4 +44,10 @@ class DatabaseList extends React.Component {
     }
 }
 
+//Type checking for props
+DatabaseList.propTypes = {
+    source: React.PropTypes.string,
+    onDBClick: React.PropTypes.func
+};
+
 export default DatabaseList;

@@ -14,7 +14,6 @@ class CollectionList extends React.Component {
         this.getCollections = this.getCollections.bind(this);
         this.addOrDropCollection = this.addOrDropCollection.bind(this);
         this.addCollectionClick = this.addCollectionClick.bind(this);
-        //this.addCollection = this.addCollection.bind(this);
     }
 
     addOrDropCollection(action, colToDrop) {
@@ -34,20 +33,6 @@ class CollectionList extends React.Component {
               type: "input", closeOnConfirm: false, showCancelButton: true, inputPlaceholder: "Collection name" }, 
               (inputValue) => { if(inputValue === false) { return false; } else if(inputValue.trim() === "") { swal.showInputError("Please type a collection name."); return false; } self.addOrDropCollection('add', inputValue); swal.close(); });
     }
-
-    /*addCollection(colName) {
-         //console.log("add Collection: " + colName);
-         let apiStr = `/api/addCollection/${this.props.db}/${colName}`;
-
-         //API call to add collection 
-         $.post(apiStr, function(result) {
-             //Add successful 
-            this.props.onColAddOrDrop();
-         }.bind(this));
-
-         //After col added, get new list of collections 
-        this.getCollections();
-    }*/
 
     getCollections(nextProps) {
         let currProps = nextProps || this.props;
@@ -97,5 +82,12 @@ class CollectionList extends React.Component {
         );
     }
 }
+
+//Type checking for props
+CollectionList.propTypes = {
+     db: React.PropTypes.string,
+     onColClick: React.PropTypes.func,
+     onColAddOrDrop: React.PropTypes.func
+};
 
 export default CollectionList;

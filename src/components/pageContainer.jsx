@@ -137,4 +137,9 @@ class PageContainer extends React.Component {
     }
 }
 
+//Type checking for props
+PageContainer.propTypes = {
+    allDBsApi: React.PropTypes.string
+};
+
 export default PageContainer;
