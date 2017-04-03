@@ -40,4 +40,12 @@ class ActionArea extends React.Component {
     }
 }
 
+//Type checking for props
+ActionArea.propTypes = {
+    onFind: React.PropTypes.func,
+    onInsert: React.PropTypes.func,
+    onRemove: React.PropTypes.func,
+    onUpdate: React.PropTypes.func
+};
+
 export default ActionArea; 

@@ -53,4 +53,13 @@ class ActionFindSort extends React.Component {
     }
 }
 
+//Type checking for props
+ActionFindSort.propTypes = {
+    index: React.PropTypes.number,
+    sortFields: React.PropTypes.array,
+    sortDirections: React.PropTypes.array,
+    valueChange: React.PropTypes.func,
+    removeItem: React.PropTypes.func
+};
+
 export default ActionFindSort; 

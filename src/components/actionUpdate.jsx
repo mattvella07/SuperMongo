@@ -229,4 +229,9 @@ class ActionUpdate extends React.Component {
     }
 }
 
+//Type checking for props
+ActionUpdate.propTypes = {
+    onUpdate: React.PropTypes.func
+};
+
 export default ActionUpdate;

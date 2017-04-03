@@ -113,4 +113,9 @@ class ActionRemove extends React.Component {
     }
 }
 
+//Type checking for props
+ActionRemove.propTypes = {
+    onRemove: React.PropTypes.func
+};
+
 export default ActionRemove;

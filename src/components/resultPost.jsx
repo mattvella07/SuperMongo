@@ -96,4 +96,15 @@ class ResultPost extends React.Component {
     }
 }
 
+//Type checking for props
+ResultPost.propTypes = {
+    db: React.PropTypes.string,
+    col: React.PropTypes.string, 
+    dataObj: React.PropTypes.string,
+    op: React.PropTypes.string,
+    criteria: React.PropTypes.string,
+    justOne: React.PropTypes.string,
+    options: React.PropTypes.string
+};
+
 export default ResultPost;

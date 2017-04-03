@@ -77,4 +77,15 @@ class ActionKeyValueComparison extends React.Component {
     }
 }
 
+//Type checking for props
+ActionKeyValueComparison.propTypes = {
+    index: React.PropTypes.number,
+    keys: React.PropTypes.array,
+    comparisons: React.PropTypes.array,
+    vals: React.PropTypes.array,
+    valueChange: React.PropTypes.func,
+    removeItem: React.PropTypes.func,
+    type: React.PropTypes.string
+};
+
 export default ActionKeyValueComparison;

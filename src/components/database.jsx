@@ -25,4 +25,10 @@ class Database extends React.Component {
     }
 }
 
+//Type checking for props
+Database.propTypes = {
+    db: React.PropTypes.string,
+    onDBClick: React.PropTypes.func
+};
+
 export default Database;

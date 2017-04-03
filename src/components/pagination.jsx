@@ -99,4 +99,15 @@ class Pagination extends React.Component {
     }
 }
 
+//Type checking for props
+Pagination.propTypes = {
+    db: React.PropTypes.string,
+    col: React.PropTypes.string,
+    query: React.PropTypes.string,
+    options: React.PropTypes.string,
+    userEnteredLimit: React.PropTypes.number,
+    totalCount: React.PropTypes.number,
+    onMoreClick: React.PropTypes.func
+};
+
 export default Pagination;

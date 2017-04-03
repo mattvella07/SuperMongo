@@ -1,7 +1,7 @@
 import React from 'react';
 var classNames = require('classnames');
 
-class ActionInsertItem extends React.Component {
+class ActionKeyValueItem extends React.Component {
     constructor(props) {
         super(props);
 
@@ -58,4 +58,14 @@ class ActionInsertItem extends React.Component {
     }
 }
 
-export default ActionInsertItem;
+//Type checking for props
+ActionKeyValueItem.propTypes = {
+    index: React.PropTypes.number,
+    keys: React.PropTypes.array,
+    vals: React.PropTypes.array,
+    textChange: React.PropTypes.func,
+    removeItem: React.PropTypes.func,
+    type: React.PropTypes.string
+};
+
+export default ActionKeyValueItem;

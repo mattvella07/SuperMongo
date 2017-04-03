@@ -255,4 +255,9 @@ class ActionFind extends React.Component {
     }
 }
 
+//Type checking for props
+ActionFind.propTypes = {
+    onFind: React.PropTypes.func
+};
+
 export default ActionFind;

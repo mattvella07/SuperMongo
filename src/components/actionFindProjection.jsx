@@ -53,4 +53,13 @@ class ActionFindProjection extends React.Component {
     }
 }
 
+//Type checking for props
+ActionFindProjection.propTypes = {
+    index: React.PropTypes.number,
+    projectionVals: React.PropTypes.array,
+    projectionFields: React.PropTypes.array,
+    valueChange: React.PropTypes.func,
+    removeItem: React.PropTypes.func
+};
+
 export default ActionFindProjection;

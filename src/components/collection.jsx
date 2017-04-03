@@ -36,4 +36,12 @@ class Collection extends React.Component {
     }
 }
 
+//Type checking for props
+Collection.propTypes = {
+    db: React.PropTypes.string,
+    col: React.PropTypes.string,
+    onColClick: React.PropTypes.func,
+    onColDrop: React.PropTypes.func
+};
+
 export default Collection; 

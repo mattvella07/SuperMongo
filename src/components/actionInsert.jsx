@@ -99,4 +99,9 @@ class ActionInsert extends React.Component {
     }
 }
 
+//Type checking for props
+ActionInsert.propTypes = {
+    onInsert: React.PropTypes.func
+};
+
 export default ActionInsert;

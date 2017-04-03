@@ -85,4 +85,13 @@ class ResultGet extends React.Component {
     }
 }
 
+//Type checking for props
+ResultGet.propTypes = {
+    db: React.PropTypes.string,
+    col: React.PropTypes.string,
+    query: React.PropTypes.string,
+    projection: React.PropTypes.string,
+    options: React.PropTypes.string
+};
+
 export default ResultGet; 
