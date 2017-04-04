@@ -16,6 +16,7 @@ body {
     .pageContainer {
         display: flex;
         flex-direction: row;
+        background-color: rgba(139,175,223, 0.3);
         .sideBar {
             height: 100%;
             width: 250px;
@@ -106,6 +107,12 @@ body {
             .fa-chevron-down {
                 margin-right: 6px;
             }
+            select {
+                border-radius: 50%;
+                &[name="operations"] {
+                    font-size: 16px;
+                }
+            }
             form {
                 display: flex; 
                 align-items: flex-start;
@@ -117,7 +124,7 @@ body {
                     margin-bottom: 12px; 
                     .fa {
                         border: none;
-                        background: white;
+                        background-color: transparent;
                         &.fa-plus-circle {
                             color: green;
                         }
@@ -132,6 +139,9 @@ body {
                     input[type="radio"] {
                         margin: 8px;
                     }
+                }
+                input[type="submit"] {
+                    font-size: 16px;
                 }
             }  
         }
