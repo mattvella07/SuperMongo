@@ -1,4 +1,6 @@
 import React from 'react';
+import config from './../../lib/config.js';
+var fetch = require('node-fetch');
 
 class ResultGet extends React.Component {
     constructor(props) {
@@ -16,7 +18,7 @@ class ResultGet extends React.Component {
 
     getData(nextProps) {
         let currProps = nextProps || this.props,
-            getStr = '/api/find/' + currProps.db + '/' + currProps.col,
+            getStr = `http://localhost:${config.express.port}/api/find/${currProps.db}/${currProps.col}`,
             data = '';
 
         if(currProps.query) {
@@ -37,19 +39,22 @@ class ResultGet extends React.Component {
             getStr += '/{}';
         }
         
-        $.get(getStr, function(result) {
-            for(let x = 0; x < result.length; x++) {
-                data += JSON.stringify(result[x]).split(':').join(' : ').split(',').join(', ');
-            }
+        fetch(getStr)
+            .then(function(res) {
+                return res.json();
+            }).then(function(result) {
+                for(let x = 0; x < result.length; x++) {
+                    data += JSON.stringify(result[x]).split(':').join(' : ').split(',').join(', ');
+                }
 
-            if(!data) {
-                data = '{ No results found ';
-            }
+                if(!data) {
+                    data = '{ No results found ';
+                }
             
-            //Using state, set data and hide loading message 
-            this.setState({ result: data });
-            this.setState({ isLoading: false });
-        }.bind(this));
+                //Using state, set data and hide loading message 
+                this.setState({ result: data });
+                this.setState({ isLoading: false });
+            }.bind(this));
     }
 
     componentWillReceiveProps(nextProps) {

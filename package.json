@@ -19,6 +19,7 @@
     "express": "^4.14.0",
     "helmet": "^3.5.0",
     "mongodb": "^2.2.11",
+    "node-fetch": "^1.6.3",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "react-scroll": "^1.4.4",

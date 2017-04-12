@@ -1,5 +1,7 @@
 import React from 'react';
 import Collection from './collection.jsx';
+import config from './../../lib/config.js';
+var fetch = require('node-fetch');
 
 class CollectionList extends React.Component {
     constructor(props) {
@@ -17,11 +19,14 @@ class CollectionList extends React.Component {
     }
 
     addOrDropCollection(action, colToDrop) {
-        let apiStr = `/api/${action}Collection/${this.props.db}/${colToDrop}`;
+        let apiStr = `http://localhost:${config.express.port}/api/${action}Collection/${this.props.db}/${colToDrop}`;
 
-        $.post(apiStr, function(result) {
-            this.props.onColAddOrDrop();
-        }.bind(this));
+        fetch(apiStr, { method: 'POST' })
+            .then(function(res) {
+                return res.text();
+            }).then(function(result) {
+                this.props.onColAddOrDrop();
+            }.bind(this));
 
         //Get new list of collections 
         this.getCollections();
@@ -35,18 +40,22 @@ class CollectionList extends React.Component {
     }
 
     getCollections(nextProps) {
-        let currProps = nextProps || this.props;
+        let currProps = nextProps || this.props,
+            apiStr = `http://localhost:${config.express.port}/api/collections/${currProps.db}`;
 
-        $.get(`/api/collections/${currProps.db}`, function(result) {
-            var newData = '';
-            for(let x = 0; x < result.length; x++) {
-                if(result[x].name.indexOf('system.') !== 0) {
-                    newData += ',' + result[x].name;
+        fetch(apiStr)
+            .then(function(res) {
+                return res.json();
+            }).then(function(result) {
+                var newData = '';
+                for(let x = 0; x < result.length; x++) {
+                    if(result[x].name.indexOf('system.') !== 0) {
+                        newData += ',' + result[x].name;
+                    }
                 }
-            }
-            
-            this.setState({ collectionNames: newData});
-        }.bind(this));
+                
+                this.setState({ collectionNames: newData});
+            }.bind(this));
     }
 
     componentWillReceiveProps(nextProps) {

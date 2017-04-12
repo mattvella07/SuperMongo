@@ -1,5 +1,6 @@
 import React from 'react';
 import Database from './database.jsx';
+var fetch = require('node-fetch');
 
 class DatabaseList extends React.Component {
     constructor(props) {
@@ -12,13 +13,16 @@ class DatabaseList extends React.Component {
     }
 
     componentDidMount() {
-        $.get(this.props.source, function(result) {
-            for(let x = 0; x < result.length; x++) {
-                this.setState({
-                    dbNames: this.state.dbNames.concat("," + result[x].name)
-                });
-            }
-        }.bind(this));
+        fetch(this.props.source)
+            .then(function(res) {
+                return res.json();
+            }).then(function(result) {
+                for(let x = 0; x < result.length; x++) {
+                    this.setState({
+                        dbNames: this.state.dbNames.concat("," + result[x].name)
+                    });
+                }
+            }.bind(this));
     }
 
     componentWillUnmount() {

@@ -1,5 +1,7 @@
 import React from 'react';
+import config from './../../lib/config.js';
 var scroll = require('react-scroll').animateScroll;
+var fetch = require('node-fetch');
 const PAGE_LIMIT = 20;
 
 class Pagination extends React.Component {
@@ -28,7 +30,7 @@ class Pagination extends React.Component {
     hasMoreItems(nextProps) {
         //Get count 
         let currProps = nextProps || this.props,
-            countStr = '/api/count/' + currProps.db + '/' + currProps.col;
+            countStr = `http://localhost:${config.express.port}/api/count/${currProps.db}/${currProps.col}`;
         
         if(currProps.query) {
             countStr += '/' + currProps.query;
@@ -50,22 +52,25 @@ class Pagination extends React.Component {
         countStr = countStr.replace(',}', '}');
         countStr = countStr.replace('{,', '{');
 
-        $.get(countStr, function(result) {
-            if(result) {
-                this.setState({ numRecords: result });
+        fetch(countStr)
+            .then(function(res) {
+                return res.json();
+            }).then(function(result) {
+                if(result) {
+                    this.setState({ numRecords: result });
 
-                let optionsObj = JSON.parse(currProps.options);
+                    let optionsObj = JSON.parse(currProps.options);
 
-                //If more items exist, make sure button is enabled
-                if(result - (optionsObj.skip + PAGE_LIMIT) > 0 && (currProps.userEnteredLimit === -1 || currProps.userEnteredLimit - (optionsObj.skip + PAGE_LIMIT) > 0)) {
-                    this.setState({ isDisabled: false });
-                } else { //If no more items exist, make sure button is disabled 
+                    //If more items exist, make sure button is enabled
+                    if(result - (optionsObj.skip + PAGE_LIMIT) > 0 && (currProps.userEnteredLimit === -1 || currProps.userEnteredLimit - (optionsObj.skip + PAGE_LIMIT) > 0)) {
+                        this.setState({ isDisabled: false });
+                    } else { //If no more items exist, make sure button is disabled 
+                        this.setState({ isDisabled: true });
+                    }
+                } else {
                     this.setState({ isDisabled: true });
                 }
-            } else {
-                this.setState({ isDisabled: true });
-            }
-        }.bind(this));
+            }.bind(this));
     } 
 
     moreClick(e) {
