@@ -33,7 +33,7 @@ class Pagination extends React.Component {
             countStr = `http://localhost:${config.express.port}/api/count/${currProps.db}/${currProps.col}`;
         
         if(currProps.query) {
-            countStr += '/' + currProps.query;
+            countStr += `/${currProps.query}`;
         } else {
             countStr += '/{}';
         }
@@ -41,11 +41,11 @@ class Pagination extends React.Component {
         //If user didn't enter a limit, remove the default limit of 20
         //to get the total number of items 
         if(currProps.userEnteredLimit === -1) {
-            countStr += '/' + currProps.options.replace('"limit":' + PAGE_LIMIT + ',', '');
+            countStr += `/${currProps.options.replace(`"limit":${PAGE_LIMIT},`, '')}`;
         } else if(currProps.userEnteredLimit > PAGE_LIMIT) {
-            countStr += '/' + currProps.options.replace('"limit":' + PAGE_LIMIT, '"limit": ' + currProps.userEnteredLimit);
+            countStr += `/${currProps.options.replace(`"limit":${PAGE_LIMIT}`, `"limit": ${currProps.userEnteredLimit}`)}`;
         } else {
-            countStr += '/' + currProps.options;
+            countStr += `/${currProps.options}`;
         }
 
         //If default limit of 20 is removed make sure no commas are left over 

@@ -22,19 +22,19 @@ class ResultGet extends React.Component {
             data = '';
 
         if(currProps.query) {
-            getStr += '/' + currProps.query;
+            getStr += `/${currProps.query}`;
         } else {
             getStr += '/{}';
         }
         
         if(currProps.projection) {
-            getStr += '/' + currProps.projection;
+            getStr += `/${currProps.projection}`;
         } else {
             getStr += '/{}';
         }
 
         if(currProps.options) {
-            getStr += '/' + currProps.options;
+            getStr += `/${currProps.options}`;
         } else {
             getStr += '/{}';
         }
@@ -74,7 +74,7 @@ class ResultGet extends React.Component {
     }
 
     render() {
-        var results = this.state.result.split('}').map(function(r) {
+        let results = this.state.result.split('}').map(function(r) {
             if(r !== '') {
                 return (
                     <p>{r + '}'}</p>

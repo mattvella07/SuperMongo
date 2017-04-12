@@ -61,14 +61,14 @@ class ActionFind extends React.Component {
                         queryValStr = queryValStr.replace("'" , '"');
                         queryValStr = queryValStr.replace("'" , '"');
                     } else if(queryValStr.trim() !== 'true' && queryValStr.trim() !== 'false') { //Else, its a string and not a bool value 
-                        queryValStr = '"' + queryValStr + '"';
+                        queryValStr = `"${queryValStr}"`;
                     } 
                 }
                     
                 if(this.queryComparisons[x] === ':') {
-                    queryStr += '"' + encodeURIComponent(this.queryKeys[x]) + '"' + this.queryComparisons[x] + queryValStr + ',';
+                    queryStr += `"${encodeURIComponent(this.queryKeys[x])}"${this.queryComparisons[x]}${queryValStr},`;
                 } else {
-                    queryStr += '"' + encodeURIComponent(this.queryKeys[x]) + '":{"' + this.queryComparisons[x] + '":' + queryValStr + '},';
+                    queryStr += `"${encodeURIComponent(this.queryKeys[x])}":{"${this.queryComparisons[x]}":${queryValStr}},`;
                 }
             }
         }
@@ -78,7 +78,7 @@ class ActionFind extends React.Component {
         //Projection
         for(let x = 0; x < this.state.numProjection; x++) {
             if(this.projectionFields[x]) {
-                projectionStr += '"' + encodeURIComponent(this.projectionFields[x]) + '":' + this.projectionVals[x] + ',';
+                projectionStr += `"${encodeURIComponent(this.projectionFields[x])}":${this.projectionVals[x]},`;
             }
         }
         projectionStr += '}';
@@ -88,7 +88,7 @@ class ActionFind extends React.Component {
         optionsStr += '"sort":[';
         for(let x = 0; x < this.state.numSort; x++) {
             if(this.sortFields[x]) {
-                optionsStr += '["' + encodeURIComponent(this.sortFields[x]) + '","' + this.sortDirections[x] + '"],';
+                optionsStr += `["${encodeURIComponent(this.sortFields[x])}","${this.sortDirections[x]}"],`;
             }
         }
         optionsStr += '],';
@@ -96,14 +96,14 @@ class ActionFind extends React.Component {
 
         //Limit
         if(this.state.limitVal && this.state.limitVal < 20) {
-            optionsStr += '"limit":' + this.state.limitVal + ',';
+            optionsStr += `"limit":${this.state.limitVal},`;
         } else { //If not entered by user, set to default of 20
-            optionsStr += '"limit":' + PAGE_LIMIT + ',';
+            optionsStr += `"limit":${PAGE_LIMIT},`;
         }
 
         //Skip
         if(this.state.skipVal) {
-            optionsStr += '"skip":' + this.state.skipVal + ',';
+            optionsStr += `"skip":${this.state.skipVal},`;
         } else { //If not entered by user, set to default of 0
             optionsStr += '"skip":0,';
         }

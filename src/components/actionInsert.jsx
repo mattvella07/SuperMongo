@@ -38,11 +38,11 @@ class ActionInsert extends React.Component {
                         valStr = valStr.replace("'" , '"');
                         valStr = valStr.replace("'" , '"');
                     } else if(valStr.trim() !== 'true' && valStr.trim() !== 'false') { //Else, its a string and not a bool value
-                        valStr = '"' + valStr + '"';
+                        valStr = `"${valStr}"`;
                     }
                 }
 
-                completeStr += '"' + encodeURIComponent(this.insertKeys[x]) + '": ' + valStr + ','; 
+                completeStr += `"${encodeURIComponent(this.insertKeys[x])}": ${valStr},`; 
             }
         }
         completeStr += '}';

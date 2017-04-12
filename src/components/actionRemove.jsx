@@ -40,14 +40,14 @@ class ActionRemove extends React.Component {
                         valStr = valStr.replace("'" , '"');
                         valStr = valStr.replace("'" , '"');
                     } else if(valStr.trim() !== 'true' && valStr.trim() !== 'false') { //Else, its a string and not a bool value
-                        valStr = '"' + valStr + '"';
+                        valStr = `"${valStr}"`;
                     }
                 }
 
                 if(this.removeComparisons[x] === ':') {
-                    completeStr += '"' + encodeURIComponent(this.removeKeys[x]) + '"' + this.removeComparisons[x] + valStr + ',';
+                    completeStr += `"${encodeURIComponent(this.removeKeys[x])}"${this.removeComparisons[x]}${valStr},`;
                 } else {
-                    completeStr += '"' + encodeURIComponent(this.removeKeys[x]) + '":{"' + this.removeComparisons[x] + '":' + valStr + '},';
+                    completeStr += `"${encodeURIComponent(this.removeKeys[x])}":{"${this.removeComparisons[x]}":${valStr}},`;
                 }
             }
         }

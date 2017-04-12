@@ -51,14 +51,14 @@ class ActionUpdate extends React.Component {
                         criteriaValStr = criteriaValStr.replace("'", '"');
                         criteriaValStr = criteriaValStr.replace("'", '"');
                     } else if(criteriaValStr.trim() !== 'true' && criteriaValStr.trim() !== 'false') { //Else, its a string and not a bool value 
-                        criteriaValStr = '"' + criteriaValStr + '"';
+                        criteriaValStr = `"${criteriaValStr}"`;
                     }
                 }
 
                 if(this.criteriaComparisons[x] === ':') {
-                    criteriaStr += '"' + encodeURIComponent(this.criteriaKeys[x]) + '"' + this.criteriaComparisons[x] + criteriaValStr + ',';
+                    criteriaStr += `"${encodeURIComponent(this.criteriaKeys[x])}"${this.criteriaComparisons[x]}${criteriaValStr},`;
                 } else { 
-                    criteriaStr += '"' + encodeURIComponent(this.criteriaKeys[x]) + '":{"' + this.criteriaComparisons[x] + '":' + criteriaValStr + '},';
+                    criteriaStr += `"${encodeURIComponent(this.criteriaKeys[x])}":{"${this.criteriaComparisons[x]}":${criteriaValStr}},`;
                 }
             }
         }
@@ -77,11 +77,11 @@ class ActionUpdate extends React.Component {
                         updatedItemValStr = updatedItemValStr.replace("'", '"');
                         updatedItemValStr = updatedItemValStr.replace("'", '"');
                     } else if(updatedItemValStr.trim() !== 'true' && updatedItemValStr.trim() !== 'false') { //Else, its a string and not a bool value 
-                        updatedItemValStr = '"' + updatedItemValStr + '"';
+                        updatedItemValStr = `"${updatedItemValStr}"`;
                     }
                 }
 
-                updatedItemStr += '"' + encodeURIComponent(this.updatedItemKeys[x]) + '": ' + updatedItemValStr + ',';
+                updatedItemStr += `"${encodeURIComponent(this.updatedItemKeys[x])}": ${updatedItemValStr},`;
             }
         }
 
