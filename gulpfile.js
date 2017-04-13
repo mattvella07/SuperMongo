@@ -10,7 +10,8 @@ var gulp = require('gulp'),
     babelify = require('babelify'),
     source = require('vinyl-source-stream'),
     streamify = require('gulp-streamify'),
-    pump = require('pump');
+    pump = require('pump'),
+    electron = require('electron-connect').server.create();
 
 var jsPaths = ['./*.js', './src/components/*.jsx', './src/*.jsx', './lib/*.js', './lib/routes/*.js', './lib/routes/test/*.js'];
 
@@ -54,6 +55,15 @@ gulp.task('minifyJS', function(cb) {
     ], cb);
 });
 
+//Start Electron
+gulp.task('serve', ['minifyJS'], function() {
+    electron.start();
+
+    gulp.watch('src/main.js', electron.restart);
+
+    gulp.watch(jsPaths, electron.reload);
+});
+
 //Watch files for changes 
 gulp.task('watch', function() {
     gulp.watch('src/styles/*.less', ['less']);
@@ -63,5 +73,5 @@ gulp.task('watch', function() {
 
 //Initial task 
 gulp.task('default', ['clean'], function() {
-    gulp.start('less', 'lint', 'minifyJS', 'watch');
+    gulp.start('less', 'lint', 'minifyJS', 'serve', 'watch');
 });
