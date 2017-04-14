@@ -13,7 +13,7 @@ var gulp = require('gulp'),
     pump = require('pump'),
     electron = require('electron-connect').server.create();
 
-var jsPaths = ['./*.js', './src/components/*.jsx', './src/*.jsx', './lib/*.js', './lib/routes/*.js', './lib/routes/test/*.js'];
+var jsPaths = ['./*.js', './src/components/*.jsx', './src/*.js', './src/*.jsx', './lib/*.js', './lib/routes/*.js', './lib/routes/test/*.js'];
 
 //Clean dist folder
 gulp.task('clean', function() {
@@ -61,7 +61,7 @@ gulp.task('serve', ['minifyJS'], function() {
 
     gulp.watch('src/main.js', electron.restart);
 
-    gulp.watch(jsPaths, electron.reload);
+    gulp.watch(['dist/app.min.js', 'src/index.html'], electron.reload);
 });
 
 //Watch files for changes 
