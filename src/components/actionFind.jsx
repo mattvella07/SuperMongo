@@ -2,7 +2,8 @@ import React from 'react';
 import ActionKeyValueComparison from './actionKeyValueComparison.jsx';
 import ActionFindProjection from './actionFindProjection.jsx';
 import ActionFindSort from './actionFindSort.jsx';
-var classNames = require('classnames');
+var classNames = require('classnames'),
+    moment = require('moment');
 const PAGE_LIMIT = 20;
 
 class ActionFind extends React.Component {
@@ -54,8 +55,12 @@ class ActionFind extends React.Component {
             if(this.queryKeys[x] && this.queryVals[x]) {
                 let queryValStr = encodeURIComponent(this.queryVals[x]);
 
-                //If the query value is a string, make sure it satrts and end with double quotes
-                if(isNaN(queryValStr) && queryValStr[0] !== '"' && queryValStr[queryValStr.length - 1] !== '"') {
+                //If the query value is a date, then convert it to an ISO Date
+                /*if(moment(queryValStr, moment.ISO_8601).isValid()) {
+                    queryValStr = new Date(queryValStr).toISOString();
+                    queryValStr = `"new Date("${queryValStr}")"`;
+                } //Else if the query value is a string, make sure it satrts and end with double quotes
+                else*/ if(isNaN(queryValStr) && queryValStr[0] !== '"' && queryValStr[queryValStr.length - 1] !== '"') {
                     //If single quotes were used replace them with double quotes, else just add double quotes 
                     if(queryValStr[0] === "'" && queryValStr[queryValStr.length - 1] === "'") {
                         queryValStr = queryValStr.replace("'" , '"');

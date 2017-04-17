@@ -57,7 +57,7 @@ class Pagination extends React.Component {
                 return res.json();
             }).then(function(result) {
                 if(result) {
-                    this.setState({ numRecords: result });
+                    this.setState({ numRecords: (typeof(result) === 'number') ? result : 0 });
 
                     let optionsObj = JSON.parse(currProps.options);
 
