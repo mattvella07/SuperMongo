@@ -8,7 +8,8 @@
   },
   "main": "src/main.js",
   "scripts": {
-    "test": "mocha lib/test/",
+    "serverTest": "mocha lib/test/",
+    "frontEndTest": "mocha --require src/test/withDom.js --compilers js:babel-register --recursive src/test/*.jsx",
     "start": "node server.js"
   },
   "author": "Matt Vella",
@@ -17,7 +18,6 @@
     "babel-core": "^6.18.2",
     "classnames": "^2.2.5",
     "electron": "^1.6.2",
-    "enzyme": "^2.8.2",
     "express": "^4.14.0",
     "helmet": "^3.5.0",
     "jquery": "^3.2.1",
@@ -38,6 +38,8 @@
     "browserify": "^13.1.1",
     "del": "^2.2.2",
     "electron-connect": "^0.6.1",
+    "enzyme": "^2.8.2",
+    "expect": "^1.20.2",
     "gulp": "^3.9.1",
     "gulp-clean-css": "^2.0.13",
     "gulp-jshint": "^2.0.2",
@@ -46,9 +48,11 @@
     "gulp-rename": "^1.2.2",
     "gulp-streamify": "^1.0.2",
     "gulp-uglify": "^2.0.0",
+    "jsdom": "9.4.1",
     "jshint": "^2.9.4",
     "mocha": "^3.1.2",
     "pump": "^1.0.1",
+    "react-addons-test-utils": "^15.5.1",
     "should": "^11.1.1",
     "supertest": "^2.0.1",
     "vinyl-source-stream": "^1.1.0"

@@ -1,6 +1,6 @@
 /*
     -A div is always rendered with a class name of databaseList
-    -An h3 element is always rendered with the test "DATABASES"
+    -An h3 element is always rendered with the text "DATABASES"
     -PropType source should be a string
     -PropType onDBClick should be a func
     -If a Database is rendered it should receieve exactly 1 prop 
@@ -8,10 +8,11 @@
 
 */
 import React from 'react';
-import { mount } from 'enzyme';
+import { mount, shallow } from 'enzyme';
+import expect from 'expect';
 import DatabaseList from './../components/databaseList.jsx';
 
-describe ('DatabaseList', () => {
+describe('DatabaseList', () => {
     let props;
     let mountedDatabaseList;
     const databaseList = () => {
@@ -20,18 +21,35 @@ describe ('DatabaseList', () => {
                 <DatabaseList {...props} />
             ); 
         }
+
+        return mountedDatabaseList;
     }
 
     beforeEach(() => {
         props = {
-            dbNames: undefined
+            source: 'http://localhost:3000/api/databases',
+            onDBClick: function() {}
         };
         mountedDatabaseList = undefined;
     });
 
+    const divs = databaseList().find("div");
+
     it("always returns a div", () => {
-        const divs = databaseList().find("div");
-        const wrappingDiv = divs.first();
-        expect(wrappingDiv.children()).toEqual(databaseList().children());
+        expect(divs.length).toBeGreaterThan(0);
+    });
+
+    it("div has the class databaseList", () => {
+        expect(divs.hasClass('databaseList')).toEqual(true);
+    });
+
+    it("displays an H3 element", () => {
+        const header = divs.find("h3");
+        expect(header.length).toBeGreaterThan(0);
+    });
+
+    it("H3 element has the text 'DATABASES'", () => {
+        const header = divs.find("h3");
+        expect(header.text()).toEqual('DATABASES');
     });
 });
