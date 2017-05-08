@@ -52,4 +52,14 @@ describe('DatabaseList', () => {
         const header = divs.find("h3");
         expect(header.text()).toEqual('DATABASES');
     });
+
+    /*it("database ", () => {
+        const db = divs.find(".database");
+        if(db.length > 0) {
+            console.log('---' + db.length);
+            expect(db.hasClass('database')).toEqual(true);
+        } else {
+            console.log('nope');
+        }
+    });*/
 });
