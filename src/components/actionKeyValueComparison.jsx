@@ -1,4 +1,5 @@
 import React from 'react';
+import TextField from 'material-ui/TextField';
 var classNames = require('classnames');
 
 class ActionKeyValueComparison extends React.Component {
@@ -61,8 +62,9 @@ class ActionKeyValueComparison extends React.Component {
 
         return (
             <div>
-                <input type="text" placeholder="Key" value={this.state.key} onChange={this.keyChange} ref={(ref) => this.key = ref} /> 
-                <select name="comparison" value={this.state.comp} onChange={this.compChange} ref={(ref) => this.comparison = ref} > 
+                <input type="text" placeholder="Key" value={this.state.key} onChange={this.keyChange} ref={(ref) => this.key = ref} />
+                { /* <TextField hintText="Key" value={this.state.key} onChange={this.keyChange} ref={(ref) => this.key = ref} /> */ }
+                <select name="comparison" value={this.state.comp} onChange={this.compChange} ref={(ref) => this.comparison = ref} >
                     <option value=":">Equals</option>
                     <option value="$lt">Less than</option>
                     <option value="$lte">Less than or equal to</option>

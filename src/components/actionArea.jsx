@@ -1,8 +1,14 @@
 import React from 'react';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
 import ActionFind from './actionFind.jsx';
 import ActionInsert from './actionInsert.jsx';
 import ActionUpdate from './actionUpdate.jsx';
 import ActionRemove from './actionRemove.jsx';
+
+import injectTapEventPlugin from 'react-tap-event-plugin';
+
+injectTapEventPlugin();
 
 class ActionArea extends React.Component {
     constructor(props) {
@@ -17,19 +23,27 @@ class ActionArea extends React.Component {
         this.opChange = this.opChange.bind(this);
     } 
 
-    opChange(e) {
-        this.setState({ operation: e.target.value });
+    opChange(event, index, value) {
+        //this.setState({ operation: e.target.value });
+        this.setState({ operation: value });
     }
 
     render() {
         return (
             <div className="actionArea">
-                <select name="operations" onChange={this.opChange} value={this.state.operation} > 
+                {/*<select name="operations" onChange={this.opChange} value={this.state.operation} > 
                     <option value="find">Find</option>
                     <option value="insert">Insert</option>
                     <option value="remove">Remove</option>
                     <option value="update">Update</option>
-                </select>
+                </select> */}
+
+                <SelectField style={{width: 125}} floatingLabelText="Operation" name="operations" onChange={this.opChange} value={this.state.operation}>
+                    <MenuItem value="find" primaryText="Find" />
+                    <MenuItem value="insert" primaryText="Insert" />
+                    <MenuItem value="remove" primaryText="Remove" />
+                    <MenuItem value="update" primaryText="Update" />
+                </SelectField>
 
                 { this.state.operation === 'find' ? <ActionFind onFind={this.props.onFind} /> : null }
                 { this.state.operation === 'insert' ? <ActionInsert onInsert={this.props.onInsert} /> : null }
