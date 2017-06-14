@@ -1,4 +1,6 @@
 import React from 'react';
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton';
 import ActionKeyValueComparison from './actionKeyValueComparison.jsx';
 import ActionFindProjection from './actionFindProjection.jsx';
 import ActionFindSort from './actionFindSort.jsx';
@@ -168,21 +170,21 @@ class ActionFind extends React.Component {
     
     queryChange(index, queryKey, queryComparison, queryVal) {
         //Store query 
-        this.queryKeys[index] = queryKey.value;
-        this.queryComparisons[index] = queryComparison.value;
-        this.queryVals[index] = queryVal.value;
+        this.queryKeys[index] = queryKey;
+        this.queryComparisons[index] = queryComparison;
+        this.queryVals[index] = queryVal;
     }
 
     projectionChange(index, projectionVal, projectionField) {
         //Store projection
-        this.projectionVals[index] = projectionVal.value;
-        this.projectionFields[index] = projectionField.value;
+        this.projectionVals[index] = projectionVal;
+        this.projectionFields[index] = projectionField;
     }
 
     sortChange(index, sortField, sortDirection) {
         //Store sort 
-        this.sortFields[index] = sortField.value;
-        this.sortDirections[index] = sortDirection.value;
+        this.sortFields[index] = sortField;
+        this.sortDirections[index] = sortDirection;
     }
 
     render() {
@@ -247,13 +249,15 @@ class ActionFind extends React.Component {
                     </div>
                     <div>
                         <div onClick={ () => this.setState({ showLimit: !this.state.showLimit }) }><i className={limitClass}></i>Limit</div>
-                        { this.state.showLimit ? <input type="text" placeholder="Number to show" value={this.state.limitVal} onChange={ (e) => this.setState({limitVal: e.target.value}) } /> : null }    
+                        { this.state.showLimit ? <TextField className="materialUIComponents" style={{width: 125}} hintText="# to Show" value={this.state.limitVal} onChange={ e => this.setState({limitVal: e.target.value}) } /> : null }    
                     </div>
                     <div>
                         <div onClick={ () => this.setState({ showSkip: !this.state.showSkip }) }><i className={skipClass}></i>Skip</div>
-                        { this.state.showSkip ? <input type="text" placeholder="Number to skip" value={this.state.skipVal} onChange={ (e) => this.setState({skipVal: e.target.value}) } /> : null }
+                        { this.state.showSkip ? <TextField className="materialUIComponents" style={{width: 125}} hintText="# to Skip" value={this.state.skipVal} onChange={ e => this.setState({skipVal: e.target.value}) } /> : null }
+                        
                     </div>
-                    <input type="submit" value="Run" />
+                    { /* <input type="submit" value="Run" /> */ }
+                    <RaisedButton style={{width: 75, height: 30 }} type="submit" label="Run" />
                 </div>
             </form>
         );

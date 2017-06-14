@@ -1,5 +1,7 @@
 import React from 'react';
 import TextField from 'material-ui/TextField';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
 var classNames = require('classnames');
 
 class ActionKeyValueComparison extends React.Component {
@@ -9,7 +11,7 @@ class ActionKeyValueComparison extends React.Component {
         //Set initial state
         this.state = {
             key: this.props.keys[this.props.index] || '',
-            comp: this.props.comparisons[this.props.index] || '',
+            comp: this.props.comparisons[this.props.index] || ':',
             val: this.props.vals[this.props.index] || ''
         };
 
@@ -37,18 +39,21 @@ class ActionKeyValueComparison extends React.Component {
     }
 
     keyChange(e) {
-        this.setState({ key: e.target.value });
-        this.props.valueChange(this.props.index, this.key, this.comparison, this.val);
+        let k = e.target.value;
+        this.setState({ key: k });
+        this.props.valueChange(this.props.index, k, this.state.comp, this.state.val);
     }
 
-    compChange(e) {
-        this.setState({ comp: e.target.value });
-        this.props.valueChange(this.props.index, this.key, this.comparison, this.val);
+    compChange(event, index, value) {
+        let c = value; 
+        this.setState({ comp: c });
+        this.props.valueChange(this.props.index, this.state.key, c, this.state.val);
     }
 
     valChange(e) {
-        this.setState({ val: e.target.value });
-        this.props.valueChange(this.props.index, this.key, this.comparison, this.val);
+        let v = e.target.value;
+        this.setState({ val: v });
+        this.props.valueChange(this.props.index, this.state.key, this.state.comp, v);
     }
 
     render() {
@@ -61,18 +66,17 @@ class ActionKeyValueComparison extends React.Component {
             self = this;
 
         return (
-            <div>
-                <input type="text" placeholder="Key" value={this.state.key} onChange={this.keyChange} ref={(ref) => this.key = ref} />
-                { /* <TextField hintText="Key" value={this.state.key} onChange={this.keyChange} ref={(ref) => this.key = ref} /> */ }
-                <select name="comparison" value={this.state.comp} onChange={this.compChange} ref={(ref) => this.comparison = ref} >
-                    <option value=":">Equals</option>
-                    <option value="$lt">Less than</option>
-                    <option value="$lte">Less than or equal to</option>
-                    <option value="$gt">Greater than</option>
-                    <option value="$gte">Greater than or equal to</option>
-                    <option value="$ne">Not equal</option>
-                </select>
-                <input type="text" placeholder="Value" value={this.state.val} onChange={this.valChange} ref={(ref) => this.val = ref} />&nbsp;
+            <div className="materialUIComponents">
+                <TextField style={{width: 150}} hintText="Key" value={this.state.key} onChange={this.keyChange} />           
+                <SelectField style={{width: 200}} name="comparison" onChange={this.compChange} value={this.state.comp}>
+                    <MenuItem value=":" primaryText="Equals" />
+                    <MenuItem value="$lt" primaryText="Less than" />
+                    <MenuItem value="$lte" primaryText="Less than or equal to" />
+                    <MenuItem value="$gt" primaryText="Greater than" />
+                    <MenuItem value="$gte" primaryText="Greater than or equal to" />
+                    <MenuItem value="$ne" primaryText="Not equal" />
+                </SelectField>
+                <TextField style={{width: 150}} hintText="Value" value={this.state.val} onChange={this.valChange} />
                 { this.props.index > 0 ? <button type="button" className={removeBtnClass} onClick={ (e) => { self.props.removeItem(e, self.props.index); }}></button> : null }
             </div>
         );

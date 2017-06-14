@@ -1,4 +1,7 @@
 import React from 'react';
+import TextField from 'material-ui/TextField';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
 
 class ActionFindProjection extends React.Component {
     constructor(props) {
@@ -6,7 +9,7 @@ class ActionFindProjection extends React.Component {
 
         //Set initial state
         this.state = {
-            val: this.props.projectionVals[this.props.index] || '',
+            val: this.props.projectionVals[this.props.index] || '1',
             field: this.props.projectionFields[this.props.index] || ''
         };
 
@@ -28,25 +31,27 @@ class ActionFindProjection extends React.Component {
         } 
     }
 
-    valChange(e) {
-        this.setState({ val: e.target.value });
-        this.props.valueChange(this.props.index, this.projectionValue, this.projectionField);
+    valChange(event, index, value) {
+        let v = value;
+        this.setState({ val: v });
+        this.props.valueChange(this.props.index, v, this.state.field);
     }
 
     fieldChange(e) {
-        this.setState({ field: e.target.value });
-        this.props.valueChange(this.props.index, this.projectionValue, this.projectionField);
+        let f = e.target.value;
+        this.setState({ field: f });
+        this.props.valueChange(this.props.index, this.state.val, f);
     }
 
     render() {
         let self = this;
         return (
-            <div>
-                <select name="hideOrShow" value={this.state.val} onChange={this.valChange} ref={(ref) => this.projectionValue = ref} >
-                    <option value="1">Show</option>
-                    <option value="0">Hide</option>
-                </select>
-                <input type="text" placeholder="Field" value={this.state.field} onChange={this.fieldChange} ref={(ref) => this.projectionField = ref} />
+            <div className="materialUIComponents">
+                <SelectField style={{width: 100}} name="hideOrShow" onChange={this.valChange} value={this.state.val}>
+                    <MenuItem value="1" primaryText="Show" />
+                    <MenuItem value="0" primaryText="Hide" />
+                </SelectField>
+                <TextField style={{width: 150}} hintText="Field" value={this.state.field} onChange={this.fieldChange} />
                 { this.props.index > 0 ? <button type="button" className="projectionItem fa fa-times" onClick={ (e) => { self.props.removeItem(e, self.props.index); }}></button> : null }
             </div>
         );
