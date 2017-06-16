@@ -2,6 +2,7 @@ import React from 'react';
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import AddIcon from 'material-ui/content/svg/production/ic_add_24px';
 var classNames = require('classnames');
 
 class ActionKeyValueComparison extends React.Component {
@@ -78,6 +79,7 @@ class ActionKeyValueComparison extends React.Component {
                 </SelectField>
                 <TextField style={{width: 150}} hintText="Value" value={this.state.val} onChange={this.valChange} />
                 { this.props.index > 0 ? <button type="button" className={removeBtnClass} onClick={ (e) => { self.props.removeItem(e, self.props.index); }}></button> : null }
+                <i class="material-icons">AddIcon</i>
             </div>
         );
     }

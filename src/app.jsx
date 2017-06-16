@@ -2,13 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import { lightBlue200, grey900 } from 'material-ui/styles/colors';
+import { grey900 } from 'material-ui/styles/colors';
 import PageContainer from './components/pageContainer.jsx';
 import config from './../lib/config.js';
 
 const muiTheme = getMuiTheme({
     palette: {
-        accent1Color: lightBlue200,
+        accent1Color: 'rgba(139, 175, 223, 1)',
         borderColor: grey900
     },
     selectField: {

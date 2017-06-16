@@ -122,11 +122,21 @@ body {
                 padding-top: 25px;
                 .materialUIComponents {
                     display: flex;
+                    &.updateRadioGroup {
+                        flex-direction: column;
+                        >div {
+                            margin-bottom: 8px;
+                        }
+                    }
                     >div {
                         margin-right: 40px;
+                        input {
+                            margin-left: 0px;
+                        }
                     }
                     div {
                         margin-bottom: 0px;
+                        width: 100%;
                     }
                 }
                 select, input {

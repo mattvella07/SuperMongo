@@ -1,4 +1,5 @@
 import React from 'react';
+import RaisedButton from 'material-ui/RaisedButton';
 import ActionKeyValueItem from './actionKeyValueItem.jsx';
 
 class ActionInsert extends React.Component {
@@ -53,8 +54,8 @@ class ActionInsert extends React.Component {
 
     handleChange(index, k, v) {
         //Store keys and values to be inserted on form submit 
-        this.insertKeys[index] = k.value;
-        this.insertVals[index] = v.value;
+        this.insertKeys[index] = k;
+        this.insertVals[index] = v;
 
         //Determine whether to enable button or not
         this.setState({ isDisabled: true });
@@ -92,7 +93,7 @@ class ActionInsert extends React.Component {
                         {items}
                         <button type="button" className="fa fa-plus-circle" onClick={this.addItem}></button>
                     </div>
-                    <input type="submit" value="Insert" disabled={this.state.isDisabled} />
+                    <RaisedButton style={{width: 75, height: 30 }} type="submit" label="Insert" disabled={this.state.isDisabled} />
                 </div>
             </form>
         );

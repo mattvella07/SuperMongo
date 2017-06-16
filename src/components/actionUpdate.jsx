@@ -1,4 +1,7 @@
 import React from 'react';
+import Checkbox from 'material-ui/Checkbox';
+import RaisedButton from 'material-ui/RaisedButton';
+import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import ActionKeyValueItem from './actionKeyValueItem.jsx';
 import ActionKeyValueComparison from './actionKeyValueComparison.jsx';
 var classNames = require('classnames');
@@ -16,6 +19,8 @@ class ActionUpdate extends React.Component {
             showUpdatedItem: false,
             selectedReplace: 'all'
         };
+        this.multi = false;
+        this.upsert = false;
 
         //Bind functions to this context 
         this.onSubmit = this.onSubmit.bind(this);
@@ -37,7 +42,7 @@ class ActionUpdate extends React.Component {
         e.preventDefault();
 
         let criteriaStr = '{',
-            updatedItemStr = (this.multi && this.multi.checked) || (this.state.selectedReplace === 'specified') ? '{"$set": {' : '{',
+            updatedItemStr = this.state.selectedReplace === 'specified' ? '{"$set": {' : '{',
             optionsStr = '{';
 
         //Criteria
@@ -85,18 +90,14 @@ class ActionUpdate extends React.Component {
             }
         }
 
-        updatedItemStr += (this.multi && this.multi.checked) || (this.state.selectedReplace === 'specified') ? '}}' : '}';
+        updatedItemStr += this.state.selectedReplace === 'specified' ? '}}' : '}';
         updatedItemStr = updatedItemStr.replace(',}', '}');
 
         //Multi
-        if(this.multi) {
-            optionsStr += `"multi": ${this.multi.checked},`;
-        }
+        optionsStr += `"multi": ${this.multi},`;
 
         //Upsert
-        if(this.upsert) {
-            optionsStr += `"upsert": ${this.upsert.checked}`;
-        }
+        optionsStr += `"upsert": ${this.upsert}`;
 
         if(optionsStr[optionsStr.length - 1] === ',') {
             optionsStr[optionsStr.length - 1] = '';
@@ -153,25 +154,26 @@ class ActionUpdate extends React.Component {
 
     criteriaChange(index, k, comp, v) {
         //Store keys and values for the criteria
-        this.criteriaKeys[index] = k.value;
-        this.criteriaComparisons[index] = comp.value;
-        this.criteriaVals[index] = v.value;
+        this.criteriaKeys[index] = k;
+        this.criteriaComparisons[index] = comp;
+        this.criteriaVals[index] = v;
     }
 
     updatedItemChange(index, k, v) {
         //Store keys and values for the updated item 
-        this.updatedItemKeys[index] = k.value;
-        this.updatedItemVals[index] = v.value;
+        this.updatedItemKeys[index] = k;
+        this.updatedItemVals[index] = v;
     }
 
-    multiChanged(e) {
-        if(this.multi && this.multi.checked) {
+    multiChanged(event, isInputChecked) {
+        this.multi = isInputChecked;
+        if(isInputChecked) {
             this.setState({selectedReplace: 'specified'});
         }
     }
 
-    replaceChanged(e) {
-        this.setState({selectedReplace: e.target.value});
+    replaceChanged(event, value) {
+        this.setState({selectedReplace: value});
     }
 
     render() {
@@ -211,18 +213,20 @@ class ActionUpdate extends React.Component {
                     </div>
 
                     <div>
-                        <input type="radio" name="replace" value="all" checked={this.state.selectedReplace === 'all'} onChange={this.replaceChanged} />Replace entire document<br/>
-                        <input type="radio" name="replace" value="specified" checked={this.state.selectedReplace === 'specified'} onChange={this.replaceChanged} />Update only specified fields<br/>
+                        <RadioButtonGroup name="replace" className="materialUIComponents updateRadioGroup" onChange={this.replaceChanged} defaultSelected="all">
+                            <RadioButton label="Replace entire document" value="all" />
+                            <RadioButton label="Update only specified fields" value="specified" />
+                        </RadioButtonGroup>
                     </div>
 
                     <div>
-                        <label><input type="checkbox" value="multi" ref={(ref) => this.multi = ref} onChange={this.multiChanged} />Multi</label>
+                       <Checkbox label="Multi" className="materialUIComponents" value="multi" onCheck={this.multiChanged} />
                     </div>
 
                     <div>
-                        <label><input type="checkbox" value="upsert" ref={(ref) => this.upsert = ref} />Upsert</label>
+                        <Checkbox label="Upsert" className="materialUIComponents" value="upsert" onCheck={ (event, isInputChecked) => { this.upsert = isInputChecked } } />
                     </div>
-                    <input type="submit" value="Update" />
+                    <RaisedButton style={{width: 75, height: 30 }} type="submit" label="Update" />
                 </div>
             </form>
         );

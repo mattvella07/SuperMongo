@@ -256,7 +256,6 @@ class ActionFind extends React.Component {
                         { this.state.showSkip ? <TextField className="materialUIComponents" style={{width: 125}} hintText="# to Skip" value={this.state.skipVal} onChange={ e => this.setState({skipVal: e.target.value}) } /> : null }
                         
                     </div>
-                    { /* <input type="submit" value="Run" /> */ }
                     <RaisedButton style={{width: 75, height: 30 }} type="submit" label="Run" />
                 </div>
             </form>

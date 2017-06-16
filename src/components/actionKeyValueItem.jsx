@@ -1,4 +1,5 @@
 import React from 'react';
+import TextField from 'material-ui/TextField';
 var classNames = require('classnames');
 
 class ActionKeyValueItem extends React.Component {
@@ -30,13 +31,15 @@ class ActionKeyValueItem extends React.Component {
     }
 
     keyChange(e) {
-        this.setState({ key: e.target.value });
-        this.props.textChange(this.props.index, this.key, this.val);
+        let k = e.target.value;
+        this.setState({ key: k });
+        this.props.textChange(this.props.index, k, this.state.val);
     }
 
     valChange(e) {
-        this.setState({ val: e.target.value });
-        this.props.textChange(this.props.index, this.key, this.val);
+        let v = e.target.value; 
+        this.setState({ val: v });
+        this.props.textChange(this.props.index, this.state.key, v);
     }
 
     render() {
@@ -49,9 +52,9 @@ class ActionKeyValueItem extends React.Component {
             self = this;
 
         return (
-            <div>
-                <input type="text" placeholder="Key" value={this.state.key} onChange={this.keyChange} ref={(ref) => this.key = ref} /> 
-                <input type="text" placeholder="Value" value={this.state.val} onChange={this.valChange} ref={(ref) => this.val = ref} />
+            <div className="materialUIComponents">
+                <TextField style={{width: 150}} hintText="Key" value={this.state.key} onChange={this.keyChange} />
+                <TextField style={{width: 150}} hintText="Value" value={this.state.val} onChange={this.valChange} />
                 { this.props.index > 0 ? <button type="button" className={removeBtnClass} onClick={ (e) => { self.props.removeItem(e, self.props.index); }}></button> : null }
             </div>
         );

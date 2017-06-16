@@ -1,4 +1,6 @@
 import React from 'react';
+import Checkbox from 'material-ui/Checkbox';
+import RaisedButton from 'material-ui/RaisedButton';
 import ActionKeyValueComparison from './actionKeyValueComparison.jsx';
 const SweetAlert = require('react-swal');
 
@@ -56,9 +58,9 @@ class ActionRemove extends React.Component {
 
         //Just One
         if(this.justOne) {
-            justOneStr = `{"single": ${this.justOne.checked}}`;
+            justOneStr = `{"single": ${this.justOne}}`;
         } 
-            
+        
         if(completeStr === '{}') {
             let self = this;
             swal({title: "Are you sure you want to proceed?", text: "Not entering a key and value will delete the entire collection.", 
@@ -71,9 +73,9 @@ class ActionRemove extends React.Component {
 
     handleChange(index, k, comp, v) {
         //Store keys and values to be removed on form submit 
-        this.removeKeys[index] = k.value;
-        this.removeComparisons[index] = comp.value;
-        this.removeVals[index] = v.value;
+        this.removeKeys[index] = k;
+        this.removeComparisons[index] = comp;
+        this.removeVals[index] = v;
     }
 
     addItem() {
@@ -104,9 +106,9 @@ class ActionRemove extends React.Component {
                         <button type="button" className="fa fa-plus-circle" onClick={this.addItem}></button>
                     </div>
                     <div>
-                        <label><input type="checkbox" value="justOne" ref={(ref) => this.justOne = ref} />Just One</label>
+                        <Checkbox label="Just One" value="justOne" onCheck={(event, isInputChecked) => { this.justOne = isInputChecked } } />
                     </div>
-                    <input type="submit" value="Remove" />
+                    <RaisedButton style={{width: 75, height: 30 }} type="submit" label="Remove" />
                 </div>
             </form>
         );

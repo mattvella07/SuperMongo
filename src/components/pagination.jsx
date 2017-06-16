@@ -1,4 +1,5 @@
 import React from 'react';
+import RaisedButton from 'material-ui/RaisedButton';
 import config from './../../lib/config.js';
 var scroll = require('react-scroll').animateScroll;
 var fetch = require('node-fetch');
@@ -98,7 +99,7 @@ class Pagination extends React.Component {
         return (
             <div className="pagination">
                 <p>{this.state.numRecords.toLocaleString('en-US')} record(s) found</p>
-                <button className="moreButton" onClick={this.moreClick} disabled={this.state.isDisabled} >More</button>
+                <RaisedButton style={{width: 75, height: 30 }} label="More" onClick={this.moreClick} disabled={this.state.isDisabled} className="moreButton" />
             </div>
         );
     }
