@@ -1,6 +1,7 @@
 import React from 'react';
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
+import RemoveIcon from 'material-ui-icons/RemoveCircle';
 import MenuItem from 'material-ui/MenuItem';
 
 class ActionFindSort extends React.Component {
@@ -52,8 +53,7 @@ class ActionFindSort extends React.Component {
                     <MenuItem value="asc" primaryText="Ascending" />
                     <MenuItem value="desc" primaryText="Descending" />
                 </SelectField>
-
-        { this.props.index > 0 ? <button type="button" className="sortItem fa fa-times" onClick={ (e) => { self.props.removeItem(e, self.props.index); }}></button> : null }
+                { this.props.index > 0 ? <RemoveIcon className='sortItem' onClick={ (e) => { self.props.removeItem(self.props.index, self.props.type); }} /> : null }
             </div>
         );
     }

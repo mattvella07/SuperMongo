@@ -2,7 +2,7 @@ import React from 'react';
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
-import AddIcon from 'material-ui/content/svg/production/ic_add_24px';
+import RemoveIcon from 'material-ui-icons/RemoveCircle';
 var classNames = require('classnames');
 
 class ActionKeyValueComparison extends React.Component {
@@ -60,9 +60,9 @@ class ActionKeyValueComparison extends React.Component {
     render() {
         let removeBtnClass = classNames({
                 'queryItem': this.props.type && this.props.type === 'queryItem' ? true : false,
-                'criteriaItem': this.props.type && this.props.type === 'criteriaItem' ? true : false,
+                'criteriaItem': this.props.type && this.props.type === 'criteriaItem' ? true : false/*,
                 'fa': true,
-                'fa-times': true
+                'fa-times': true*/
             }),
             self = this;
 
@@ -78,8 +78,7 @@ class ActionKeyValueComparison extends React.Component {
                     <MenuItem value="$ne" primaryText="Not equal" />
                 </SelectField>
                 <TextField style={{width: 150}} hintText="Value" value={this.state.val} onChange={this.valChange} />
-                { this.props.index > 0 ? <button type="button" className={removeBtnClass} onClick={ (e) => { self.props.removeItem(e, self.props.index); }}></button> : null }
-                <i class="material-icons">AddIcon</i>
+                { this.props.index > 0 ? <RemoveIcon className={removeBtnClass} onClick={ (e) => { self.props.removeItem(self.props.index, self.props.type); }} /> : null }
             </div>
         );
     }

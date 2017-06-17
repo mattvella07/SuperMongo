@@ -4,6 +4,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import ActionKeyValueComparison from './actionKeyValueComparison.jsx';
 import ActionFindProjection from './actionFindProjection.jsx';
 import ActionFindSort from './actionFindSort.jsx';
+import AddIcon from 'material-ui-icons/AddCircle';
 var classNames = require('classnames'),
     moment = require('moment');
 const PAGE_LIMIT = 20;
@@ -122,9 +123,7 @@ class ActionFind extends React.Component {
         this.props.onFind(queryStr, projectionStr, optionsStr, userEnteredLimit);
     }
 
-    addItem(e) {
-        let itemToAdd = e.target.className.toString().replace('fa fa-plus-circle', '').trim();
-
+    addItem(e, itemToAdd) {
         switch(itemToAdd) {
             case 'queryItem':
                 this.setState({ numQuery: this.state.numQuery + 1 });
@@ -137,9 +136,7 @@ class ActionFind extends React.Component {
         }
     }
 
-    removeItem(e, idx) {
-        let itemToRemove = e.target.className.toString().replace('fa fa-times', '').trim();
-
+    removeItem(idx, itemToRemove) {
         switch (itemToRemove) {
             case 'queryItem': 
                 //Remove specified item
@@ -222,11 +219,11 @@ class ActionFind extends React.Component {
         }
 
         for (let i = 0; i < this.state.numProjection; i++) {
-            projectionItems.push(<ActionFindProjection index={i} projectionVals={this.projectionVals} projectionFields={this.projectionFields} valueChange={this.projectionChange} removeItem={this.removeItem} />);
+            projectionItems.push(<ActionFindProjection index={i} projectionVals={this.projectionVals} projectionFields={this.projectionFields} valueChange={this.projectionChange} removeItem={this.removeItem} type='projectionItem' />);
         }
 
         for (let i = 0; i < this.state.numSort; i++) {
-            sortItems.push(<ActionFindSort index={i} sortFields={this.sortFields} sortDirections={this.sortDirections} valueChange={this.sortChange} removeItem={this.removeItem} />);
+            sortItems.push(<ActionFindSort index={i} sortFields={this.sortFields} sortDirections={this.sortDirections} valueChange={this.sortChange} removeItem={this.removeItem} type='sortItem' />);
         }
 
         return (
@@ -235,17 +232,18 @@ class ActionFind extends React.Component {
                     <div>
                         <div onClick={ () => this.setState({ showQuery: !this.state.showQuery }) }><i className={queryClass}></i>Query</div>
                         { this.state.showQuery ? <div>{queryItems}</div> : null }
-                        { this.state.showQuery ? <button type="button" className="queryItem fa fa-plus-circle" onClick={this.addItem}></button> : null }
+                        { this.state.showQuery ? <AddIcon className="queryItem" onClick={ (e) => { this.addItem(e, 'queryItem'); } } /> : null }
                     </div>
                     <div>
                         <div onClick={ () => this.setState({ showProjection: !this.state.showProjection }) }><i className={projectionClass}></i>Projection</div>
                         { this.state.showProjection ? <div>{projectionItems}</div> : null }
-                        { this.state.showProjection ? <button type="button" className="projectionItem fa fa-plus-circle" onClick={this.addItem}></button> : null }
+                        { this.state.showProjection ? <AddIcon className="projectionItem" onClick={ (e) => { this.addItem(e, 'projectionItem'); } } /> : null }
+
                     </div>
                     <div>
                         <div onClick={ () => this.setState({ showSort: !this.state.showSort }) }><i className={sortClass}></i>Sort</div>
                         { this.state.showSort ? <div>{sortItems}</div> : null }
-                        { this.state.showSort ? <button type="button" className="sortItem fa fa-plus-circle" onClick={this.addItem}></button> : null }
+                        { this.state.showSort ? <AddIcon className="sortItem" onClick={ (e) => { this.addItem(e, 'sortItem'); } } /> : null }
                     </div>
                     <div>
                         <div onClick={ () => this.setState({ showLimit: !this.state.showLimit }) }><i className={limitClass}></i>Limit</div>
@@ -254,7 +252,6 @@ class ActionFind extends React.Component {
                     <div>
                         <div onClick={ () => this.setState({ showSkip: !this.state.showSkip }) }><i className={skipClass}></i>Skip</div>
                         { this.state.showSkip ? <TextField className="materialUIComponents" style={{width: 125}} hintText="# to Skip" value={this.state.skipVal} onChange={ e => this.setState({skipVal: e.target.value}) } /> : null }
-                        
                     </div>
                     <RaisedButton style={{width: 75, height: 30 }} type="submit" label="Run" />
                 </div>

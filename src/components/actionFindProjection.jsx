@@ -1,6 +1,7 @@
 import React from 'react';
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
+import RemoveIcon from 'material-ui-icons/RemoveCircle';
 import MenuItem from 'material-ui/MenuItem';
 
 class ActionFindProjection extends React.Component {
@@ -52,7 +53,7 @@ class ActionFindProjection extends React.Component {
                     <MenuItem value="0" primaryText="Hide" />
                 </SelectField>
                 <TextField style={{width: 150}} hintText="Field" value={this.state.field} onChange={this.fieldChange} />
-                { this.props.index > 0 ? <button type="button" className="projectionItem fa fa-times" onClick={ (e) => { self.props.removeItem(e, self.props.index); }}></button> : null }
+                { this.props.index > 0 ? <RemoveIcon className='projectionItem' onClick={ (e) => { self.props.removeItem(self.props.index, self.props.type); }} /> : null }
             </div>
         );
     }

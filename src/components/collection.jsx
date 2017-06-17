@@ -1,4 +1,5 @@
 import React from 'react';
+import RemoveIcon from 'material-ui-icons/RemoveCircle';
 const SweetAlert = require('react-swal');
 
 class Collection extends React.Component {
@@ -30,7 +31,7 @@ class Collection extends React.Component {
         return (
             <div className="collection" onClick={this.handleClick} >
                 {this.props.col}
-                <button type="button" className="collectionRemove fa fa-times-circle" onClick={this.confirmDropCollection}></button>
+                <RemoveIcon className="collectionIcon collectionRemove" onClick={this.confirmDropCollection} />
             </div>
         );
     }

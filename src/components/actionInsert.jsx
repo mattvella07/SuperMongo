@@ -1,5 +1,6 @@
 import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
+import AddIcon from 'material-ui-icons/AddCircle';
 import ActionKeyValueItem from './actionKeyValueItem.jsx';
 
 class ActionInsert extends React.Component {
@@ -71,7 +72,7 @@ class ActionInsert extends React.Component {
         this.setState({ numItems: this.state.numItems + 1 });
     }
 
-    removeItem(e, idx) {
+    removeItem(idx, itemToRemove) {
         //Remove specified item
         this.insertKeys.splice(idx, 1);
         this.insertVals.splice(idx, 1);
@@ -91,7 +92,7 @@ class ActionInsert extends React.Component {
                 <div>
                     <div>
                         {items}
-                        <button type="button" className="fa fa-plus-circle" onClick={this.addItem}></button>
+                        <AddIcon onClick={this.addItem} />
                     </div>
                     <RaisedButton style={{width: 75, height: 30 }} type="submit" label="Insert" disabled={this.state.isDisabled} />
                 </div>

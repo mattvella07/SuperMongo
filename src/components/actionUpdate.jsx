@@ -2,6 +2,7 @@ import React from 'react';
 import Checkbox from 'material-ui/Checkbox';
 import RaisedButton from 'material-ui/RaisedButton';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
+import AddIcon from 'material-ui-icons/AddCircle';
 import ActionKeyValueItem from './actionKeyValueItem.jsx';
 import ActionKeyValueComparison from './actionKeyValueComparison.jsx';
 var classNames = require('classnames');
@@ -116,9 +117,7 @@ class ActionUpdate extends React.Component {
         }
     }
 
-    addItem(e) {
-        let itemToAdd = e.target.className.toString().replace('fa fa-plus-circle', '').trim();
-
+    addItem(e, itemToAdd) {
         switch(itemToAdd) {
             case 'criteriaItem':
                 this.setState({ numCriteria: this.state.numCriteria + 1 });
@@ -128,9 +127,7 @@ class ActionUpdate extends React.Component {
         }
     }
 
-    removeItem(e, idx) {
-        let itemToRemove = e.target.className.toString().replace('fa fa-times', '').trim();
-
+    removeItem(idx, itemToRemove) {
         switch(itemToRemove) {
             case 'criteriaItem':
                 //Remove specified item 
@@ -204,27 +201,24 @@ class ActionUpdate extends React.Component {
                     <div> 
                         <div onClick={() => this.setState({ showCriteria: !this.state.showCriteria }) }><i className={criteriaClass}></i>Criteria</div>
                         { this.state.showCriteria ? <div>{criteriaItems}</div> : null }
-                        { this.state.showCriteria ? <button type="button" className="criteriaItem fa fa-plus-circle" onClick={this.addItem}></button> : null }
+                        { this.state.showCriteria ? <AddIcon className="criteriaItem" onClick={ (e) => { this.addItem(e, 'criteriaItem'); } } /> : null }
                     </div>
                     <div> 
                         <div onClick={() => this.setState({ showUpdatedItem: !this.state.showUpdatedItem }) }><i className={updatedItemClass}></i>Updated Item</div>
                         { this.state.showUpdatedItem ? <div>{updatedItems}</div> : null }
-                        { this.state.showUpdatedItem ? <button type="button" className="updatedItem fa fa-plus-circle" onClick={this.addItem}></button> : null }
+                        { this.state.showUpdatedItem ? <AddIcon className="updatedItem" onClick={ (e) => { this.addItem(e, 'updatedItem'); } } /> : null }
                     </div>
-
                     <div>
                         <RadioButtonGroup name="replace" className="materialUIComponents updateRadioGroup" onChange={this.replaceChanged} defaultSelected="all">
                             <RadioButton label="Replace entire document" value="all" />
                             <RadioButton label="Update only specified fields" value="specified" />
                         </RadioButtonGroup>
                     </div>
-
                     <div>
                        <Checkbox label="Multi" className="materialUIComponents" value="multi" onCheck={this.multiChanged} />
                     </div>
-
                     <div>
-                        <Checkbox label="Upsert" className="materialUIComponents" value="upsert" onCheck={ (event, isInputChecked) => { this.upsert = isInputChecked } } />
+                        <Checkbox label="Upsert" className="materialUIComponents" value="upsert" onCheck={ (event, isInputChecked) => { this.upsert = isInputChecked; } } />
                     </div>
                     <RaisedButton style={{width: 75, height: 30 }} type="submit" label="Update" />
                 </div>

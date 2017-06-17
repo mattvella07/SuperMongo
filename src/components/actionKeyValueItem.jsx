@@ -1,5 +1,6 @@
 import React from 'react';
 import TextField from 'material-ui/TextField';
+import RemoveIcon from 'material-ui-icons/RemoveCircle';
 var classNames = require('classnames');
 
 class ActionKeyValueItem extends React.Component {
@@ -45,9 +46,9 @@ class ActionKeyValueItem extends React.Component {
     render() {
         let removeBtnClass = classNames({
                 'criteriaItem': this.props.type && this.props.type === 'criteriaItem' ? true : false,
-                'updatedItem': this.props.type && this.props.type === 'updatedItem' ? true : false,
+                'updatedItem': this.props.type && this.props.type === 'updatedItem' ? true : false/*,
                 'fa': true,
-                'fa-times': true
+                'fa-times': true*/
             }),
             self = this;
 
@@ -55,7 +56,7 @@ class ActionKeyValueItem extends React.Component {
             <div className="materialUIComponents">
                 <TextField style={{width: 150}} hintText="Key" value={this.state.key} onChange={this.keyChange} />
                 <TextField style={{width: 150}} hintText="Value" value={this.state.val} onChange={this.valChange} />
-                { this.props.index > 0 ? <button type="button" className={removeBtnClass} onClick={ (e) => { self.props.removeItem(e, self.props.index); }}></button> : null }
+                { this.props.index > 0 ? <RemoveIcon className={removeBtnClass} onClick={ (e) => { self.props.removeItem(self.props.index, self.props.type); }} /> : null }
             </div>
         );
     }

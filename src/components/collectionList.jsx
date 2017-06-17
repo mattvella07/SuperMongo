@@ -1,4 +1,5 @@
 import React from 'react';
+import AddIcon from 'material-ui-icons/AddCircle';
 import Collection from './collection.jsx';
 import config from './../../lib/config.js';
 var fetch = require('node-fetch');
@@ -85,9 +86,11 @@ class CollectionList extends React.Component {
 
         return (
             <div className="collectionList">
-                <h3>COLLECTIONS in <i>{this.props.db}</i></h3> <button type="button"className="fa fa-plus-circle" onClick={this.addCollectionClick}></button>
+                <div className="collectionListHeader">
+                    <h3>COLLECTIONS in <i>{this.props.db}</i></h3><AddIcon className="collectionIcon addCollection" onClick={this.addCollectionClick} />
+                </div>
                 { (collections.length <= 1) ? <p>NONE</p> : collections }
-            </div>  
+            </div>
         );
     }
 }

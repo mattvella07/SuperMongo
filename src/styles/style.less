@@ -44,16 +44,22 @@ body {
             margin-bottom: 6px;
         }
         .collectionList {
+            .collectionListHeader {
+                display: flex;
+                align-items: center;
+            }
             h3 {
                 display: inline;
             }
-            button {
-                border: none;
+            .collectionIcon {
                 background: none;
-                color: white;
-                &.fa-plus-circle {
-                    margin-bottom: 18px;
-                }
+                border: none;
+                color: white !important;
+                width: 20px !important;
+                height: 20px !important;
+            }
+            .addCollection {
+                margin-left: 10px; 
             }
         }
         .actionArea, 
@@ -84,16 +90,14 @@ body {
             &:hover {
                 background-color: rgba(139, 175, 223, 0.5);
                 .collectionRemove {
-                    display: flex;
+                    display: flex !important;
                 }
             }
             &.clicked {
                 background-color: rgba(139, 175, 223, 1);
             }
             .collectionRemove {
-                display: none;
-                background: none;
-                border: none;
+                display: none !important;
             }
         }
         .column {

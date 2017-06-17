@@ -1,6 +1,7 @@
 import React from 'react';
 import Checkbox from 'material-ui/Checkbox';
 import RaisedButton from 'material-ui/RaisedButton';
+import AddIcon from 'material-ui-icons/AddCircle';
 import ActionKeyValueComparison from './actionKeyValueComparison.jsx';
 const SweetAlert = require('react-swal');
 
@@ -82,7 +83,7 @@ class ActionRemove extends React.Component {
         this.setState({ numItems: this.state.numItems + 1 });
     }
 
-    removeItem(e, idx) {
+    removeItem(idx, itemToRemove) {
         //Remove specified item 
         this.removeKeys.splice(idx, 1);
         this.removeComparisons.splice(idx, 1);
@@ -103,10 +104,11 @@ class ActionRemove extends React.Component {
                 <div>
                     <div>
                         {items}
-                        <button type="button" className="fa fa-plus-circle" onClick={this.addItem}></button>
+                        { /*<button type="button" className="fa fa-plus-circle" onClick={this.addItem}></button>*/}
+                        <AddIcon onClick={this.addItem} />
                     </div>
                     <div>
-                        <Checkbox label="Just One" value="justOne" onCheck={(event, isInputChecked) => { this.justOne = isInputChecked } } />
+                        <Checkbox label="Just One" value="justOne" onCheck={(event, isInputChecked) => { this.justOne = isInputChecked; } } />
                     </div>
                     <RaisedButton style={{width: 75, height: 30 }} type="submit" label="Remove" />
                 </div>
