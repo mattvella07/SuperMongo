@@ -19,8 +19,13 @@ class ActionInsert extends React.Component {
         this.addItem = this.addItem.bind(this);
         this.removeItem = this.removeItem.bind(this);
 
+        //Variables for storing user entered values 
         this.insertKeys = [];
         this.insertVals = [];
+
+        //Initialize arrays
+        this.insertKeys[0] = '';
+        this.insertVals[0] = '';
     }
 
     onSubmit(e) {
@@ -69,6 +74,10 @@ class ActionInsert extends React.Component {
     }
 
     addItem() {
+        //Initialize next index in array
+        this.insertKeys[this.state.numItems] = '';
+        this.insertVals[this.state.numItems] = '';
+
         this.setState({ numItems: this.state.numItems + 1 });
     }
 

@@ -22,20 +22,17 @@ class ActionFindProjection extends React.Component {
     componentWillReceiveProps(nextProps) {
         //Set state with new props 
         if(nextProps) {
-            if(nextProps.projectionVals && nextProps.projectionVals[nextProps.index]) {
-                this.setState({ val: nextProps.projectionVals[nextProps.index]});
-            }
-
-            if(nextProps.projectionFields && nextProps.projectionFields[nextProps.index]) {
-                this.setState({ field: nextProps.projectionFields[nextProps.index]});
-            }
+            this.setState({ val: nextProps.projectionVals[nextProps.index]});
+            this.setState({ field: nextProps.projectionFields[nextProps.index]});
         } 
     }
 
     valChange(event, index, value) {
         let v = value;
         this.setState({ val: v });
-        this.props.valueChange(this.props.index, v, this.state.field);
+        //The || ' ' part is used to keep the correct key and value together even if one doesn't have a value
+        //It acts as a placeholder
+        this.props.valueChange(this.props.index, v, this.state.field || '');
     }
 
     fieldChange(e) {

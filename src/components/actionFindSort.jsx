@@ -22,13 +22,8 @@ class ActionFindSort extends React.Component {
     componentWillReceiveProps(nextProps) {
         //Set state with new props 
         if(nextProps) {
-            if(nextProps.sortFields && nextProps.sortFields[nextProps.index]) {
-                this.setState({ field: nextProps.sortFields[nextProps.index]});
-            }
-
-            if(nextProps.sortDirections && nextProps.sortDirections[nextProps.index]) {
-                this.setState({ direction: nextProps.sortDirections[nextProps.index]});
-            }
+            this.setState({ field: nextProps.sortFields[nextProps.index]});
+            this.setState({ direction: nextProps.sortDirections[nextProps.index]});
         } 
     }
 
@@ -41,7 +36,9 @@ class ActionFindSort extends React.Component {
     directionChange(event, index, value) {
         let d = value;
         this.setState({ direction: d });
-        this.props.valueChange(this.props.index, this.state.field, d);
+        //The || ' ' part is used to keep the correct key and value together even if one doesn't have a value
+        //It acts as a placeholder
+        this.props.valueChange(this.props.index, this.state.field || '', d);
     }
 
     render() {

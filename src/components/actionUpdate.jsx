@@ -32,11 +32,19 @@ class ActionUpdate extends React.Component {
         this.multiChanged = this.multiChanged.bind(this);
         this.replaceChanged = this.replaceChanged.bind(this);
 
+        //Variables for storing user entered values 
         this.criteriaKeys = [];
         this.criteriaComparisons = [];
         this.criteriaVals = [];
         this.updatedItemKeys = [];
         this.updatedItemVals = [];
+
+        //Initialize arrays 
+        this.criteriaKeys[0] = '';
+        this.criteriaComparisons[0] = ':';
+        this.criteriaVals[0] = '';
+        this.updatedItemKeys[0] = '';
+        this.updatedItemVals[0] = '';
     }
 
     onSubmit(e) {
@@ -120,9 +128,18 @@ class ActionUpdate extends React.Component {
     addItem(e, itemToAdd) {
         switch(itemToAdd) {
             case 'criteriaItem':
+                //Initialize next index in array
+                this.criteriaKeys[this.state.numCriteria] = '';
+                this.criteriaComparisons[this.state.numCriteria] = ':';
+                this.criteriaVals[this.state.numCriteria] = '';
+
                 this.setState({ numCriteria: this.state.numCriteria + 1 });
                 break;
             case 'updatedItem':
+                //Initialize next index in array
+                this.updatedItemKeys[this.state.numUpdatedItem] = '';
+                this.updatedItemVals[this.state.numUpdatedItem] = '';
+
                 this.setState({ numUpdatedItem: this.state.numUpdatedItem + 1});
         }
     }

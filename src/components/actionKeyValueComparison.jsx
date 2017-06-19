@@ -25,44 +25,40 @@ class ActionKeyValueComparison extends React.Component {
     componentWillReceiveProps(nextProps) {
         //Set state with new props 
         if(nextProps) {
-            if(nextProps.keys && nextProps.keys[nextProps.index]) {
-                this.setState({ key: nextProps.keys[nextProps.index]});
-            }
-
-            if(nextProps.comparisons && nextProps.comparisons[nextProps.index]) {
-                this.setState({ comp: nextProps.comparisons[nextProps.index]});
-            }
-
-            if(nextProps.vals && nextProps.vals[nextProps.index]) {
-                this.setState({ val: nextProps.vals[nextProps.index]});
-            }
+            this.setState({ key: nextProps.keys[nextProps.index]});
+            this.setState({ comp: nextProps.comparisons[nextProps.index]});
+            this.setState({ val: nextProps.vals[nextProps.index]});
         } 
     }
 
     keyChange(e) {
         let k = e.target.value;
         this.setState({ key: k });
-        this.props.valueChange(this.props.index, k, this.state.comp, this.state.val);
+        //The || '' part is used to keep the correct key and value together even if one doesn't have a value
+        //It acts as a placeholder
+        this.props.valueChange(this.props.index, k, this.state.comp, this.state.val || '');
     }
 
     compChange(event, index, value) {
         let c = value; 
         this.setState({ comp: c });
-        this.props.valueChange(this.props.index, this.state.key, c, this.state.val);
+        //The || '' part is used to keep the correct key and value together even if one doesn't have a value
+        //It acts as a placeholder
+        this.props.valueChange(this.props.index, this.state.key || '', c, this.state.val || '');
     }
 
     valChange(e) {
         let v = e.target.value;
         this.setState({ val: v });
-        this.props.valueChange(this.props.index, this.state.key, this.state.comp, v);
+        //The || '' part is used to keep the correct key and value together even if one doesn't have a value
+        //It acts as a placeholder
+        this.props.valueChange(this.props.index, this.state.key || '', this.state.comp, v);
     }
 
     render() {
         let removeBtnClass = classNames({
                 'queryItem': this.props.type && this.props.type === 'queryItem' ? true : false,
-                'criteriaItem': this.props.type && this.props.type === 'criteriaItem' ? true : false/*,
-                'fa': true,
-                'fa-times': true*/
+                'criteriaItem': this.props.type && this.props.type === 'criteriaItem' ? true : false
             }),
             self = this;
 

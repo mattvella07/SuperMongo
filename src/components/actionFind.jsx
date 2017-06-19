@@ -43,6 +43,15 @@ class ActionFind extends React.Component {
         this.projectionFields = [];
         this.sortFields = [];
         this.sortDirections = [];
+
+        //Initialize arrays 
+        this.queryKeys[0] = '';
+        this.queryComparisons[0] = ':';
+        this.queryVals[0] = '';
+        this.projectionVals[0] = '1';
+        this.projectionFields[0] = '';
+        this.sortFields[0] = '';
+        this.sortDirections[0] = 'asc';
     }
 
     onSubmit(e) {
@@ -56,6 +65,10 @@ class ActionFind extends React.Component {
         //Query
         for(let x = 0; x < this.state.numQuery; x++) {
             if(this.queryKeys[x] && this.queryVals[x]) {
+                //Remove whitespace 
+                this.queryKeys[x] = this.queryKeys[x].trim();
+                this.queryVals[x] = this.queryVals[x].trim();
+                
                 let queryValStr = encodeURIComponent(this.queryVals[x]);
 
                 //If the query value is a date, then convert it to an ISO Date
@@ -126,12 +139,25 @@ class ActionFind extends React.Component {
     addItem(e, itemToAdd) {
         switch(itemToAdd) {
             case 'queryItem':
+                //Initialize next index in array
+                this.queryKeys[this.state.numQuery] = '';
+                this.queryComparisons[this.state.numQuery] = ':';
+                this.queryVals[this.state.numQuery] = '';
+
                 this.setState({ numQuery: this.state.numQuery + 1 });
                 break;
             case 'projectionItem': 
+                //Initialize next index in array
+                this.projectionVals[this.state.numProjection] = '1';
+                this.projectionFields[this.state.numProjection] = '';
+
                 this.setState({ numProjection: this.state.numProjection + 1 });
                 break;
             case 'sortItem': 
+                //Initialize next index in array
+                this.sortFields[this.state.numSort] = '';
+                this.sortDirections[this.state.numSort] = 'asc';
+
                 this.setState({ numSort: this.state.numSort + 1 });
         }
     }

@@ -21,34 +21,27 @@ class ActionKeyValueItem extends React.Component {
     componentWillReceiveProps(nextProps) {
         //Set state with new props 
         if(nextProps) {
-            if(nextProps.keys && nextProps.keys[nextProps.index]) {
-                this.setState({ key: nextProps.keys[nextProps.index]});
-            }
-
-            if(nextProps.vals && nextProps.vals[nextProps.index]) {
-                this.setState({ val: nextProps.vals[nextProps.index]});
-            }
+            this.setState({ key: nextProps.keys[nextProps.index]});
+            this.setState({ val: nextProps.vals[nextProps.index]});
         } 
     }
 
     keyChange(e) {
         let k = e.target.value;
         this.setState({ key: k });
-        this.props.textChange(this.props.index, k, this.state.val);
+        this.props.textChange(this.props.index, k, this.state.val || '');
     }
 
     valChange(e) {
         let v = e.target.value; 
         this.setState({ val: v });
-        this.props.textChange(this.props.index, this.state.key, v);
+        this.props.textChange(this.props.index, this.state.key || '', v);
     }
 
     render() {
         let removeBtnClass = classNames({
                 'criteriaItem': this.props.type && this.props.type === 'criteriaItem' ? true : false,
-                'updatedItem': this.props.type && this.props.type === 'updatedItem' ? true : false/*,
-                'fa': true,
-                'fa-times': true*/
+                'updatedItem': this.props.type && this.props.type === 'updatedItem' ? true : false
             }),
             self = this;
 

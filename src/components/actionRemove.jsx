@@ -20,9 +20,15 @@ class ActionRemove extends React.Component {
         this.addItem = this.addItem.bind(this);
         this.removeItem = this.removeItem.bind(this);
 
+        //Variables for storing user entered values 
         this.removeKeys = [];
         this.removeComparisons = [];
         this.removeVals = [];
+
+        //Initialize arrays 
+        this.removeKeys[0] = '';
+        this.removeComparisons[0] = ':';
+        this.removeVals[0] = '';
     }
 
     onSubmit(e) {
@@ -80,6 +86,11 @@ class ActionRemove extends React.Component {
     }
 
     addItem() {
+        //Initialize next index in array
+        this.removeKeys[this.state.numItems] = '';
+        this.removeComparisons[this.state.numItems] = ':';
+        this.removeVals[this.state.numItems] = '';
+
         this.setState({ numItems: this.state.numItems + 1 });
     }
 
@@ -104,7 +115,6 @@ class ActionRemove extends React.Component {
                 <div>
                     <div>
                         {items}
-                        { /*<button type="button" className="fa fa-plus-circle" onClick={this.addItem}></button>*/}
                         <AddIcon onClick={this.addItem} />
                     </div>
                     <div>
