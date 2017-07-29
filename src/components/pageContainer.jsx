@@ -63,11 +63,13 @@ class PageContainer extends React.Component {
         });
     }
 
-    handleFind(query, projection, options, userEnteredLimit) {
+    handleFind(findOp, query, projection, options, userEnteredLimit, distinctKey) {
+        this.findOp = findOp;
         this.query = query;
         this.projection = projection;
         this.options = options;
         this.userEnteredLimit = userEnteredLimit;
+        this.distinctKey = distinctKey;
         this.setState({
             showFindResultArea: true,
             showInsertResultArea: false,
@@ -126,7 +128,7 @@ class PageContainer extends React.Component {
                 </div>
                 <div className="column mainContainer">
                     { this.state.showActionArea ? <ActionArea onFind={this.handleFind} onInsert={this.handleInsert} onRemove={this.handleRemove} onUpdate={this.handleUpdate} /> : null }
-                    { this.state.showFindResultArea ? <ResultGet db={this.selectedDB} col={this.selectedCol} query={this.query} projection={this.projection} options={this.options} /> : null }
+                    { this.state.showFindResultArea ? <ResultGet db={this.selectedDB} col={this.selectedCol} findOp={this.findOp} query={this.query} projection={this.projection} options={this.options} distinctKey={this.distinctKey} /> : null }
                     { this.state.showFindResultArea ? <Pagination db={this.selectedDB} col={this.selectedCol} query={this.query} options={this.options} userEnteredLimit={this.userEnteredLimit} totalCount={this.totalCount} onMoreClick={this.moreClick} /> : null }
                     { this.state.showInsertResultArea ? <ResultPost db={this.selectedDB} col={this.selectedCol} dataObj={this.objToInsert} op='insert' /> : null }
                     { this.state.showRemoveResultArea ? <ResultPost db={this.selectedDB} col={this.selectedCol} dataObj={this.objToRemove} justOne={this.justOne} op='remove' /> : null }

@@ -1,10 +1,11 @@
 import React from 'react';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
+import AddIcon from 'material-ui-icons/AddCircle';
+import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import ActionKeyValueComparison from './actionKeyValueComparison.jsx';
 import ActionFindProjection from './actionFindProjection.jsx';
 import ActionFindSort from './actionFindSort.jsx';
-import AddIcon from 'material-ui-icons/AddCircle';
 var classNames = require('classnames'),
     moment = require('moment');
 const PAGE_LIMIT = 20;
@@ -18,13 +19,22 @@ class ActionFind extends React.Component {
             numQuery: 1,
             numProjection: 1,
             numSort: 1,
+            keyVisible: false,
+            queryVisible: true,
+            projectionVisible: true,
+            sortVisible: true,
+            limitVisible: true,
+            skipVisible: true,
+            showKey: false,
             showQuery: false,
             showProjection: false,
             showSort: false,
             showLimit: false,
             showSkip: false,
+            keyVal: '',
             skipVal: '',
-            limitVal: ''
+            limitVal: '',
+            op: 'find'
         };
 
         //Bind functions to this context 
@@ -34,6 +44,7 @@ class ActionFind extends React.Component {
         this.queryChange = this.queryChange.bind(this);
         this.projectionChange = this.projectionChange.bind(this);
         this.sortChange = this.sortChange.bind(this);
+        this.opChange = this.opChange.bind(this);
 
         //Variables for storing user entered values 
         this.queryKeys = [];
@@ -56,11 +67,12 @@ class ActionFind extends React.Component {
 
     onSubmit(e) {
         e.preventDefault();
-
+        
         let queryStr = '{',
             projectionStr = '{',
             optionsStr = '{',
-            userEnteredLimit = (this.state.limitVal) ? this.state.limitVal : -1;
+            userEnteredLimit = (this.state.limitVal) ? this.state.limitVal : -1,
+            distinctKeyStr = '';
 
         //Query
         for(let x = 0; x < this.state.numQuery; x++) {
@@ -68,15 +80,11 @@ class ActionFind extends React.Component {
                 //Remove whitespace 
                 this.queryKeys[x] = this.queryKeys[x].trim();
                 this.queryVals[x] = this.queryVals[x].trim();
-                
+
                 let queryValStr = encodeURIComponent(this.queryVals[x]);
 
-                //If the query value is a date, then convert it to an ISO Date
-                /*if(moment(queryValStr, moment.ISO_8601).isValid()) {
-                    queryValStr = new Date(queryValStr).toISOString();
-                    queryValStr = `"new Date("${queryValStr}")"`;
-                } //Else if the query value is a string, make sure it satrts and end with double quotes
-                else*/ if(isNaN(queryValStr) && queryValStr[0] !== '"' && queryValStr[queryValStr.length - 1] !== '"') {
+                //If the query value is a string, make sure it satrts and end with double quotes
+                if(isNaN(queryValStr) && queryValStr[0] !== '"' && queryValStr[queryValStr.length - 1] !== '"') {
                     //If single quotes were used replace them with double quotes, else just add double quotes 
                     if(queryValStr[0] === "'" && queryValStr[queryValStr.length - 1] === "'") {
                         queryValStr = queryValStr.replace("'" , '"');
@@ -85,7 +93,7 @@ class ActionFind extends React.Component {
                         queryValStr = `"${queryValStr}"`;
                     } 
                 }
-                    
+
                 if(this.queryComparisons[x] === ':') {
                     queryStr += `"${encodeURIComponent(this.queryKeys[x])}"${this.queryComparisons[x]}${queryValStr},`;
                 } else {
@@ -116,10 +124,14 @@ class ActionFind extends React.Component {
         optionsStr = optionsStr.replace(',]', ']');
 
         //Limit
-        if(this.state.limitVal && this.state.limitVal < 20) {
-            optionsStr += `"limit":${this.state.limitVal},`;
-        } else { //If not entered by user, set to default of 20
-            optionsStr += `"limit":${PAGE_LIMIT},`;
+        if(this.state.op === 'find') {
+            if(this.state.limitVal && this.state.limitVal < 20) {
+                optionsStr += `"limit":${this.state.limitVal},`;
+            } else { //If not entered by user, set to default of 20
+                optionsStr += `"limit":${PAGE_LIMIT},`;
+            }
+        } else if(this.state.op === 'findOne') {
+            optionsStr += `"limit":1,`;
         }
 
         //Skip
@@ -133,7 +145,12 @@ class ActionFind extends React.Component {
         optionsStr += '}';
         optionsStr = optionsStr.replace(',}', '}');
 
-        this.props.onFind(queryStr, projectionStr, optionsStr, userEnteredLimit);
+        //Key (Distinct only)
+        if(this.state.op === 'distinct' && this.state.keyVal) {
+            distinctKeyStr = this.state.keyVal;
+        }
+
+        this.props.onFind(this.state.op, queryStr, projectionStr, optionsStr, userEnteredLimit, distinctKeyStr);
     }
 
     addItem(e, itemToAdd) {
@@ -210,10 +227,53 @@ class ActionFind extends React.Component {
         this.sortDirections[index] = sortDirection;
     }
 
+    opChange(event, value) {
+        switch(value) {
+            case 'find':
+                this.setState({ keyVisible: false });
+                this.setState({ queryVisible: true });
+                this.setState({ projectionVisible: true });
+                this.setState({ sortVisible: true });
+                this.setState({ limitVisible: true });
+                this.setState({ skipVisible: true });
+                break;
+            case 'findOne':
+                this.setState({ keyVisible: false });
+                this.setState({ queryVisible: true });
+                this.setState({ projectionVisible: true });
+                this.setState({ sortVisible: false });
+                this.setState({ limitVisible: false });
+                this.setState({ skipVisible: true });
+                break;
+            case 'count':
+                this.setState({ keyVisible: false });
+                this.setState({ queryVisible: true });
+                this.setState({ projectionVisible: false });
+                this.setState({ sortVisible: false });
+                this.setState({ limitVisible: false });
+                this.setState({ skipVisible: true });
+                break;
+            case 'distinct':
+                this.setState({ keyVisible: true });
+                this.setState({ queryVisible: true });
+                this.setState({ projectionVisible: false });
+                this.setState({ sortVisible: false });
+                this.setState({ limitVisible: false });
+                this.setState({ skipVisible: false });
+        }
+
+        this.setState({ op: value });
+    }
+
     render() {
         let queryItems = [],
             projectionItems = [],
             sortItems = [],
+            keyClass = classNames({
+                'fa': true,
+                'fa-chevron-right': !this.state.showKey,
+                'fa-chevron-down': this.state.showKey
+            }),
             queryClass = classNames({
                 'fa': true,
                 'fa-chevron-right': !this.state.showQuery,
@@ -255,30 +315,39 @@ class ActionFind extends React.Component {
         return (
             <form onSubmit={this.onSubmit} >
                 <div>
-                    <div>
+                    <RadioButtonGroup style={{width: 125, height: 40, display: "flex"}} floatingLabelText="Operation" name="operations" defaultSelected="find" onChange={this.opChange} value={this.state.operation}>
+                        <RadioButton value="find" label="Find" />
+                        <RadioButton value="findOne" label="FindOne" />
+                        <RadioButton value="count" label="Count" />
+                        <RadioButton value="distinct" label="Distinct" />
+                    </RadioButtonGroup>
+                    { this.state.keyVisible ? <div> 
+                        <div onClick={ () => this.setState({ showKey: !this.state.showKey }) }><i className={keyClass}></i>Key</div>
+                        { this.state.showKey ? <TextField className="materialUIComponents" style={{width: 125}} hintText="Key Name" value={this.state.keyVal} onChange={ e => this.setState({keyVal: e.target.value}) } /> : null } 
+                    </div> : null }
+                    { this.state.queryVisible ? <div>
                         <div onClick={ () => this.setState({ showQuery: !this.state.showQuery }) }><i className={queryClass}></i>Query</div>
                         { this.state.showQuery ? <div>{queryItems}</div> : null }
                         { this.state.showQuery ? <AddIcon className="queryItem" onClick={ (e) => { this.addItem(e, 'queryItem'); } } /> : null }
-                    </div>
-                    <div>
+                    </div> : null }
+                    { this.state.projectionVisible ? <div>
                         <div onClick={ () => this.setState({ showProjection: !this.state.showProjection }) }><i className={projectionClass}></i>Projection</div>
                         { this.state.showProjection ? <div>{projectionItems}</div> : null }
                         { this.state.showProjection ? <AddIcon className="projectionItem" onClick={ (e) => { this.addItem(e, 'projectionItem'); } } /> : null }
-
-                    </div>
-                    <div>
+                    </div> : null }
+                    { this.state.sortVisible ? <div>
                         <div onClick={ () => this.setState({ showSort: !this.state.showSort }) }><i className={sortClass}></i>Sort</div>
                         { this.state.showSort ? <div>{sortItems}</div> : null }
                         { this.state.showSort ? <AddIcon className="sortItem" onClick={ (e) => { this.addItem(e, 'sortItem'); } } /> : null }
-                    </div>
-                    <div>
+                    </div> : null }
+                    { this.state.limitVisible ? <div>
                         <div onClick={ () => this.setState({ showLimit: !this.state.showLimit }) }><i className={limitClass}></i>Limit</div>
                         { this.state.showLimit ? <TextField className="materialUIComponents" style={{width: 125}} hintText="# to Show" value={this.state.limitVal} onChange={ e => this.setState({limitVal: e.target.value}) } /> : null }    
-                    </div>
-                    <div>
+                    </div> : null }
+                    { this.state.skipVisible ? <div>
                         <div onClick={ () => this.setState({ showSkip: !this.state.showSkip }) }><i className={skipClass}></i>Skip</div>
                         { this.state.showSkip ? <TextField className="materialUIComponents" style={{width: 125}} hintText="# to Skip" value={this.state.skipVal} onChange={ e => this.setState({skipVal: e.target.value}) } /> : null }
-                    </div>
+                    </div> : null }
                     <RaisedButton style={{width: 75, height: 30 }} type="submit" label="Run" />
                 </div>
             </form>
