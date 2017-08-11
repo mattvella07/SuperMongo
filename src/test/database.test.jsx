@@ -39,19 +39,19 @@ describe('Database', () => {
     });
 
     it('div has the class database', () => {
-        const divs = database().find("div");
-        expect(divs.hasClass('database')).toEqual(true);
+        const div = database().find("div").first();
+        expect(div.hasClass('database')).toEqual(true);
     });
 
     it('div has the text from db prop', () => {
-        const divs = database().find("div");
-        expect(divs.text()).toEqual(props.db);
+        const div = database().find("div").first();
+        expect(div.text()).toEqual(props.db);
     });
 
     it('on div click the class "clicked" is added to it', () => {
-        const divs = database().find("div");
-        divs.simulate('click');
-        expect(divs.hasClass('clicked')).toEqual(true);
+        const div = database().find("div").first();
+        div.simulate('click');
+        expect(div.hasClass('clicked')).toEqual(true);
     });
   
 });

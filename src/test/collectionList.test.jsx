@@ -1,10 +1,9 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import expect from 'expect';
-import CollectionList from './../components/collectionList.jsx';
-
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import CollectionList from './../components/collectionList.jsx';
 
 describe('CollectionList', () => {
     let props, 
@@ -29,7 +28,6 @@ describe('CollectionList', () => {
                 }
             }
         });
-
     });
 
     const collectionList = () => {
@@ -79,13 +77,13 @@ describe('CollectionList', () => {
 
     it('H3 element contains text Collections in databaseName', () => {
         const secondDiv = collectionList().find("div").last();
-        const header = secondDiv.find('h3');
+        const header = secondDiv.find('h3').first();
         expect(header.text()).toEqual("COLLECTIONS in " + props.db);
     });
 
     it('SVG element has the class collectionIcon and addCollection', () => {
         const secondDiv = collectionList().find("div").last();
-        const svg = secondDiv.find('svg');
+        const svg = secondDiv.find('svg').first();
         expect(svg.hasClass('collectionIcon')).toEqual(true);
         expect(svg.hasClass('addCollection')).toEqual(true);
     });
