@@ -9,7 +9,7 @@
   "main": "src/main.js",
   "scripts": {
     "serverTest": "mocha lib/test/",
-    "frontEndTest": "mocha --require src/test/withDom.js --compilers js:babel-register --recursive src/test/*.jsx",
+    "frontEndTest": "mocha --require src/test/withDom.js --compilers js:babel-register --recursive src/test/*.jsx; exit 0",
     "start": "node server.js"
   },
   "author": "Matt Vella",
