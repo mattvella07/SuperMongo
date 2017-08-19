@@ -116,7 +116,9 @@ ResultGet.propTypes = {
     col: React.PropTypes.string,
     query: React.PropTypes.string,
     projection: React.PropTypes.string,
-    options: React.PropTypes.string
+    options: React.PropTypes.string,
+    findOp: React.PropTypes.string,
+    distinctKey: React.PropTypes.string
 };
 
 export default ResultGet; 
