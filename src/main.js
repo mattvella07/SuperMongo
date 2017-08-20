@@ -1,6 +1,7 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
 const url = require('url');
+const logger = require('./utils/logger');
 
 let win; 
 
@@ -13,10 +14,11 @@ function createWindow() {
         slashes: true
     }));
 
-    //win.webContents.openDevTools();
-
+    logger.info('Window created');
+    
     win.on('closed', () => {
         win = null;
+        logger.info('Window closed');
     });
 }
 
@@ -24,6 +26,7 @@ app.on('ready', createWindow);
 
 app.on('window-all-closed', () => {
     if(process.platform !== 'darwin') {
+        logger.info('Exit');
         app.quit();
     }
 });
