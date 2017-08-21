@@ -34,7 +34,8 @@ class ActionFind extends React.Component {
             keyVal: '',
             skipVal: '',
             limitVal: '',
-            op: 'find'
+            op: 'find',
+            isDisabled: true
         };
 
         //Bind functions to this context 
@@ -45,6 +46,7 @@ class ActionFind extends React.Component {
         this.projectionChange = this.projectionChange.bind(this);
         this.sortChange = this.sortChange.bind(this);
         this.opChange = this.opChange.bind(this);
+        this.keyChange = this.keyChange.bind(this);
 
         //Variables for storing user entered values 
         this.queryKeys = [];
@@ -265,6 +267,17 @@ class ActionFind extends React.Component {
         this.setState({ op: value });
     }
 
+    keyChange(event, value) {
+        this.setState({ keyVal: value });
+
+        //Determine whether to enable button or not - for Distinct only
+        if(value && value.toString().trim() !== '') {
+            this.setState({ isDisabled: false });
+        } else {
+            this.setState({ isDisabled: true });
+        }
+    }
+
     render() {
         let queryItems = [],
             projectionItems = [],
@@ -323,7 +336,7 @@ class ActionFind extends React.Component {
                     </RadioButtonGroup>
                     { this.state.keyVisible ? <div> 
                         <div onClick={ () => this.setState({ showKey: !this.state.showKey }) }><i className={keyClass}></i>Key</div>
-                        { this.state.showKey ? <TextField className="materialUIComponents" style={{width: 125}} hintText="Key Name" value={this.state.keyVal} onChange={ e => this.setState({keyVal: e.target.value}) } /> : null } 
+                        { this.state.showKey ? <TextField className="materialUIComponents" style={{width: 125}} hintText="Key Name" value={this.state.keyVal} onChange={this.keyChange} /> : null } 
                     </div> : null }
                     { this.state.queryVisible ? <div>
                         <div onClick={ () => this.setState({ showQuery: !this.state.showQuery }) }><i className={queryClass}></i>Query</div>
@@ -348,7 +361,7 @@ class ActionFind extends React.Component {
                         <div onClick={ () => this.setState({ showSkip: !this.state.showSkip }) }><i className={skipClass}></i>Skip</div>
                         { this.state.showSkip ? <TextField className="materialUIComponents" style={{width: 125}} hintText="# to Skip" value={this.state.skipVal} onChange={ e => this.setState({skipVal: e.target.value}) } /> : null }
                     </div> : null }
-                    <RaisedButton style={{width: 75, height: 30 }} type="submit" label="Run" />
+                    <RaisedButton style={{width: 75, height: 30 }} type="submit" label="Run" disabled={this.state.op === 'distinct' && this.state.isDisabled} />
                 </div>
             </form>
         );
