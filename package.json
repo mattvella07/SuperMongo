@@ -8,7 +8,7 @@
   },
   "main": "src/main.js",
   "scripts": {
-    "serverTest": "mocha lib/test/",
+    "serverTest": "mocha lib/test/*.js; exit 0",
     "frontEndTest": "mocha --require src/test/withDom.js --compilers js:babel-register --recursive src/test/*.jsx; exit 0",
     "start": "node server.js"
   },
