@@ -1,4 +1,5 @@
 import React from 'react';
+import JSONPretty from 'react-json-pretty';
 import config from './../../lib/config.js';
 var fetch = require('node-fetch');
 
@@ -97,7 +98,7 @@ class ResultGet extends React.Component {
         let results = (this.state.result.indexOf('{') !== -1) ? this.state.result.split('}').map(function(r) {
             if(r !== '') {
                 return (
-                    <p>{r + '}'}</p>
+                    <JSONPretty json={r + '}'}></JSONPretty>
                 );
             } 
         }) : this.state.result;

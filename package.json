@@ -29,6 +29,7 @@
     "path": "^0.12.7",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
+    "react-json-pretty": "^1.6.3",
     "react-scroll": "^1.4.4",
     "react-swal": "^2.0.0",
     "react-tap-event-plugin": "^2.0.1",
