@@ -20,7 +20,7 @@ class ResultGet extends React.Component {
     getData(nextProps) {
         let currProps = nextProps || this.props,
             getStr = `http://localhost:${config.express.port}/api/${currProps.findOp}/${currProps.db}/${currProps.col}`,
-            data = '';
+            data = [];
 
         if(currProps.findOp.indexOf('distinct') !== -1) {
             if(currProps.distinctKey) {
@@ -56,22 +56,9 @@ class ResultGet extends React.Component {
             .then(function(res) {
                 return res.json();
             }).then(function(result) {
-                if(result.length) {
-                    for(let x = 0; x < result.length; x++) {
-                        if(JSON.stringify(result[x]).indexOf(':') !== -1) {
-                            data += JSON.stringify(result[x]).split(':').join(' : ').split(',').join(', ');
-                        } else {
-                            data += JSON.stringify(result[x]) + ', ';
-                        }
-                    }
-                } else if(result) {
-                    data += JSON.stringify(result).split(':').join(' : ').split(',').join(', ');
+                for(let x = 0; x < result.length; x++) {
+                    data.push(JSON.stringify(result[x]));
                 }
-                
-                if(!data) {
-                    data = '{ No results found ';
-                }
-            
                 //Using state, set data and hide loading message 
                 this.setState({ result: data });
                 this.setState({ isLoading: false });
@@ -95,13 +82,13 @@ class ResultGet extends React.Component {
     }
 
     render() {
-        let results = (this.state.result.indexOf('{') !== -1) ? this.state.result.split('}').map(function(r) {
+        let results = (this.state.result.length > 0) ? this.state.result.map(function(r) {
             if(r !== '') {
                 return (
-                    <JSONPretty json={r + '}'}></JSONPretty>
+                    <JSONPretty json={r}></JSONPretty>
                 );
-            } 
-        }) : this.state.result;
+            }
+        }) : 'No results found';
 
         return (
             <div className="resultArea" id="resultArea">
