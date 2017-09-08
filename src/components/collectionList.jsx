@@ -75,10 +75,10 @@ class CollectionList extends React.Component {
         let self = this,
             collections = '';
         
-        collections = this.state.collectionNames.split(',').map(function(col) {
+        collections = this.state.collectionNames.split(',').map(function(col, index) {
             if(col !== '') {
                 return (
-                    <Collection db={self.props.db} col={col} onColClick={self.props.onColClick} onColDrop={self.addOrDropCollection} >
+                    <Collection key={index} db={self.props.db} col={col} onColClick={self.props.onColClick} onColDrop={self.addOrDropCollection} >
                     </Collection>
                 );
             }

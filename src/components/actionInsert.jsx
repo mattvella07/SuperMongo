@@ -109,7 +109,7 @@ class ActionInsert extends React.Component {
     render() {
         let items = [];
         for (let i = 0; i < this.state.numItems; i++) {
-            items.push(<ActionKeyValueItem index={i} keys={this.insertKeys} vals={this.insertVals} textChange={this.handleChange} removeItem={this.removeItem} />);
+            items.push(<ActionKeyValueItem key={i} index={i} keys={this.insertKeys} vals={this.insertVals} textChange={this.handleChange} removeItem={this.removeItem} />);
         }
 
         return (

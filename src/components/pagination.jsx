@@ -66,9 +66,11 @@ class Pagination extends React.Component {
                     if(result - (optionsObj.skip + PAGE_LIMIT) > 0 && (currProps.userEnteredLimit === -1 || currProps.userEnteredLimit - (optionsObj.skip + PAGE_LIMIT) > 0)) {
                         this.setState({ isDisabled: false });
                     } else { //If no more items exist, make sure button is disabled 
+                        console.log('a');
                         this.setState({ isDisabled: true });
                     }
                 } else {
+                    console.log('b')
                     this.setState({ isDisabled: true });
                 }
             }.bind(this));
@@ -111,7 +113,7 @@ Pagination.propTypes = {
     col: React.PropTypes.string,
     query: React.PropTypes.string,
     options: React.PropTypes.string,
-    userEnteredLimit: React.PropTypes.string,
+    userEnteredLimit: React.PropTypes.number,
     onMoreClick: React.PropTypes.func
 };
 

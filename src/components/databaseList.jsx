@@ -31,10 +31,10 @@ class DatabaseList extends React.Component {
 
     render() {
         var self = this;
-        var dbs = this.state.dbNames.split(',').map(function(db) {
+        var dbs = this.state.dbNames.split(',').map(function(db, index) {
             if(db !== '') {
                 return (
-                    <Database db={db} onDBClick={self.props.onDBClick}>
+                    <Database key={index} db={db} onDBClick={self.props.onDBClick}>
                     </Database>
                 );
             }

@@ -205,11 +205,11 @@ class ActionUpdate extends React.Component {
             });
 
         for(let i = 0; i < this.state.numCriteria; i++) {
-            criteriaItems.push(<ActionKeyValueComparison index={i} keys={this.criteriaKeys} comparisons={this.criteriaComparisons} vals={this.criteriaVals} valueChange={this.criteriaChange} removeItem={this.removeItem} type='criteriaItem' />);
+            criteriaItems.push(<ActionKeyValueComparison key={i} index={i} keys={this.criteriaKeys} comparisons={this.criteriaComparisons} vals={this.criteriaVals} valueChange={this.criteriaChange} removeItem={this.removeItem} type='criteriaItem' />);
         }
 
         for(let i = 0; i < this.state.numUpdatedItem; i++) {
-            updatedItems.push(<ActionKeyValueItem index={i} keys={this.updatedItemKeys} vals={this.updatedItemVals} textChange={this.updatedItemChange} removeItem={this.removeItem} type='updatedItem' />);
+            updatedItems.push(<ActionKeyValueItem key={i} index={i} keys={this.updatedItemKeys} vals={this.updatedItemVals} textChange={this.updatedItemChange} removeItem={this.removeItem} type='updatedItem' />);
         }
 
         return (

@@ -16,7 +16,7 @@ describe('Pagination', () => {
             col: 'testCollection',
             query: '{}',
             options: '{}',
-            userEnteredLimit: '1',
+            userEnteredLimit: 1,
             onMoreClick: function() {}
         };
         mountedPagination = undefined;
@@ -50,7 +50,7 @@ describe('Pagination', () => {
         expect(pagination().props().col).toEqual('testCollection');
         expect(pagination().props().query).toEqual('{}');
         expect(pagination().props().options).toEqual('{}');
-        expect(pagination().props().userEnteredLimit).toEqual('1');
+        expect(pagination().props().userEnteredLimit).toEqual(1);
         expect(pagination().props().onMoreClick).toBeA('function');
     });
 

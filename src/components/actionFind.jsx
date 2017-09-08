@@ -73,7 +73,7 @@ class ActionFind extends React.Component {
         let queryStr = '{',
             projectionStr = '{',
             optionsStr = '{',
-            userEnteredLimit = (this.state.limitVal) ? this.state.limitVal : -1,
+            userEnteredLimit = (this.state.limitVal) ? parseInt(this.state.limitVal) : -1,
             distinctKeyStr = '';
 
         //Query
@@ -314,15 +314,15 @@ class ActionFind extends React.Component {
             });
 
         for(let i = 0; i < this.state.numQuery; i++) {
-            queryItems.push(<ActionKeyValueComparison index={i} keys={this.queryKeys} comparisons={this.queryComparisons} vals={this.queryVals} valueChange={this.queryChange} removeItem={this.removeItem} type='queryItem' />);
+            queryItems.push(<ActionKeyValueComparison key={i} index={i} keys={this.queryKeys} comparisons={this.queryComparisons} vals={this.queryVals} valueChange={this.queryChange} removeItem={this.removeItem} type='queryItem' />);
         }
 
         for (let i = 0; i < this.state.numProjection; i++) {
-            projectionItems.push(<ActionFindProjection index={i} projectionVals={this.projectionVals} projectionFields={this.projectionFields} valueChange={this.projectionChange} removeItem={this.removeItem} type='projectionItem' />);
+            projectionItems.push(<ActionFindProjection key={i} index={i} projectionVals={this.projectionVals} projectionFields={this.projectionFields} valueChange={this.projectionChange} removeItem={this.removeItem} type='projectionItem' />);
         }
 
         for (let i = 0; i < this.state.numSort; i++) {
-            sortItems.push(<ActionFindSort index={i} sortFields={this.sortFields} sortDirections={this.sortDirections} valueChange={this.sortChange} removeItem={this.removeItem} type='sortItem' />);
+            sortItems.push(<ActionFindSort key={i} index={i} sortFields={this.sortFields} sortDirections={this.sortDirections} valueChange={this.sortChange} removeItem={this.removeItem} type='sortItem' />);
         }
 
         return (
@@ -355,11 +355,11 @@ class ActionFind extends React.Component {
                     </div> : null }
                     { this.state.limitVisible ? <div>
                         <div onClick={ () => this.setState({ showLimit: !this.state.showLimit }) }><i className={limitClass}></i>Limit</div>
-                        { this.state.showLimit ? <TextField className="materialUIComponents" style={{width: 125}} hintText="# to Show" value={this.state.limitVal} onChange={ e => this.setState({limitVal: e.target.value}) } /> : null }    
+                        { this.state.showLimit ? <TextField className="materialUIComponents" style={{width: 125}} hintText="# to Show" value={this.state.limitVal} onChange={ e => this.setState({limitVal: e.target.value.trim()}) } /> : null }    
                     </div> : null }
                     { this.state.skipVisible ? <div>
                         <div onClick={ () => this.setState({ showSkip: !this.state.showSkip }) }><i className={skipClass}></i>Skip</div>
-                        { this.state.showSkip ? <TextField className="materialUIComponents" style={{width: 125}} hintText="# to Skip" value={this.state.skipVal} onChange={ e => this.setState({skipVal: e.target.value}) } /> : null }
+                        { this.state.showSkip ? <TextField className="materialUIComponents" style={{width: 125}} hintText="# to Skip" value={this.state.skipVal} onChange={ e => this.setState({skipVal: e.target.value.trim()}) } /> : null }
                     </div> : null }
                     <RaisedButton style={{width: 75, height: 30 }} type="submit" label="Run" disabled={this.state.op === 'distinct' && this.state.isDisabled} />
                 </div>
