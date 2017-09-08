@@ -1,6 +1,7 @@
 import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import AddIcon from 'material-ui-icons/AddCircle';
+import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import ActionKeyValueItem from './actionKeyValueItem.jsx';
 
 class ActionInsert extends React.Component {
@@ -10,7 +11,9 @@ class ActionInsert extends React.Component {
         //Set initial state
         this.state = {
             isDisabled: true,
-            numItems: 1
+            numItems: 1,
+            op: 'dataEntry',
+            showItems: true
         };
 
         //Bind functions to this context 
@@ -18,6 +21,7 @@ class ActionInsert extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.addItem = this.addItem.bind(this);
         this.removeItem = this.removeItem.bind(this);
+        this.opChange = this.opChange.bind(this);
 
         //Variables for storing user entered values 
         this.insertKeys = [];
@@ -90,6 +94,18 @@ class ActionInsert extends React.Component {
         this.setState({ numItems: this.state.numItems - 1 });
     }
 
+    opChange(event, value) {
+        switch(value) {
+            case 'dataEntry':
+                this.setState({ showItems: true });
+                break;
+            case 'fromFile':
+                this.setState({ showItems: false });
+        }
+
+        this.setState({ op: value });
+    }
+
     render() {
         let items = [];
         for (let i = 0; i < this.state.numItems; i++) {
@@ -99,10 +115,14 @@ class ActionInsert extends React.Component {
         return (
             <form onSubmit={this.onSubmit}>
                 <div>
-                    <div>
+                    <RadioButtonGroup style={{width: 125, height: 40, display: "flex"}} name="operations" defaultSelected="dataEntry" onChange={this.opChange} value={this.state.op}>
+                        <RadioButton value="dataEntry" label="Data Entry" />
+                        <RadioButton value="fromFile" label="From File" />
+                    </RadioButtonGroup>
+                    { this.state.showItems ? <div>
                         {items}
                         <AddIcon onClick={this.addItem} />
-                    </div>
+                    </div> : null }
                     <RaisedButton style={{width: 75, height: 30 }} type="submit" label="Insert" disabled={this.state.isDisabled} />
                 </div>
             </form>

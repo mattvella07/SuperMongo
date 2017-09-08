@@ -56,9 +56,16 @@ class ResultGet extends React.Component {
             .then(function(res) {
                 return res.json();
             }).then(function(result) {
-                for(let x = 0; x < result.length; x++) {
-                    data.push(JSON.stringify(result[x]));
+                if(result) {
+                    if(result.length) {
+                        for(let x = 0; x < result.length; x++) {
+                            data.push(JSON.stringify(result[x]));
+                        }
+                    } else {
+                        data.push(result);
+                    }
                 }
+
                 //Using state, set data and hide loading message 
                 this.setState({ result: data });
                 this.setState({ isLoading: false });
@@ -84,9 +91,13 @@ class ResultGet extends React.Component {
     render() {
         let results = (this.state.result.length > 0) ? this.state.result.map(function(r) {
             if(r !== '') {
-                return (
-                    <JSONPretty json={r}></JSONPretty>
-                );
+                if(typeof r === 'number') {
+                    return r;
+                } else {
+                    return (
+                        <JSONPretty json={r}></JSONPretty>
+                    );
+                }
             }
         }) : 'No results found';
 
