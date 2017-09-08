@@ -58,6 +58,6 @@ describe('ActionInsert', () => {
     it('div contains 2 children', () => {
         let form = actionInsert().find("form").first();
         let innerDiv = form.find("div").first();
-        expect(innerDiv.children().length).toEqual(2);
+        expect(innerDiv.children().length).toEqual(3);
     });
 });

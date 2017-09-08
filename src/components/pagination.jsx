@@ -111,8 +111,7 @@ Pagination.propTypes = {
     col: React.PropTypes.string,
     query: React.PropTypes.string,
     options: React.PropTypes.string,
-    userEnteredLimit: React.PropTypes.number,
-    totalCount: React.PropTypes.number,
+    userEnteredLimit: React.PropTypes.string,
     onMoreClick: React.PropTypes.func
 };
 
