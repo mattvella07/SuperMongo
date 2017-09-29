@@ -107,7 +107,7 @@ class ResultGet extends React.Component {
                 <div className="resultArea" id="resultArea">
                     { this.state.isLoading ? <p id="resultsLoading">Loading...</p> : <div> { (this.props.findOp === 'count') ? results.toLocaleString('en-US') : results } </div> }
                 </div>
-                { this.props.findOp.indexOf('find') !== -1 ? <Pagination db={this.props.db} col={this.props.col} findOp={this.props.findOp} query={this.props.query} options={this.props.options} userEnteredLimit={this.props.userEnteredLimit} onMoreClick={this.props.onMoreClick} /> : null }
+                { this.props.findOp !== 'count' ? <Pagination db={this.props.db} col={this.props.col} findOp={this.props.findOp} query={this.props.query} options={this.props.options} userEnteredLimit={this.props.userEnteredLimit} onMoreClick={this.props.onMoreClick} resultCount={this.state.result.length} /> : null }
             </div>
         );
     }

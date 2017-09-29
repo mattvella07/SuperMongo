@@ -36,8 +36,10 @@ class Pagination extends React.Component {
         if(currProps.findOp === 'findOne') {
             this.setState({ numRecords: 1 });
             this.setState({ isDisabled: true });  
-        }
-        else {
+        } else if(currProps.findOp === 'distinct') {
+            this.setState({ numRecords: currProps.resultCount });
+            this.setState({ isDisabled: true }); 
+        } else {
             //Get count 
             let countStr = `http://localhost:${config.express.port}/api/count/${currProps.db}/${currProps.col}`;
             
