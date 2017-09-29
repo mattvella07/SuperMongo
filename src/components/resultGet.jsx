@@ -1,5 +1,6 @@
 import React from 'react';
 import JSONPretty from 'react-json-pretty';
+import Pagination from './pagination.jsx';
 import config from './../../lib/config.js';
 var fetch = require('node-fetch');
 
@@ -89,21 +90,24 @@ class ResultGet extends React.Component {
     }
 
     render() {
-        let results = (this.state.result.length > 0) ? this.state.result.map(function(r) {
+        let results = (this.state.result.length > 0) ? this.state.result.map(function(r, index) {
             if(r !== '') {
                 if(typeof r === 'number') {
                     return r;
                 } else {
                     return (
-                        <JSONPretty json={r}></JSONPretty>
+                        <JSONPretty key={index} json={r}></JSONPretty>
                     );
                 }
             }
         }) : 'No results found';
 
         return (
-            <div className="resultArea" id="resultArea">
-                { this.state.isLoading ? <p id="resultsLoading">Loading...</p> : <div> { (this.props.findOp === 'count') ? results.toLocaleString('en-US') : results } </div> }
+            <div>
+                <div className="resultArea" id="resultArea">
+                    { this.state.isLoading ? <p id="resultsLoading">Loading...</p> : <div> { (this.props.findOp === 'count') ? results.toLocaleString('en-US') : results } </div> }
+                </div>
+                { this.props.findOp.indexOf('find') !== -1 ? <Pagination db={this.props.db} col={this.props.col} findOp={this.props.findOp} query={this.props.query} options={this.props.options} userEnteredLimit={this.props.userEnteredLimit} onMoreClick={this.props.onMoreClick} /> : null }
             </div>
         );
     }

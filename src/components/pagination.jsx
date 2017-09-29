@@ -29,52 +29,63 @@ class Pagination extends React.Component {
     }
 
     hasMoreItems(nextProps) {
-        //Get count 
-        let currProps = nextProps || this.props,
-            countStr = `http://localhost:${config.express.port}/api/count/${currProps.db}/${currProps.col}`;
-        
-        if(currProps.query) {
-            countStr += `/${currProps.query}`;
-        } else {
-            countStr += '/{}';
+        let currProps = nextProps || this.props;
+
+        //If performing a findOne, number of records will always be 1
+        //and More button should always be disabled 
+        if(currProps.findOp === 'findOne') {
+            this.setState({ numRecords: 1 });
+            this.setState({ isDisabled: true });  
         }
+        else {
+            //Get count 
+            let countStr = `http://localhost:${config.express.port}/api/count/${currProps.db}/${currProps.col}`;
+            
+            if(currProps.query) {
+                countStr += `/${currProps.query}`;
+            } else {
+                countStr += '/{}';
+            }
 
-        //If user didn't enter a limit, remove the default limit of 20
-        //to get the total number of items 
-        if(currProps.userEnteredLimit === -1) {
-            countStr += `/${currProps.options.replace(`"limit":${PAGE_LIMIT},`, '')}`;
-        } else if(currProps.userEnteredLimit > PAGE_LIMIT) {
-            countStr += `/${currProps.options.replace(`"limit":${PAGE_LIMIT}`, `"limit": ${currProps.userEnteredLimit}`)}`;
-        } else {
-            countStr += `/${currProps.options}`;
-        }
+            //If user didn't enter a limit, remove the default limit of 20
+            //to get the total number of items 
+            if(currProps.userEnteredLimit === -1) {
+                countStr += `/${currProps.options.replace(`"limit":${PAGE_LIMIT},`, '')}`;
+            } else if(currProps.userEnteredLimit > PAGE_LIMIT) {
+                countStr += `/${currProps.options.replace(`"limit":${PAGE_LIMIT}`, `"limit": ${currProps.userEnteredLimit}`)}`;
+            } else {
+                countStr += `/${currProps.options}`;
+            }
 
-        //If default limit of 20 is removed make sure no commas are left over 
-        countStr = countStr.replace(',}', '}');
-        countStr = countStr.replace('{,', '{');
+            //If default limit of 20 is removed make sure no commas are left over 
+            countStr = countStr.replace(',}', '}');
+            countStr = countStr.replace('{,', '{');
 
-        fetch(countStr)
-            .then(function(res) {
-                return res.json();
-            }).then(function(result) {
-                if(result) {
-                    this.setState({ numRecords: (typeof(result) === 'number') ? result : 0 });
+            fetch(countStr)
+                .then(function(res) {
+                    return res.json();
+                }).then(function(result) {
+                    if(result) {
+                        this.setState({ numRecords: (typeof(result) === 'number') ? result : 0 });
 
-                    let optionsObj = JSON.parse(currProps.options);
+                        let optionsObj = JSON.parse(currProps.options);
 
-                    //If more items exist, make sure button is enabled
-                    if(result - (optionsObj.skip + PAGE_LIMIT) > 0 && (currProps.userEnteredLimit === -1 || currProps.userEnteredLimit - (optionsObj.skip + PAGE_LIMIT) > 0)) {
-                        this.setState({ isDisabled: false });
-                    } else { //If no more items exist, make sure button is disabled 
-                        console.log('a');
+                        if(currProps.findOp === 'find') {
+                            //If more items exist, make sure button is enabled
+                            if(result - (optionsObj.skip + PAGE_LIMIT) > 0 && (currProps.userEnteredLimit === -1 || currProps.userEnteredLimit - (optionsObj.skip + PAGE_LIMIT) > 0)) {
+                                this.setState({ isDisabled: false });
+                            } else { //If no more items exist, make sure button is disabled 
+                                this.setState({ isDisabled: true });
+                            }
+                        } else {
+                            this.setState({ isDisabled: true });
+                        }
+                    } else {
                         this.setState({ isDisabled: true });
                     }
-                } else {
-                    console.log('b')
-                    this.setState({ isDisabled: true });
-                }
-            }.bind(this));
-    } 
+                }.bind(this));
+        }
+    }
 
     moreClick(e) {
         let optionsObj = JSON.parse(this.props.options);
@@ -101,7 +112,7 @@ class Pagination extends React.Component {
         return (
             <div className="pagination">
                 <p>{this.state.numRecords.toLocaleString('en-US')} record(s) found</p>
-                <RaisedButton style={{width: 75, height: 30 }} label="More" onClick={this.moreClick} disabled={this.state.isDisabled} className="moreButton" />
+                { this.props.findOp === 'find' ? <RaisedButton style={{width: 75, height: 30 }} label="More" onClick={this.moreClick} disabled={this.state.isDisabled} className="moreButton" /> : null }
             </div>
         );
     }
@@ -111,6 +122,7 @@ class Pagination extends React.Component {
 Pagination.propTypes = {
     db: React.PropTypes.string,
     col: React.PropTypes.string,
+    findOp: React.PropTypes.string,
     query: React.PropTypes.string,
     options: React.PropTypes.string,
     userEnteredLimit: React.PropTypes.number,

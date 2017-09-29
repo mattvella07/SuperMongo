@@ -14,6 +14,7 @@ describe('Pagination', () => {
         props = {
             db: 'testDB',
             col: 'testCollection',
+            findOp: 'find',
             query: '{}',
             options: '{}',
             userEnteredLimit: 1,
@@ -48,6 +49,7 @@ describe('Pagination', () => {
     it('sets props correctly', () => {
         expect(pagination().props().db).toEqual('testDB');
         expect(pagination().props().col).toEqual('testCollection');
+        expect(resultGet().props().findOp).toEqual('find');
         expect(pagination().props().query).toEqual('{}');
         expect(pagination().props().options).toEqual('{}');
         expect(pagination().props().userEnteredLimit).toEqual(1);
