@@ -8,21 +8,17 @@ class DatabaseList extends React.Component {
 
         //Set initial state
         this.state = {
-            dbNames: ''
+            dbNames: []
         };
     }
 
     componentDidMount() {
         fetch(this.props.source)
-            .then(function(res) {
-                return res.json();
-            }).then(function(result) {
-                for(let x = 0; x < result.length; x++) {
-                    this.setState({
-                        dbNames: this.state.dbNames.concat("," + result[x].name)
-                    });
-                }
-            }.bind(this));
+        .then(res => res.json())
+        .then(result => {
+            let tempArr = result.map(item => item.name);
+            this.setState({ dbNames: tempArr })
+        });
     }
 
     componentWillUnmount() {
@@ -30,19 +26,11 @@ class DatabaseList extends React.Component {
     }
 
     render() {
-        var self = this;
-        var dbs = this.state.dbNames.split(',').map(function(db, index) {
-            if(db !== '') {
-                return (
-                    <Database key={index} db={db} onDBClick={self.props.onDBClick}>
-                    </Database>
-                );
-            }
-        });  
+        let dbs = this.state.dbNames.map((db, index) => <Database key={index} db={db} onDBClick={this.props.onDBClick} />);  
         return (
             <div className="databaseList">
-                <h3>DATABASES</h3>
-                { (dbs.length <= 1) ? 'NONE' : dbs }            
+                <h3>DATABASES ({dbs.length})</h3>
+                { (dbs.length === 0) ? 'NONE' : dbs }            
             </div>
         );
     }

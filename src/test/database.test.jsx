@@ -52,6 +52,5 @@ describe('Database', () => {
         const div = database().find("div").first();
         div.simulate('click');
         expect(div.hasClass('clicked')).toEqual(true);
-    });
-  
+    });  
 });

@@ -3,7 +3,6 @@ import DatabaseList from './databaseList.jsx';
 import CollectionList from './collectionList.jsx';
 import ActionArea from './actionArea.jsx';
 import ResultGet from './resultGet.jsx';
-import Pagination from './pagination.jsx';
 import ResultPost from './resultPost.jsx';
 
 class PageContainer extends React.Component {
@@ -15,8 +14,7 @@ class PageContainer extends React.Component {
             showCollections: false,
             showActionArea: false,
             showFindResultArea: false,
-            showInsertResultArea: false,
-            showPaginationArea: false
+            showInsertResultArea: false
         };
 
         //Bind functions to this context 
