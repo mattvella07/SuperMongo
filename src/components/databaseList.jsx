@@ -1,6 +1,6 @@
 import React from 'react';
 import Database from './database.jsx';
-var fetch = require('node-fetch');
+const fetch = require('node-fetch');
 
 class DatabaseList extends React.Component {
     constructor(props) {

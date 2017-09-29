@@ -2,7 +2,7 @@ import React from 'react';
 import AddIcon from 'material-ui-icons/AddCircle';
 import Collection from './collection.jsx';
 import config from './../../lib/config.js';
-var fetch = require('node-fetch');
+const fetch = require('node-fetch');
 
 class CollectionList extends React.Component {
     constructor(props) {
@@ -10,7 +10,7 @@ class CollectionList extends React.Component {
 
         //Set initial state
         this.state = {
-            collectionNames: ''
+            collectionNames: []
         };
 
         //Bind functions to this context
@@ -34,10 +34,9 @@ class CollectionList extends React.Component {
     }
 
     addCollectionClick() {
-        let self = this;
         swal({title: "Add Collection", text: "What is the name of the collection you want to add?", 
               type: "input", closeOnConfirm: false, showCancelButton: true, inputPlaceholder: "Collection name" }, 
-              (inputValue) => { if(inputValue === false) { return false; } else if(inputValue.trim() === "") { swal.showInputError("Please type a collection name."); return false; } self.addOrDropCollection('add', inputValue); swal.close(); });
+              inputValue => { if(inputValue === false) { return false; } else if(inputValue.trim() === "") { swal.showInputError("Please type a collection name."); return false; } this.addOrDropCollection('add', inputValue); swal.close(); });
     }
 
     getCollections(nextProps) {
@@ -45,18 +44,11 @@ class CollectionList extends React.Component {
             apiStr = `http://localhost:${config.express.port}/api/collections/${currProps.db}`;
 
         fetch(apiStr)
-            .then(function(res) {
-                return res.json();
-            }).then(function(result) {
-                var newData = '';
-                for(let x = 0; x < result.length; x++) {
-                    if(result[x].name.indexOf('system.') !== 0) {
-                        newData += ',' + result[x].name;
-                    }
-                }
-                
-                this.setState({ collectionNames: newData});
-            }.bind(this));
+        .then(res => res.json())
+        .then(result => {
+            let tempArr = result.map(item => item.name).filter(col => col.indexOf('system.') !== 0);
+            this.setState({ collectionNames: tempArr });
+        });
     }
 
     componentWillReceiveProps(nextProps) {
@@ -72,24 +64,13 @@ class CollectionList extends React.Component {
     }
 
     render() {
-        let self = this,
-            collections = '';
-        
-        collections = this.state.collectionNames.split(',').map(function(col, index) {
-            if(col !== '') {
-                return (
-                    <Collection key={index} db={self.props.db} col={col} onColClick={self.props.onColClick} onColDrop={self.addOrDropCollection} >
-                    </Collection>
-                );
-            }
-        });
-
+        let collections = this.state.collectionNames.map((col, index) => <Collection key={index} db={this.props.db} col={col} onColClick={this.props.onColClick} onColDrop={this.addOrDropCollection} />);
         return (
             <div className="collectionList">
                 <div className="collectionListHeader">
-                    <h3>COLLECTIONS in <i>{this.props.db}</i></h3><AddIcon className="collectionIcon addCollection" onClick={this.addCollectionClick} />
+                    <h3>COLLECTIONS in <i>{this.props.db}</i> ({collections.length})</h3><AddIcon className="collectionIcon addCollection" onClick={this.addCollectionClick} />
                 </div>
-                { (collections.length <= 1) ? <p>NONE</p> : collections }
+                { (collections.length === 0) ? 'NONE' : collections }
             </div>
         );
     }

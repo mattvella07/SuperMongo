@@ -21,10 +21,9 @@ class Collection extends React.Component {
     confirmDropCollection(event) {
         event.stopPropagation();
 
-        let self = this;
-        swal({title: "Are you sure you want to drop this collection?", text: `Clicking Yes will completely remove the collection ${self.props.col}.`, 
+        swal({title: "Are you sure you want to drop this collection?", text: `Clicking Yes will completely remove the collection ${this.props.col}.`, 
               type: "warning", confirmButtonText: "Yes", showCancelButton: true, cancelButtonText: "No"}, 
-              (isConfirm) => { if(isConfirm) { self.props.onColDrop('drop', self.props.col); } });         
+              isConfirm => { if(isConfirm) { this.props.onColDrop('drop', this.props.col); } });         
     }
 
     render() {
