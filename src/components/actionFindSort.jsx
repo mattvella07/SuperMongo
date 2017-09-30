@@ -42,7 +42,6 @@ class ActionFindSort extends React.Component {
     }
 
     render() {
-        let self = this; 
         return (
             <div className="materialUIComponents">
                 <TextField style={{width: 150}} hintText="Field" value={this.state.field} onChange={this.fieldChange} />
@@ -50,7 +49,7 @@ class ActionFindSort extends React.Component {
                     <MenuItem value="asc" primaryText="Ascending" />
                     <MenuItem value="desc" primaryText="Descending" />
                 </SelectField>
-                { this.props.index > 0 ? <RemoveIcon className='sortItem' onClick={ (e) => { self.props.removeItem(self.props.index, self.props.type); }} /> : null }
+                { this.props.index > 0 ? <RemoveIcon className='sortItem' onClick={ e => this.props.removeItem(this.props.index, this.props.type) } /> : null }
             </div>
         );
     }

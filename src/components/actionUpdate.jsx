@@ -5,7 +5,7 @@ import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import AddIcon from 'material-ui-icons/AddCircle';
 import ActionKeyValueItem from './actionKeyValueItem.jsx';
 import ActionKeyValueComparison from './actionKeyValueComparison.jsx';
-var classNames = require('classnames');
+const classNames = require('classnames');
 const SweetAlert = require('react-swal');
 
 class ActionUpdate extends React.Component {
@@ -116,10 +116,9 @@ class ActionUpdate extends React.Component {
 
         //If user doesn't enter criteria, confirm before updating
         if(criteriaStr === '{}') {
-            let self = this;
             swal({title: "Are you sure you want to proceed?", text: "Not entering any criteria for the update will update the first item in the collection.", 
                   type: "warning", confirmButtonText: "Yes, update", showCancelButton: true, cancelButtonText: "No"}, 
-                  (isConfirm) => { if(isConfirm) { self.props.onUpdate(criteriaStr, updatedItemStr, optionsStr); } });
+                  isConfirm => { if(isConfirm) { this.props.onUpdate(criteriaStr, updatedItemStr, optionsStr); } });
         } else {
             this.props.onUpdate(criteriaStr, updatedItemStr, optionsStr);
         }
@@ -218,12 +217,12 @@ class ActionUpdate extends React.Component {
                     <div> 
                         <div onClick={() => this.setState({ showCriteria: !this.state.showCriteria }) }><i className={criteriaClass}></i>Criteria</div>
                         { this.state.showCriteria ? <div>{criteriaItems}</div> : null }
-                        { this.state.showCriteria ? <AddIcon className="criteriaItem" onClick={ (e) => { this.addItem(e, 'criteriaItem'); } } /> : null }
+                        { this.state.showCriteria ? <AddIcon className="criteriaItem" onClick={ e => this.addItem(e, 'criteriaItem') } /> : null }
                     </div>
                     <div> 
                         <div onClick={() => this.setState({ showUpdatedItem: !this.state.showUpdatedItem }) }><i className={updatedItemClass}></i>Updated Item</div>
                         { this.state.showUpdatedItem ? <div>{updatedItems}</div> : null }
-                        { this.state.showUpdatedItem ? <AddIcon className="updatedItem" onClick={ (e) => { this.addItem(e, 'updatedItem'); } } /> : null }
+                        { this.state.showUpdatedItem ? <AddIcon className="updatedItem" onClick={ e => this.addItem(e, 'updatedItem') } /> : null }
                     </div>
                     <div>
                         <RadioButtonGroup name="replace" className="materialUIComponents updateRadioGroup" onChange={this.replaceChanged} defaultSelected="all">
@@ -235,7 +234,7 @@ class ActionUpdate extends React.Component {
                        <Checkbox label="Multi" className="materialUIComponents" value="multi" onCheck={this.multiChanged} />
                     </div>
                     <div>
-                        <Checkbox label="Upsert" className="materialUIComponents" value="upsert" onCheck={ (event, isInputChecked) => { this.upsert = isInputChecked; } } />
+                        <Checkbox label="Upsert" className="materialUIComponents" value="upsert" onCheck={ (event, isInputChecked) => this.upsert = isInputChecked } />
                     </div>
                     <RaisedButton style={{width: 75, height: 30 }} type="submit" label="Update" />
                 </div>

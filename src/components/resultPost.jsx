@@ -1,6 +1,6 @@
 import React from 'react';
 import config from './../../lib/config.js';
-var fetch = require('node-fetch');
+const fetch = require('node-fetch');
 
 class ResultPost extends React.Component {
     constructor(props) {
@@ -52,25 +52,24 @@ class ResultPost extends React.Component {
         }
 
         fetch(apiStr, { method: 'POST' })
-            .then(function(res) {
-                return res.json();
-            }).then(function(result) {
-                if(result && JSON.stringify(result).indexOf('ok') !== -1 && (currProps.op === 'insert' || result.n > 0)) {
-                    if(currProps.op === 'insert') {
-                        res = `Item ${currProps.op}ed successfully!`;
-                    } else {
-                        res = `Item ${currProps.op}d successfully!`;
-                    }
-                } else if(result && JSON.stringify(result).indexOf('ok') !== -1) {
-                    res = `Unable to find item that you wanted to ${currProps.op}.`;
+        .then(res => res.json())
+        .then(result => {
+            if(result && JSON.stringify(result).indexOf('ok') !== -1 && (currProps.op === 'insert' || result.n > 0)) {
+                if(currProps.op === 'insert') {
+                    res = `Item ${currProps.op}ed successfully!`;
                 } else {
-                    res = `Failed to ${currProps.op} item.`;
+                    res = `Item ${currProps.op}d successfully!`;
                 }
+            } else if(result && JSON.stringify(result).indexOf('ok') !== -1) {
+                res = `Unable to find item that you wanted to ${currProps.op}.`;
+            } else {
+                res = `Failed to ${currProps.op} item.`;
+            }
 
-                //Using state, set data and hide loading message 
-                this.setState({ result: res });
-                this.setState({ isLoading: false });
-            }.bind(this));
+            //Using state, set data and hide loading message 
+            this.setState({ result: res });
+            this.setState({ isLoading: false });
+        });
     }
 
     componentWillReceiveProps(nextProps) {

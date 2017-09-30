@@ -42,7 +42,6 @@ class ActionFindProjection extends React.Component {
     }
 
     render() {
-        let self = this;
         return (
             <div className="materialUIComponents">
                 <SelectField style={{width: 100}} name="hideOrShow" onChange={this.valChange} value={this.state.val}>
@@ -50,7 +49,7 @@ class ActionFindProjection extends React.Component {
                     <MenuItem value="0" primaryText="Hide" />
                 </SelectField>
                 <TextField style={{width: 150}} hintText="Field" value={this.state.field} onChange={this.fieldChange} />
-                { this.props.index > 0 ? <RemoveIcon className='projectionItem' onClick={ (e) => { self.props.removeItem(self.props.index, self.props.type); }} /> : null }
+                { this.props.index > 0 ? <RemoveIcon className='projectionItem' onClick={ e => this.props.removeItem(this.props.index, this.props.type) } /> : null }
             </div>
         );
     }

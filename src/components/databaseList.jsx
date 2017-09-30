@@ -17,7 +17,7 @@ class DatabaseList extends React.Component {
         .then(res => res.json())
         .then(result => {
             let tempArr = result.map(item => item.name);
-            this.setState({ dbNames: tempArr })
+            this.setState({ dbNames: tempArr });
         });
     }
 

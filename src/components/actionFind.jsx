@@ -6,8 +6,7 @@ import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import ActionKeyValueComparison from './actionKeyValueComparison.jsx';
 import ActionFindProjection from './actionFindProjection.jsx';
 import ActionFindSort from './actionFindSort.jsx';
-var classNames = require('classnames'),
-    moment = require('moment');
+const classNames = require('classnames');
 const PAGE_LIMIT = 20;
 
 class ActionFind extends React.Component {

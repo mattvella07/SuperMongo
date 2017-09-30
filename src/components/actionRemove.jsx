@@ -69,10 +69,9 @@ class ActionRemove extends React.Component {
         } 
         
         if(completeStr === '{}') {
-            let self = this;
             swal({title: "Are you sure you want to proceed?", text: "Not entering a key and value will delete the entire collection.", 
                   type: "warning", confirmButtonText: "Yes, delete", showCancelButton: true, cancelButtonText: "No"}, 
-                  (isConfirm) => { if(isConfirm) { self.props.onRemove(completeStr, justOneStr); } }); 
+                  isConfirm => { if(isConfirm) { this.props.onRemove(completeStr, justOneStr); } }); 
         } else {
             this.props.onRemove(completeStr, justOneStr);
         }
@@ -118,7 +117,7 @@ class ActionRemove extends React.Component {
                         <AddIcon onClick={this.addItem} />
                     </div>
                     <div>
-                        <Checkbox label="Just One" value="justOne" onCheck={(event, isInputChecked) => { this.justOne = isInputChecked; } } />
+                        <Checkbox label="Just One" value="justOne" onCheck={(event, isInputChecked) => this.justOne = isInputChecked } />
                     </div>
                     <RaisedButton style={{width: 75, height: 30 }} type="submit" label="Remove" />
                 </div>

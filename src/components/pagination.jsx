@@ -1,8 +1,8 @@
 import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import config from './../../lib/config.js';
-var scroll = require('react-scroll').animateScroll;
-var fetch = require('node-fetch');
+const scroll = require('react-scroll').animateScroll;
+const fetch = require('node-fetch');
 const PAGE_LIMIT = 20;
 
 class Pagination extends React.Component {
@@ -64,34 +64,33 @@ class Pagination extends React.Component {
             countStr = countStr.replace('{,', '{');
 
             fetch(countStr)
-                .then(function(res) {
-                    return res.json();
-                }).then(function(result) {
-                    if(result) {
-                        this.setState({ numRecords: (typeof(result) === 'number') ? result : 0 });
+            .then(res => res.json())
+            .then(result => {
+                if(result) {
+                    this.setState({ numRecords: (typeof(result) === 'number') ? result : 0 });
 
-                        let optionsObj = JSON.parse(currProps.options);
+                    let optionsObj = JSON.parse(currProps.options);
 
-                        if(currProps.findOp === 'find') {
-                            //If more items exist, make sure button is enabled
-                            if(result - (optionsObj.skip + PAGE_LIMIT) > 0 && (currProps.userEnteredLimit === -1 || currProps.userEnteredLimit - (optionsObj.skip + PAGE_LIMIT) > 0)) {
-                                this.setState({ isDisabled: false });
-                            } else { //If no more items exist, make sure button is disabled 
-                                this.setState({ isDisabled: true });
-                            }
-                        } else {
+                    if(currProps.findOp === 'find') {
+                        //If more items exist, make sure button is enabled
+                        if(result - (optionsObj.skip + PAGE_LIMIT) > 0 && (currProps.userEnteredLimit === -1 || currProps.userEnteredLimit - (optionsObj.skip + PAGE_LIMIT) > 0)) {
+                            this.setState({ isDisabled: false });
+                        } else { //If no more items exist, make sure button is disabled 
                             this.setState({ isDisabled: true });
                         }
                     } else {
                         this.setState({ isDisabled: true });
                     }
-                }.bind(this));
+                } else {
+                    this.setState({ isDisabled: true });
+                }
+            });
         }
     }
 
     moreClick(e) {
         let optionsObj = JSON.parse(this.props.options);
-            optionsObj.skip += PAGE_LIMIT;
+        optionsObj.skip += PAGE_LIMIT;
 
         //If there is a full page of items to display
         if(this.props.userEnteredLimit === -1 || (this.props.userEnteredLimit > -1 && optionsObj.skip + PAGE_LIMIT <= this.props.userEnteredLimit)) {

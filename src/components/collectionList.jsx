@@ -23,11 +23,8 @@ class CollectionList extends React.Component {
         let apiStr = `http://localhost:${config.express.port}/api/${action}Collection/${this.props.db}/${colToDrop}`;
 
         fetch(apiStr, { method: 'POST' })
-            .then(function(res) {
-                return res.text();
-            }).then(function(result) {
-                this.props.onColAddOrDrop();
-            }.bind(this));
+        .then(res => res.text())
+        .then(result => this.props.onColAddOrDrop());
 
         //Get new list of collections 
         this.getCollections();

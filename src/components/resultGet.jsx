@@ -2,7 +2,7 @@ import React from 'react';
 import JSONPretty from 'react-json-pretty';
 import Pagination from './pagination.jsx';
 import config from './../../lib/config.js';
-var fetch = require('node-fetch');
+const fetch = require('node-fetch');
 
 class ResultGet extends React.Component {
     constructor(props) {
@@ -54,23 +54,20 @@ class ResultGet extends React.Component {
         }
         
         fetch(getStr)
-            .then(function(res) {
-                return res.json();
-            }).then(function(result) {
-                if(result) {
-                    if(result.length) {
-                        for(let x = 0; x < result.length; x++) {
-                            data.push(JSON.stringify(result[x]));
-                        }
-                    } else {
-                        data.push(result);
-                    }
+        .then(res => res.json())
+        .then(result => {
+            if(result) {
+                if(result.length) {
+                    data = result.map(item => JSON.stringify(item));
+                } else {
+                    data.push(result);
                 }
+            }
 
-                //Using state, set data and hide loading message 
-                this.setState({ result: data });
-                this.setState({ isLoading: false });
-            }.bind(this));
+            //Using state, set data and hide loading message 
+            this.setState({ result: data });
+            this.setState({ isLoading: false });
+        });
     }
 
     componentWillReceiveProps(nextProps) {
@@ -90,7 +87,7 @@ class ResultGet extends React.Component {
     }
 
     render() {
-        let results = (this.state.result.length > 0) ? this.state.result.map(function(r, index) {
+        let results = (this.state.result.length > 0) ? this.state.result.map((r, index) => {
             if(r !== '') {
                 if(typeof r === 'number') {
                     return r;

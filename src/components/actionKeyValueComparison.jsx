@@ -3,7 +3,7 @@ import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import RemoveIcon from 'material-ui-icons/RemoveCircle';
-var classNames = require('classnames');
+const classNames = require('classnames');
 
 class ActionKeyValueComparison extends React.Component {
     constructor(props) {
@@ -59,8 +59,7 @@ class ActionKeyValueComparison extends React.Component {
         let removeBtnClass = classNames({
                 'queryItem': this.props.type && this.props.type === 'queryItem' ? true : false,
                 'criteriaItem': this.props.type && this.props.type === 'criteriaItem' ? true : false
-            }),
-            self = this;
+            });
 
         return (
             <div className="materialUIComponents">
@@ -74,7 +73,7 @@ class ActionKeyValueComparison extends React.Component {
                     <MenuItem value="$ne" primaryText="Not equal" />
                 </SelectField>
                 <TextField style={{width: 150}} hintText="Value" value={this.state.val} onChange={this.valChange} />
-                { this.props.index > 0 ? <RemoveIcon className={removeBtnClass} onClick={ (e) => { self.props.removeItem(self.props.index, self.props.type); }} /> : null }
+                { this.props.index > 0 ? <RemoveIcon className={removeBtnClass} onClick={ e => this.props.removeItem(this.props.index, this.props.type) } /> : null }
             </div>
         );
     }
