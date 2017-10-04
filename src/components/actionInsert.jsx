@@ -13,7 +13,8 @@ class ActionInsert extends React.Component {
             isDisabled: true,
             numItems: 1,
             op: 'dataEntry',
-            showItems: true
+            showItems: true,
+            selectedFile: ''
         };
 
         //Bind functions to this context 
@@ -22,6 +23,7 @@ class ActionInsert extends React.Component {
         this.addItem = this.addItem.bind(this);
         this.removeItem = this.removeItem.bind(this);
         this.opChange = this.opChange.bind(this);
+        this.selectFile = this.selectFile.bind(this);
 
         //Variables for storing user entered values 
         this.insertKeys = [];
@@ -35,31 +37,35 @@ class ActionInsert extends React.Component {
     onSubmit(e) {
         e.preventDefault();
 
-        let completeStr = '{';
-        
-        //Item to insert
-        for(let x = 0; x < this.state.numItems; x++) {
-            if(this.insertKeys[x] && this.insertVals[x]) {
-                let valStr = encodeURIComponent(this.insertVals[x]);
-        
-                //If the insert value is a string, make sure it satrts and end with double quotes
-                if(isNaN(valStr) && valStr[0] !== '"' && valStr[valStr.length - 1] !== '"') {
-                    //If single quotes were used replace them with double quotes, else just add double quotes 
-                    if(valStr[0] === "'" && valStr[valStr.length - 1] === "'") {
-                        valStr = valStr.replace("'" , '"');
-                        valStr = valStr.replace("'" , '"');
-                    } else if(valStr.trim() !== 'true' && valStr.trim() !== 'false') { //Else, its a string and not a bool value
-                        valStr = `"${valStr}"`;
+        if(this.state.showItems) {
+            let completeStr = '{';
+            
+            //Item to insert
+            for(let x = 0; x < this.state.numItems; x++) {
+                if(this.insertKeys[x] && this.insertVals[x]) {
+                    let valStr = encodeURIComponent(this.insertVals[x]);
+            
+                    //If the insert value is a string, make sure it satrts and end with double quotes
+                    if(isNaN(valStr) && valStr[0] !== '"' && valStr[valStr.length - 1] !== '"') {
+                        //If single quotes were used replace them with double quotes, else just add double quotes 
+                        if(valStr[0] === "'" && valStr[valStr.length - 1] === "'") {
+                            valStr = valStr.replace("'" , '"');
+                            valStr = valStr.replace("'" , '"');
+                        } else if(valStr.trim() !== 'true' && valStr.trim() !== 'false') { //Else, its a string and not a bool value
+                            valStr = `"${valStr}"`;
+                        }
                     }
+
+                    completeStr += `"${encodeURIComponent(this.insertKeys[x])}": ${valStr},`; 
                 }
-
-                completeStr += `"${encodeURIComponent(this.insertKeys[x])}": ${valStr},`; 
             }
-        }
-        completeStr += '}';
-        completeStr = completeStr.replace(',}', '}');
+            completeStr += '}';
+            completeStr = completeStr.replace(',}', '}');
 
-        this.props.onInsert(completeStr);
+            this.props.onInsert(completeStr);
+        } else {
+            this.props.onInsertFromFile(encodeURIComponent(this.state.selectedFile));
+        }
     }
 
     handleChange(index, k, v) {
@@ -106,6 +112,11 @@ class ActionInsert extends React.Component {
         this.setState({ op: value });
     }
 
+    selectFile(e) {
+        this.setState({ selectedFile: e.target.files[0].path });
+        this.setState({ isDisabled: false });
+    }
+
     render() {
         let items = [];
         for (let i = 0; i < this.state.numItems; i++) {
@@ -122,7 +133,7 @@ class ActionInsert extends React.Component {
                     { this.state.showItems ? <div>
                         {items}
                         <AddIcon onClick={this.addItem} />
-                    </div> : null }
+                    </div> : <input type="file" name="filePicker" onChange={this.selectFile}/> }
                     <RaisedButton style={{width: 75, height: 30 }} type="submit" label="Insert" disabled={this.state.isDisabled} />
                 </div>
             </form>
@@ -132,7 +143,8 @@ class ActionInsert extends React.Component {
 
 //Type checking for props
 ActionInsert.propTypes = {
-    onInsert: React.PropTypes.func
+    onInsert: React.PropTypes.func,
+    onInsertFromFile: React.PropTypes.func
 };
 
 export default ActionInsert;

@@ -38,7 +38,7 @@ class ActionArea extends React.Component {
                 </SelectField>
 
                 { this.state.operation === 'find' ? <ActionFind onFind={this.props.onFind} /> : null }
-                { this.state.operation === 'insert' ? <ActionInsert onInsert={this.props.onInsert} /> : null }
+                { this.state.operation === 'insert' ? <ActionInsert onInsert={this.props.onInsert} onInsertFromFile={this.props.onInsertFromFile} /> : null }
                 { this.state.operation === 'remove' ? <ActionRemove onRemove={this.props.onRemove} /> : null }
                 { this.state.operation === 'update' ? <ActionUpdate onUpdate={this.props.onUpdate} /> : null }
             </div>
@@ -50,6 +50,7 @@ class ActionArea extends React.Component {
 ActionArea.propTypes = {
     onFind: React.PropTypes.func,
     onInsert: React.PropTypes.func,
+    onInsertFromFile: React.PropTypes.func,
     onRemove: React.PropTypes.func,
     onUpdate: React.PropTypes.func
 };
