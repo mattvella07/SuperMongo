@@ -54,9 +54,11 @@ class ResultPost extends React.Component {
         fetch(apiStr, { method: 'POST' })
         .then(res => res.json())
         .then(result => {
-            if(result && JSON.stringify(result).indexOf('ok') !== -1 && (currProps.op === 'insert' || result.n > 0)) {
+            if(result && JSON.stringify(result).indexOf('ok') !== -1 && (currProps.op.indexOf('insert') !== -1 || result.n > 0)) {
                 if(currProps.op === 'insert') {
                     res = `Item ${currProps.op}ed successfully!`;
+                } else if(currProps.op === 'insertFromFile') {
+                    res = `Data from ${decodeURIComponent(currProps.dataObj)} inserted successfully!`;
                 } else {
                     res = `Item ${currProps.op}d successfully!`;
                 }
