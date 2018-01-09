@@ -10,6 +10,4 @@ First Time
 - Install dependencies `npm install` or `yarn install` -- First time running it only! 
 
 Every Time
-- Start up a local MongoDB instance (if not already running) `mongod` 
-- Start the server `npm start` or `node server`
-- Build using Gulp `gulp` -- This will perform build tasks and start up Electron 
+- Build using Gulp `gulp` -- This will start a local MongoDB instance, start the node server, perform build tasks and start up Electron 
