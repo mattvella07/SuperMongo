@@ -11,7 +11,8 @@ var gulp = require('gulp'),
     source = require('vinyl-source-stream'),
     streamify = require('gulp-streamify'),
     pump = require('pump'),
-    electron = require('electron-connect').server.create();
+    electron = require('electron-connect').server.create(),
+    exec = require('child_process').exec;
 
 var jsPaths = ['./*.js', './src/components/*.jsx', './src/*.js', './src/*.jsx', './lib/*.js', './lib/routes/*.js', './lib/routes/test/*.js'];
 
@@ -39,6 +40,18 @@ gulp.task('lint', function(cb) {
         jshint({esversion: 6}),
         jshint.reporter('default')
     ], cb);
+});
+
+gulp.task('mongo db', function(cb) {
+    exec('mongod', function (err, stdout, stderr) {
+        cb(err);
+    });
+});
+
+gulp.task('node server', function (cb) {
+    exec('node server.js', function (err, stdout, stderr) {
+        cb(err);
+    });
 });
 
 //Minify JavaScript and move it to dist folder 
@@ -73,5 +86,5 @@ gulp.task('watch', function() {
 
 //Initial task 
 gulp.task('default', ['clean'], function() {
-    gulp.start('less', 'lint', 'minifyJS', 'serve', 'watch');
+    gulp.start('less', 'lint', 'mongo db', 'node server', 'minifyJS', 'serve', 'watch');
 });
