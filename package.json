@@ -24,7 +24,7 @@
     "jquery": "^3.2.1",
     "material-ui": "^0.18.3",
     "material-ui-icons": "^1.0.0-alpha.3",
-    "moment": "^2.18.1",
+    "moment": "^2.22.1",
     "mongodb": "^2.2.11",
     "node-fetch": "^1.6.3",
     "path": "^0.12.7",
